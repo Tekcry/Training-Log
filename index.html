@@ -46,6 +46,15 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .musbtn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.2;
   stroke-linecap:round;stroke-linejoin:round}
 .musbtn:active,.musbtn.playing{color:var(--bronze)}
+/* Play/pause sits beside the music note in the header. The track itself is chosen in
+   the player; this is only the switch. */
+.mfloat{position:absolute;top:calc(14px + env(safe-area-inset-top));right:106px;
+  padding:10px;color:var(--bronze);background:none;border:none;
+  -webkit-tap-highlight-color:transparent;transition:opacity .25s ease}
+.mfloat svg{width:24px;height:24px;stroke:currentColor;fill:currentColor;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;display:block}
+.mfloat:active{color:var(--champ)}
+
 .trks{margin:6px 0 4px;max-height:44vh;overflow:auto}
 .trk{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--hair)}
 .trk .tname{flex:1;text-align:left;background:none;border:none;padding:12px 0;
@@ -226,6 +235,8 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
   background:var(--card);border:1px solid var(--cardline);border-radius:14px;
   padding:13px 14px;color:var(--tx);text-align:left}
 .srow h3{font-size:17px;margin:0}
+.srow .srl{display:flex;flex-direction:column;gap:3px}
+.srow .srsub{font-family:var(--serif);font-size:10px;letter-spacing:.2em;color:var(--bronze)}
 .srow span{color:var(--bronze);font-size:18px;line-height:1}
 .srow:active{border-color:var(--bronze)}
 .hist{margin-top:10px}
@@ -235,17 +246,21 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
   font-family:var(--serif);font-size:11.5px;letter-spacing:.1em}
 .hhead .ho{color:var(--tx)}
 .hhead .hw{color:var(--bronze)}
-.hhead .hd{color:var(--dimmer);flex:1}
+.hhead .hd{color:var(--dimmer);flex:1;white-space:nowrap}
 .hhead .hg{color:var(--champ);font-size:13px}
 .hsess.open .hhead .ho{color:var(--bronze)}
 .hbody{height:0;overflow:hidden}
 .hbody.anim{transition:height .34s cubic-bezier(.22,.72,.28,1)}
 .hinner{padding:0 0 12px}
-.hex{display:flex;align-items:center;flex-wrap:wrap;gap:5px;padding:4px 0}
-.hex .hn{flex:1;min-width:8.5em;font-size:12.5px;color:var(--dim)}
+.hex{display:grid;grid-template-columns:1fr 44px repeat(3,42px);align-items:center;
+  gap:5px;padding:4px 0}
+.hex .hn{font-size:12.5px;color:var(--dim);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.hex .pw{font-size:11px;color:var(--dimmer);text-align:right;margin:0;
+  font-variant-numeric:tabular-nums}
+.hex .pc{min-width:0;text-align:center;font-size:11px;font-variant-numeric:tabular-nums}
+.hex .pc.blank{border-color:transparent}
 .hnone{padding:4px 0 6px;font-size:12px;color:var(--dimmer)}
-.hex .hs{display:flex;align-items:center;flex-wrap:wrap;gap:5px;
-  font-size:11px;color:var(--dimmer);font-variant-numeric:tabular-nums}
 
 /* Last time out, under the target. One box per set so three numbers do not read as
    one long line; a weight every set shared is stated once instead of three times. */
@@ -854,8 +869,11 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
    long one, and it gets its own scrolling sheet. */
 /* Settings sits to its content and never scrolls. Sized by content rather than a
    fixed height, or a short screen clips whatever is last. */
-/* Settings never scrolls. It is sized to the space above the bar and the content
-   is kept short enough to sit inside it. */
+/* Settings takes the whole screen and still never scrolls: the content is short
+   enough to fit, and the space left over is shared out between the sections. */
+.sheet.fit.full{top:0;bottom:0;height:100vh;height:100dvh;max-height:none;
+  justify-content:space-between;gap:14px;overflow:hidden;
+  padding:calc(20px + env(safe-area-inset-top)) 22px calc(20px + env(safe-area-inset-bottom))}
 .sheet.fit{display:flex;flex-direction:column;gap:10px;
   max-height:calc(100vh - var(--fabh,0px) - 14px);
   max-height:calc(100dvh - var(--fabh,0px) - 14px);
@@ -973,7 +991,7 @@ nav button.on::after{content:'';display:block;width:14px;height:1px;background:v
   header h1{font-size:25px}
   header .sub{font-size:12px}
   .eyebrow{font-size:10px}
-  .cog,.musbtn{top:calc(18px + env(safe-area-inset-top))}
+  .cog,.musbtn,.mfloat{top:calc(18px + env(safe-area-inset-top))}
   .muted{font-size:13px;line-height:1.55}
   .pwrap{padding:12px 0 0}
   .pnum{font-size:58px}
@@ -1035,6 +1053,7 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
 
 <header>
   <button class="cog" id="cog" aria-label="Settings"><svg viewBox="0 0 24 24"><path d="M21.98 9.88 L21.98 14.12 L18.95 14.53 L18.71 15.13 L20.55 17.56 L17.56 20.55 L15.13 18.71 L14.53 18.95 L14.12 21.98 L9.88 21.98 L9.47 18.95 L8.87 18.71 L6.44 20.55 L3.45 17.56 L5.29 15.13 L5.05 14.53 L2.02 14.12 L2.02 9.88 L5.05 9.47 L5.29 8.87 L3.45 6.44 L6.44 3.45 L8.87 5.29 L9.47 5.05 L9.88 2.02 L14.12 2.02 L14.53 5.05 L15.13 5.29 L17.56 3.45 L20.55 6.44 L18.71 8.87 L18.95 9.47 Z"/><circle cx="12" cy="12" r="3.4"/></svg></button>
+  <button class="mfloat hide" id="musPP" aria-label="Play or pause"></button>
   <button class="musbtn" id="mus" aria-label="Music"><svg viewBox="0 0 24 24"><path d="M9 18V5.2l10-2v12.4"/><circle cx="6.4" cy="18" r="2.6"/><circle cx="16.4" cy="15.6" r="2.6"/></svg></button>
   <div class="eyebrow" id="hdrK">Session</div>
   <h1 id="hdrT">Today</h1>
@@ -1057,7 +1076,7 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
 let DB={sess:[],wt:[]}, mem={}, STORE='memory';
-const APP_VERSION='2026.09.20.58';
+const APP_VERSION='2026.09.21.61';
 const HOSTED = location.protocol==='https:';
 const STORE_LABEL={
   local: HOSTED
@@ -1538,11 +1557,16 @@ const mDel=(id)=>idbDo('readwrite',st=>st.delete(id));
 
 let PL={list:[], i:-1, audio:null, on:false, url:''};
 /* Tracks committed to the repo, listed in music/index.json. Absent is fine. */
+/* Only a successful read is remembered. A failure — offline at start-up, Pages still
+   deploying — is left uncached so the next look tries again rather than showing an
+   empty list for the rest of the session. */
 function repoTracks(){
   if(PL.repo) return Promise.resolve(PL.repo);
+  if(typeof fetch!=='function') return Promise.resolve([]);
   return fetch('music/index.json',{cache:'no-store'})
-    .then(r=>r.ok?r.json():[])
+    .then(r=>r.ok?r.json():null)
     .then(j=>{
+      if(j===null) return [];                    // no list published, or it failed
       const list=(Array.isArray(j)?j:[]).map(x=>{
         const file=typeof x==='string'?x:(x.file||'');
         if(!file) return null;
@@ -1551,7 +1575,7 @@ function repoTracks(){
                 name:(typeof x==='object'&&x.name)||file.replace(/\.[a-z0-9]+$/i,'')};
       }).filter(Boolean);
       PL.repo=list; return list;
-    }).catch(()=>{ PL.repo=[]; return []; });
+    }).catch(()=>[]);
 }
 function mList(){
   return Promise.all([repoTracks(), mAll()]).then(([r,d])=>
@@ -1603,6 +1627,7 @@ function mPlay(i){
   if(i<0) i=list.length-1;
   if(i>=list.length) i=0;
   const t=list[i], a=mAudio();
+  DB.trk=t.id; save();                 // remember it for next time
   try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}   // before play, or the lock screen stops it
   if(PL.url){ URL.revokeObjectURL(PL.url); PL.url=''; }
   a.src = t.repo ? t.src : (PL.url=URL.createObjectURL(mSrcFor(t)));
@@ -1633,7 +1658,8 @@ function mPlay(i){
 }
 function mPause(){ if(PL.audio) PL.audio.pause(); }
 function mResume(){
-  if(!PL.audio || PL.i<0) return mPlay(0);
+  if(PL.i<0) return mPlay(0);
+  if(!PL.audio || !PL.audio.src) return mPlay(PL.i);   // selected at start-up, never loaded
   try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}
   PL.audio.play().then(()=>{ PL.on=true; paintMusic(); })
     .catch(e=>toast('CANNOT PLAY: '+((e&&e.name)||'ERROR')));
@@ -1645,9 +1671,32 @@ function mStop(){
   wantSession();                       // hand the session back
   paintMusic();
 }
+const ICON_PLAY='<svg viewBox="0 0 24 24"><path d="M8 5.6v12.8L19 12z" stroke="none"/></svg>';
+const ICON_PAUSE='<svg viewBox="0 0 24 24" fill="none"><path d="M9.5 5.6v12.8M14.5 5.6v12.8"/></svg>';
+/* Pick up where he left off: the last track played is remembered by id and selected
+   on start-up, paused. Nothing plays on its own — the button is simply ready. */
+function mPreselect(){
+  mList().then(list=>{
+    PL.list=list;
+    if(!list.length) return paintMusic();
+    let i=list.findIndex(t=>t.id===DB.trk);
+    if(i<0) i=0;
+    PL.i=i; PL.on=false;
+    paintMusic();
+  }).catch(()=>{});
+}
 function paintMusic(){
   const note=document.getElementById('mus');
   if(note) note.classList.toggle('playing', !!PL.on);
+  const pp=document.getElementById('musPP');
+  if(pp){
+    const loaded = PL.i>=0 && !!PL.list[PL.i];
+    pp.classList.toggle('hide', !loaded);        // nothing chosen yet, nothing to show
+    if(loaded){
+      pp.innerHTML = PL.on ? ICON_PAUSE : ICON_PLAY;
+      pp.setAttribute('aria-label', PL.on ? 'Pause' : 'Play');
+    }
+  }
   const now=document.getElementById('plNow'), btn=document.getElementById('plGo');
   if(now) now.textContent = PL.i>=0 && PL.list[PL.i] ? PL.list[PL.i].name : 'nothing selected';
   if(btn) btn.textContent = PL.on ? '[ PAUSE ]' : '[ PLAY ]';
@@ -1866,6 +1915,7 @@ function cleanDB(d){
   const out={sess:[],wt:[],waist:[],photos:[],sfx:true,bk:0,seen:true};
   /* carried through untouched, or reloading the app would forget the GitHub token */
   if(d && d.gh && typeof d.gh==='object') out.gh=d.gh;
+  if(d && typeof d.trk==='string') out.trk=d.trk;
   out.sfx = !(d && d.sfx===false);
   if(!d || typeof d!=='object') return out;
   (Array.isArray(d.wt)?d.wt:[]).forEach(x=>{
@@ -2724,17 +2774,29 @@ function debrief(before){
 /* ---------- session history ----------
    Every session in the log, newest first: what was done, at what weight, for how
    many reps. One session open at a time so the list stays scannable. */
+const MONTHS=['January','February','March','April','May','June','July',
+              'August','September','October','November','December'];
+function ord(n){ const s=['th','st','nd','rd'], v=n%100; return n+(s[(v-20)%10]||s[v]||s[0]); }
+function longDate(iso){
+  const p=(iso||'').split('-');
+  return p.length===3 ? ord(+p[2])+' '+MONTHS[+p[1]-1]+' '+p[0].slice(2) : (iso||'');
+}
+/* One row per lift on a grid, so the weight and each set sit in the same column all
+   the way down the session however long the lift's name is. */
 function histSets(id,v){
   const e=EX[id]||{n:id};
   const done=(v||[]).filter(x=>+x.reps>0);
   if(!done.length) return '';
   const bw=e.bw, kgs=done.map(x=>+x.kg||0);
   const same=!bw && kgs.every(k=>k===kgs[0]);
+  let cells='';
+  for(let i=0;i<3;i++){
+    const x=done[i];
+    cells += x ? '<span class="pc">'+((!bw&&!same)?kgTxt(+x.kg||0)+'\u00d7':'')+x.reps+'</span>'
+               : '<span class="pc blank"></span>';
+  }
   return '<div class="hex"><span class="hn">'+esc(e.n||id)+'</span>'+
-    '<span class="hs">'+
-      (same?'<span class="pw">'+kgTxt(kgs[0])+'kg</span>':'')+
-      done.map(x=>'<span class="pc">'+((!bw&&!same)?kgTxt(+x.kg||0)+'\u00d7':'')+x.reps+'</span>').join('')+
-    '</span></div>';
+    '<span class="pw">'+(same?kgTxt(kgs[0])+'kg':'')+'</span>'+cells+'</div>';
 }
 function histOpen(i){
   const box=document.querySelector('.hhead[data-h="'+i+'"]');
@@ -2786,7 +2848,7 @@ function openHistory(){
       '<button class="hhead" data-h="'+i+'">'+
         '<span class="ho">OP '+String(i+1).padStart(3,'0')+'</span>'+
         '<span class="hw">'+s.w+'</span>'+
-        '<span class="hd">'+esc(s.d.slice(2))+'</span>'+
+        '<span class="hd">'+esc(longDate(s.d))+'</span>'+
         '<span class="hg">'+(p.grade||'')+'</span>'+
       '</button>'+
       '<div class="hbody" id="hb-'+i+'"'+(i===n-1?' style="height:auto"':'')+'>'+
@@ -2803,7 +2865,7 @@ function openHistory(){
 function openSettings(){
   const n=DB.sess.length, b=bkBehind();
   const XL=levelOf(ledger().total), LP=ledger().per;
-  let h='<div class="veil" id="veil"></div><div class="sheet fit">'+
+  let h='<div class="veil" id="veil"></div><div class="sheet fit full">'+
         '<h3>Settings<button class="shx" id="stClose" aria-label="Close">\u00d7</button></h3>';
 
   h+='<div class="card"><h3>Clearance</h3>'+
@@ -2819,7 +2881,8 @@ function openSettings(){
        '<button class="btn ghost" id="sfxBtn">[ '+(DB.sfx===false?'SFX OFF':'SFX ON')+' ]</button>'+
      '</div></div>';
 
-  h+='<button class="srow" id="stHist"><h3>History</h3><span>\u203a</span></button>';
+  h+='<button class="srow" id="stHist"><span class="srl"><h3>History</h3>'+
+     '<span class="srsub">'+esc(sinceStart())+'</span></span><span>\u203a</span></button>';
 
   h+='<div class="card"><h3>Backup</h3>'+
      '<div class="muted">'+n+' op'+(n===1?'':'s')+' logged'+(b?' · <b style="color:var(--bronze)">'+b+' not backed up</b>':' · up to date')+'</div>'+
@@ -3339,6 +3402,7 @@ document.addEventListener('change',e=>{
 },false);
 document.getElementById('cog').onclick=openSettings;
 document.getElementById('mus').onclick=openMusic;
+document.getElementById('musPP').onclick=()=>{ PL.on?mPause():mResume(); };
 /* Hands the link to YouTube rather than trying to play it here: an embedded player
    stops the moment the screen locks, which is most of a session.
    It has to be a real link with a real href — iOS only routes a tap to the app when
@@ -3360,6 +3424,7 @@ boot('load',load);
 boot('render',go);
 boot('sheets',watchSheets);
 boot('splash',splash);
+boot('music',mPreselect);
 boot('interference',()=>{ zapLoop(); setTimeout(rollPass, RND(1500,9000)); drawStatic(); fuzzNext(); });
 boot('worker',()=>{ if(HOSTED && 'serviceWorker' in navigator)
   navigator.serviceWorker.register('sw.js').catch(()=>{}); });
