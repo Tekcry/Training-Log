@@ -1013,7 +1013,7 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
 const KEY='sfx_log_v1';
 let DB={sess:[],wt:[]}, mem={}, STORE='memory';
 const MUS_DEFAULT='https://youtu.be/t129dlHBY3s';
-const APP_VERSION='2026.09.20.43';
+const APP_VERSION='2026.09.20.44';
 const HOSTED = location.protocol==='https:';
 const STORE_LABEL={
   local: HOSTED
@@ -1588,7 +1588,7 @@ function openRestore(){
     '<div class="veil" id="veil"></div><div class="sheet"><h3>Empty log</h3>'+
     '<div class="muted" style="margin-top:6px">Nothing is saved in this copy of the app. '+
       'If this is a new file, bring your last backup across.</div>'+
-    '<input type="file" id="rsFile" accept=".json,.txt,.tl1,application/json,text/plain" style="display:none">'+
+    '<input type="file" id="rsFile" style="display:none">'+
     '<textarea id="rsText" placeholder="Paste your backup here" '+
       'style="min-height:84px;margin-top:14px'+(canClip?';display:none':'')+'"></textarea>'+
     '<div class="duo">'+
@@ -2388,7 +2388,7 @@ function openImport(){
   const canClip = !!(navigator.clipboard && navigator.clipboard.readText);
   let h='<div class="veil" id="veil"></div><div class="sheet"><h3>Import</h3>'+
     '<div class="muted" style="margin-top:6px">Replaces everything currently saved.</div>'+
-    '<input type="file" id="imFile" accept=".json,application/json" style="display:none">'+
+    '<input type="file" id="imFile" style="display:none">'+
     '<textarea id="imText" placeholder="Paste a backup here" '+
       'style="min-height:110px;margin-top:14px'+(canClip?';display:none':'')+'"></textarea>'+
     '<div class="duo">'+
@@ -2548,18 +2548,29 @@ function backupName(){
   const p=n=>String(n).padStart(2,'0');
   return 'training-'+String(d.getFullYear()).slice(2)+p(d.getMonth()+1)+p(d.getDate())+'.txt';
 }
+let EXPORTING=false;
 async function exportFile(){
+  if(EXPORTING) return true;        // a second tap must not write a second file
+  EXPORTING=true;
+  try{ return await runExport(); }
+  finally{ setTimeout(()=>{ EXPORTING=false; },600); }
+}
+async function runExport(){
   const text=packDB(), name=backupName();
+  /* Share first where it exists. Once the sheet has been handed the file, this
+     function is done either way — it must never fall through to the download link
+     as well, or the backup is written twice. */
   if(navigator.share && window.isSecureContext){
-    try{
-      const file=new File([text], name, {type:'text/plain'});
-      if(!navigator.canShare || navigator.canShare({files:[file]})){
+    let file=null;
+    try{ file=new File([text], name, {type:'text/plain'}); }catch(e){}
+    if(file && (!navigator.canShare || navigator.canShare({files:[file]}))){
+      try{
         await navigator.share({files:[file], title:name});
         markBacked(); toast('EXPORTED');
-        return true;
+      }catch(e){
+        if(!e || e.name!=='AbortError') toast('SHARE FAILED');
       }
-    }catch(e){
-      if(e && e.name==='AbortError') return true;   // he closed the sheet; not a failure
+      return true;                  // handed over, whatever the outcome
     }
   }
   try{
