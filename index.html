@@ -230,6 +230,72 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .setbtn.on .sd::after,.setbtn.now .sd::after{content:''}
 .setbtn.mate .sd::after{opacity:1}
 .card h3 .lk{font-family:var(--serif);font-size:9.5px;letter-spacing:.14em;color:var(--dimmer)}
+/* Progress */
+.pghead{display:flex;align-items:center;gap:10px;margin:20px 0 7px}
+.pghead:first-of-type{margin-top:12px}
+.pgh{font-family:var(--serif);font-size:10px;letter-spacing:.2em;color:var(--bronze);
+  margin:0;font-weight:400}
+/* one small control per section, rather than a row of wide buttons */
+.pgadd,.pgview{width:30px;height:30px;line-height:26px;text-align:center;
+  background:none;border:1px solid var(--cardline);border-radius:8px;
+  color:var(--bronze);font-size:19px;padding:0}
+.pgview{margin-left:auto}
+.pgadd{margin-left:6px}
+.pgadd:active,.pgview:active{border-color:var(--bronze);background:var(--card)}
+.pgview svg{width:16px;height:16px;display:block;margin:0 auto;stroke:currentColor;
+  fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+/* a month of readings */
+.chart{width:100%;height:auto;margin-top:10px;display:block}
+.chart .line{fill:none;stroke:var(--bronze);stroke-width:1.6;
+  vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
+.chart .avg{stroke:var(--dim);stroke-width:1;stroke-dasharray:4 4;
+  vector-effect:non-scaling-stroke}
+.chart .dots circle{fill:var(--champ)}
+.chartkey{display:flex;justify-content:space-between;margin-top:5px;
+  font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dimmer);
+  font-variant-numeric:tabular-nums}
+.chartkey .mid{color:var(--dim)}
+.tklist{margin-top:14px}
+.tkrow{display:flex;align-items:baseline;justify-content:space-between;width:100%;
+  padding:11px 0;border-bottom:1px solid var(--hair);background:none;border-left:0;
+  border-right:0;border-top:0;text-align:left}
+.tkrow .ed{font-size:12.5px;color:var(--dim)}
+.tkrow .ev{font-size:13px;color:var(--champ);font-variant-numeric:tabular-nums}
+.tkrow:active .ev{color:var(--bronze)}
+.pgline{font-family:var(--serif);font-size:16px;color:var(--champ)}
+.pgline.warn{color:var(--alert)}
+.pgnote{margin-top:5px;font-size:12.5px;line-height:1.5;color:var(--dim)}
+.pgrail{margin-top:6px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dimmer)}
+.bignum{width:100%;margin-top:14px;padding:16px;background:var(--card);
+  border:1px solid var(--cardline);border-radius:8px;color:var(--champ);
+  font-family:var(--serif);font-size:30px;text-align:center;
+  font-variant-numeric:tabular-nums;-webkit-appearance:none;appearance:none}
+.vol{margin-top:4px}
+.volrow{display:grid;grid-template-columns:5.6em 1fr 2.4em 2.4em;align-items:center;
+  gap:8px;padding:5px 0;font-size:12px}
+.volrow .vm{color:var(--dim)}
+.volrow .vbar{height:5px;background:var(--cardhair);border-radius:2px;overflow:hidden}
+.volrow .vbar i{display:block;height:100%;background:var(--dim);border-radius:2px;
+  transition:width .4s ease}
+.volrow .vbar i.ok{background:var(--bronze)}
+.volrow .vn{text-align:right;color:var(--champ);font-variant-numeric:tabular-nums}
+.volrow .vt{color:var(--dimmer);font-variant-numeric:tabular-nums}
+.trends{margin-top:4px}
+.trow{display:grid;grid-template-columns:1fr 52px 5.6em 3.1em;align-items:center;gap:8px;
+  padding:7px 0;border-bottom:1px solid var(--hair);font-size:12.5px}
+.tends{font-size:11px;color:var(--champ);white-space:nowrap;text-align:right;
+  font-variant-numeric:tabular-nums}
+.tends i{color:var(--dimmer);font-style:normal;padding:0 3px}
+.tpct{font-size:11px;text-align:right;color:var(--dimmer);font-variant-numeric:tabular-nums}
+.tpct.up{color:var(--bronze)}
+.trow .tn{color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spark{width:52px;height:18px;overflow:visible}
+.spark path{fill:none;stroke:var(--dim);stroke-width:1.4;vector-effect:non-scaling-stroke;
+  stroke-linejoin:round;stroke-linecap:round}
+.sparkn{font-size:11px;text-align:right;color:var(--dimmer);font-variant-numeric:tabular-nums}
+.sparkn.up{color:var(--bronze)}
+.sparkless{color:var(--dimmer)}
+
 /* History: a row per session, the sets shown in the same boxes the cards use. */
 .srow{display:flex;align-items:center;justify-content:space-between;width:100%;
   background:var(--card);border:1px solid var(--cardline);border-radius:14px;
@@ -240,6 +306,19 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .srow span{color:var(--bronze);font-size:18px;line-height:1}
 .srow:active{border-color:var(--bronze)}
 .hist{margin-top:10px}
+/* months */
+.hmon{border-bottom:1px solid var(--cardline)}
+.hmhead{display:flex;align-items:baseline;justify-content:space-between;width:100%;
+  background:none;border:none;padding:14px 0;text-align:left}
+.hmn{font-family:var(--serif);font-size:13px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--dim)}
+.hmc{font-size:10.5px;letter-spacing:.12em;color:var(--dimmer)}
+.hmon.open .hmn{color:var(--bronze)}
+.hmhead::after{content:'+';margin-left:10px;color:var(--dimmer);font-size:14px}
+.hmon.open .hmhead::after{content:'\2014'}
+.hmbody{height:0;overflow:hidden}
+.hmbody.anim{transition:height .34s cubic-bezier(.22,.72,.28,1)}
+.hmbody .hsess:last-child{border-bottom:none}
 .hsess{border-bottom:1px solid var(--hair)}
 .hhead{display:flex;align-items:baseline;gap:10px;width:100%;background:none;border:none;
   padding:11px 0;text-align:left;color:var(--dim);
@@ -785,6 +864,7 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 .binner{padding-bottom:2px}
 .brief p{font-size:13.5px;color:var(--dim);margin:9px 0 0;line-height:1.6}
 .brief p b{color:var(--tx);font-weight:500}
+.brief p.capwarn{color:var(--alert)}
 
 .btn{display:block;width:100%;background:transparent;border:1px solid var(--line);
   color:var(--tx);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;
@@ -874,6 +954,19 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
 .sheet.fit.full{top:0;bottom:0;height:100vh;height:100dvh;max-height:none;
   justify-content:space-between;gap:14px;overflow:hidden;
   padding:calc(20px + env(safe-area-inset-top)) 22px calc(20px + env(safe-area-inset-bottom))}
+/* full screen, but these two have more than a screenful, so the body scrolls inside */
+.sheet.fit.full.scroll{justify-content:flex-start;gap:0}
+.sheet.fit.full.scroll .pgbody{flex:1;min-height:0;overflow:auto;
+  -webkit-overflow-scrolling:touch;padding-bottom:10px}
+.ents{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.ent{display:flex;align-items:baseline;gap:7px;background:var(--card);
+  border:1px solid var(--cardline);border-radius:6px;padding:7px 9px;color:var(--dim)}
+.ent:active{border-color:var(--bronze)}
+.ent .ed{font-size:10.5px;color:var(--dimmer)}
+.ent .ev{font-size:12px;color:var(--champ);font-variant-numeric:tabular-nums}
+.hdel{margin-top:12px}
+.hex .pc{background:none;border:1px solid var(--cardhair);color:var(--dim)}
+.hex .pc:active{border-color:var(--bronze);color:var(--bronze)}
 .sheet.fit{display:flex;flex-direction:column;gap:10px;
   max-height:calc(100vh - var(--fabh,0px) - 14px);
   max-height:calc(100dvh - var(--fabh,0px) - 14px);
@@ -953,6 +1046,8 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
   animation:fuzznoise .46s steps(8,end) both}
 /* sheet replacing a sheet: the backdrop stays put and the tune-in is quicker */
 .veil.noanim:not(.out){animation:none}
+.veil.vstack{background:rgba(0,0,0,.55)}
+.layer{display:contents}
 .sheet.swapin:not(.out){animation:fuzzin .34s steps(1,end) both}
 .sheet.swapin:not(.out)::before{animation-duration:.34s}
 @media (prefers-reduced-motion: reduce){
@@ -1076,7 +1171,7 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
 let DB={sess:[],wt:[]}, mem={}, STORE='memory';
-const APP_VERSION='2026.09.21.61';
+const APP_VERSION='2026.09.21.71';
 const HOSTED = location.protocol==='https:';
 const STORE_LABEL={
   local: HOSTED
@@ -2103,21 +2198,62 @@ function watchSheets(){
 /* Writing a new sheet over an old one used to rebuild the veil too, so the page
    behind flashed at full brightness for the length of the fade. When a veil is
    already up it is left alone and the incoming sheet just rises into place. */
-function setSheet(html){
+function topSheet(){
+  const l=document.querySelectorAll('#sheetWrap .sheet:not(.out)');
+  return l.length ? l[l.length-1] : null;
+}
+/* Open a sheet. Replacing is the default; stacking keeps what is underneath on
+   screen, which is what a sub-panel should do — stepping into the weigh-in from
+   Progress should leave Progress behind it, not the dashboard. */
+function setSheet(html,stack){
   /* Sheets stop at the top of the bar using a measurement taken on a timer. Take a
      fresh one now, or a sheet opened before the first tick lands underneath it. */
   syncPad(true);
   const wrap=document.getElementById('sheetWrap');
   const had=!!wrap.querySelector('.veil:not(.out)');
+  if(stack && had){
+    const depth=wrap.querySelectorAll('.sheet').length;
+    const box=document.createElement('div');
+    box.className='layer';
+    box.innerHTML=html;
+    const v=box.querySelector('.veil'), sh=box.querySelector('.sheet');
+    if(v){ v.style.zIndex=65+depth*10; v.classList.add('noanim'); v.removeAttribute('id'); v.classList.add('vstack'); }
+    if(sh) sh.style.zIndex=70+depth*10;
+    wrap.appendChild(box);
+    lockScroll();
+    return;
+  }
   wrap.innerHTML=html;
   lockScroll();                 // immediately, not a tick later on the observer
   if(!had) return;
   const v=wrap.querySelector('.veil'); if(v) v.classList.add('noanim');
   const sh=wrap.querySelector('.sheet'); if(sh) sh.classList.add('swapin');
 }
+/* Remove layers outright, with no animation — used when a panel is about to be
+   rebuilt over itself, so the stack does not grow every time something is saved. */
+function dropLayers(n){
+  const wrap=document.getElementById('sheetWrap');
+  for(let i=0;i<n;i++){
+    const l=wrap.querySelectorAll('.layer');
+    if(!l.length) return;
+    const box=l[l.length-1];
+    if(box.parentNode) box.parentNode.removeChild(box);
+  }
+}
+/* Close just the top layer, revealing whatever it was opened from. */
+function popSheet(){
+  const wrap=document.getElementById('sheetWrap');
+  const layers=wrap.querySelectorAll('.layer');
+  if(!layers.length) return closeSheet();
+  const box=layers[layers.length-1], sh=box.querySelector('.sheet'), vl=box.querySelector('.veil');
+  sfx('close');
+  if(sh) sh.classList.add('out');
+  if(vl) vl.classList.add('out');
+  setTimeout(()=>{ if(box.parentNode) box.parentNode.removeChild(box); },380);
+}
 function closeSheet(){
   const wrap=document.getElementById('sheetWrap');
-  const sh=wrap.querySelector('.sheet'), vl=wrap.querySelector('.veil');
+  const sh=topSheet()||wrap.querySelector('.sheet'), vl=wrap.querySelector('.veil');
   /* Release the page now, not when the markup goes. The body is pinned while a
      sheet is open, so anything that scrolls straight after closing — the glide to
      the next set — would run against a frozen page and then be undone by the
@@ -2126,8 +2262,9 @@ function closeSheet(){
   if(TOPAFTER){ TOPAFTER=false; setTimeout(()=>glideTo(0,600),60); }
   if(!sh){ wrap.innerHTML=''; return; }
   sfx('close');
-  sh.classList.add('out'); if(vl) vl.classList.add('out');
-  setTimeout(()=>{ if(sh.parentNode===wrap) wrap.innerHTML=''; },380);
+  sh.classList.add('out');
+  wrap.querySelectorAll('.veil').forEach(v=>v.classList.add('out'));
+  setTimeout(()=>{ if(document.getElementById('sheetWrap')===wrap) wrap.innerHTML=''; },380);
 }
 function clearStamp(id,ix){
   const i=T.stamps.findIndex(x=>x.n===EX[id].n && x.s===ix+1);
@@ -2668,6 +2805,7 @@ function rTrain(){
         '<p>'+ns+' sets of '+e.lo+'\u2013'+e.hi+(e.side?' per side':'')+
           (chained?' \u00b7 superset with '+g.filter(x=>x!==id).map(x=>EX[x].n.toLowerCase()).join(' and '):'')+'</p>'+
         '<p><b>'+p.why+'</b></p>'+
+      (capWarn(id,p.kg)?'<p class="capwarn">'+esc(capWarn(id,p.kg))+'</p>':'')+
         '<p>'+e.how+'</p><p><b>'+e.cue+'</b></p>'+
       '</div></div></div></div>'+
       (chained && gi<g.length-1
@@ -2771,6 +2909,337 @@ function debrief(before){
     b>1 ? b+' sessions not backed up.' : 'Paste over your note.');
 }
 
+/* ---------- progress ----------
+   The log measures inputs: sets, weights, reps. The goal is measured in waist and
+   photographs. This is where the two meet — what the scale is doing against its
+   guardrails, what the tape says, when the next photographs are due, whether each
+   muscle is getting the weekly sets the programme claims, and whether the lifts are
+   actually climbing. */
+
+/* Sets are credited in full to what a lift is built for and at half to what it
+   assists, which is the usual way of counting weekly volume. */
+const VOL={
+  gsq:{Quads:1,Glutes:1,Abs:.5}, spl:{Quads:1,Glutes:.5},
+  ht:{Glutes:1}, bp:{Chest:1,Triceps:.5,Shoulders:.5},
+  dip:{Chest:1,Triceps:1,Shoulders:.5}, ohp:{Shoulders:1,Triceps:.5},
+  lr:{Shoulders:1}, row:{Back:1,Biceps:.5}, csr:{Back:1,Biceps:.5},
+  pu:{Back:1,Biceps:.5}, cur:{Biceps:1}, tri:{Triceps:1}, hkr:{Abs:1}
+};
+const MUSCLES=['Chest','Back','Shoulders','Biceps','Triceps','Quads','Glutes','Abs'];
+/* The target is not a number I typed in — it is what the programme itself prescribes,
+   counted by the same rule, at three sessions a week alternating A and B. Change the
+   programme and the targets move with it. */
+function volTarget(){
+  const out={}; MUSCLES.forEach(m=>out[m]=0);
+  ['A','B'].forEach(w=>{
+    const seen={};
+    (W[w]?W[w].ex:[]).forEach(id=>{
+      if(seen[id]) return; seen[id]=1;
+      const v=VOL[id]; if(!v) return;
+      const n=setsFor(id,w);
+      for(const m in v) out[m]+=n*v[m]*1.5;      // 1.5 of each workout per week
+    });
+  });
+  MUSCLES.forEach(m=>out[m]=Math.round(out[m]*10)/10);
+  return out;
+}
+function volume(days){
+  const out={};
+  MUSCLES.forEach(m=>out[m]=0);
+  DB.sess.forEach(s=>{
+    if(daysAgo(s.d)>=days) return;
+    for(const id in s.sets){
+      const v=VOL[id]; if(!v) continue;
+      const n=s.sets[id].filter(x=>+x.reps>0).length;
+      for(const m in v) out[m]+=n*v[m];
+    }
+  });
+  return out;
+}
+/* Estimated one-rep max from the best set, so a session at more reps and less weight
+   still shows as progress. */
+function e1rm(sets){
+  let best=0;
+  (sets||[]).forEach(x=>{
+    const kg=+x.kg||0, r=+x.reps||0;
+    if(!r) return;
+    const e = kg>0 ? kg*(1+r/30) : r;      // bodyweight lifts are scored on reps
+    if(e>best) best=e;
+  });
+  return best;
+}
+function liftTrend(id){
+  const pts=[];
+  DB.sess.forEach(s=>{ if(s.sets[id]) { const e=e1rm(s.sets[id]); if(e) pts.push({d:s.d,e:e}); } });
+  return pts;
+}
+function spark(pts,w,h){
+  if(pts.length<2) return '<span class="sparkless">\u2014</span>';
+  const v=pts.map(p=>p.e), lo=Math.min.apply(null,v), hi=Math.max.apply(null,v);
+  const span=(hi-lo)||1;
+  const d=pts.map((p,i)=>{
+    const x=(i/(pts.length-1))*(w-2)+1;
+    const y=h-1-((p.e-lo)/span)*(h-2);
+    return (i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);
+  }).join(' ');
+  return '<svg class="spark" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none">'+
+    '<path d="'+d+'"/></svg>';
+}
+/* The span of a lift: the lightest working weight it has been trained at, the
+   heaviest, and the gap between them. Bodyweight lifts have only reps to report,
+   so that is what they report. */
+function liftSpan(id){
+  const e=EX[id], tops=[];
+  DB.sess.forEach(s=>{
+    const v=(s.sets[id]||[]).filter(x=>+x.reps>0);
+    if(!v.length) return;
+    tops.push(e.bw ? Math.max.apply(null,v.map(x=>+x.reps))
+                   : Math.max.apply(null,v.map(x=>+x.kg||0)));
+  });
+  if(!tops.length) return null;
+  const lo=Math.min.apply(null,tops), hi=Math.max.apply(null,tops);
+  return {lo:lo, hi:hi, bw:!!e.bw,
+          pct: lo>0 ? Math.round((hi-lo)/lo*100) : 0};
+}
+/* Weight guardrails, straight from the plan: flat is right, a kilo down in a month
+   means eating too little, a kilo up means eating slightly too much. */
+function wtAvg(from,to){
+  const v=DB.wt.filter(x=>{ const a=daysAgo(x.d); return a>=from && a<to; }).map(x=>+x.kg);
+  return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null;
+}
+function wtVerdict(){
+  const now=wtAvg(0,14), then=wtAvg(28,42);
+  if(now===null) return {line:'No weigh-ins yet.', note:'Log one and the guardrails start working.'};
+  const txt=now.toFixed(1)+'kg over 14 days';
+  if(then===null) return {line:txt, note:'Another two weeks and the trend becomes readable.'};
+  const d=now-then;
+  const move=(d>=0?'+':'')+d.toFixed(1)+'kg on a month ago';
+  if(d<-1)  return {line:txt+' \u00b7 '+move, note:'Falling too fast. Eat more \u2014 this is trading away the muscle.', bad:true};
+  if(d>1)   return {line:txt+' \u00b7 '+move, note:'Climbing. Trim 100\u2013150 calories.', bad:true};
+  return {line:txt+' \u00b7 '+move, note:'Flat, which is exactly right for a recomposition.'};
+}
+function waistLine(){
+  const w=DB.waist.slice().sort((a,b)=>a.d<b.d?1:-1);
+  if(!w.length) return {line:'No measurements yet.', note:'This is the main fat signal — more use than the scale.'};
+  const last=w[0], first=w[w.length-1];
+  const d=(+last.cm)-(+first.cm);
+  return {line:last.cm+' \u00b7 '+longDate(last.d),
+          note: w.length<2 ? 'One more in two to four weeks and it becomes a trend.'
+               : (d<=-1?'Down ':d>=1?'Up ':'Level, ')+
+                 (Math.abs(d)>=1?Math.abs(d).toFixed(1)+' since '+longDate(first.d):'since '+longDate(first.d))};
+}
+const PHOTO_EVERY=28;
+function photoDue(){
+  if(!DB.photos.length) return {due:0, line:'No photographs logged.',
+    note:'The baseline is the one that makes every later set worth taking.'};
+  const last=DB.photos.slice().sort((a,b)=>a.d<b.d?1:-1)[0];
+  const since=daysAgo(last.d), left=PHOTO_EVERY-since;
+  return {due:left, line: left<=0 ? 'Due now' : left+' day'+(left===1?'':'s')+' to go',
+    note:'Last set '+longDate(last.d)+'. Same side, upright, one light source, waist measured the same day.'};
+}
+/* A single bell caps at 40kg, so the lifts loaded with one need warning before the
+   ceiling arrives rather than on the night it does. */
+const BELL_CAP=40;
+const CAPPED={gsq:1, ht:1};
+function capWarn(id,kg){
+  if(!CAPPED[id] || !kg) return '';
+  const left=ladder(id).filter(x=>x>kg && x<=BELL_CAP).length;
+  if(left>2) return '';
+  return left<=0 ? 'At the top of a single bell. Time to change the exercise, or slow the tempo and pause the reps.'
+                 : left+' increment'+(left===1?'':'s')+' left on a single bell. Start thinking about tempo, pauses or one leg at a time.';
+}
+
+function logBody(kind){
+  const isW=kind==='wt';
+  numSheet({
+    title:isW?'Weigh-in':'Waist',
+    note:isW?'Kilograms, one decimal is plenty.'
+            :'Same spot, relaxed, after a normal breath out. Inches or centimetres \u2014 just be consistent.',
+    phA:isW?'75.0':'32', loA:isW?30:15, hiA:isW?250:200,
+    onSave:(n)=>{
+      const d=today(), arr=isW?DB.wt:DB.waist;
+      const i=arr.findIndex(x=>x.d===d);
+      const row=isW?{d:d,kg:n}:{d:d,cm:n};
+      if(i>-1) arr[i]=row; else arr.push(row);
+      arr.sort((a,b)=>a.d<b.d?-1:1);
+      save(); toast('LOGGED');
+      dropLayers(1); openProgress();          // close the entry, refresh what is behind
+    }});
+}
+function logPhoto(){
+  const d=today();
+  if(!DB.photos.some(x=>x.d===d)) DB.photos.push({d:d});
+  DB.photos.sort((a,b)=>a.d<b.d?-1:1);
+  save(); toast('PHOTOS LOGGED'); openProgress();
+}
+/* The row in settings says the one thing worth knowing without opening it. */
+function progSub(){
+  const ph=photoDue();
+  if(ph.due<=0) return 'PHOTOS DUE';
+  const now=wtAvg(0,14);
+  if(now===null) return 'NO WEIGH-IN YET';
+  return now.toFixed(1)+'KG \u00b7 PHOTOS IN '+ph.due+'D';
+}
+/* A shared editor for a single number, used to correct a weigh-in, a waist
+   measurement, or the weight and reps of a set logged days ago. */
+function numSheet(o){
+  setSheet('<div class="veil" id="veil"></div><div class="sheet"><h3>'+esc(o.title)+
+    '<button class="shx back" id="nsBack" aria-label="Back">\u2039</button></h3>'+
+    (o.note?'<div class="muted">'+esc(o.note)+'</div>':'')+
+    '<input class="bignum" id="nsA" type="number" inputmode="decimal" step="'+(o.stepA||'0.1')+'" '+
+      'value="'+(o.a!==undefined?o.a:'')+'" placeholder="'+esc(o.phA||'')+'">'+
+    (o.two?'<input class="bignum" id="nsB" type="number" inputmode="numeric" step="1" '+
+      'value="'+(o.b!==undefined?o.b:'')+'" placeholder="'+esc(o.phB||'')+'">':'')+
+    '<button class="btn" id="nsSave">[ SAVE ]</button>'+
+    (o.onDel?'<button class="btn ghost" id="nsDel">[ REMOVE ]</button>':''), true);
+  const box=topSheet();
+  const back=()=>popSheet();                 // step back, leaving the panel beneath
+  box.querySelector('.veil,#veil');
+  const veil=document.querySelectorAll('#sheetWrap .veil');
+  veil[veil.length-1].onclick=back;
+  box.querySelector('#nsBack').onclick=back;
+  const A=box.querySelector('#nsA'), B=box.querySelector('#nsB');
+  setTimeout(()=>A.focus(),120);
+  box.querySelector('#nsSave').onclick=()=>{
+    const a=num(A.value,o.loA,o.hiA);
+    const b=o.two?num(B.value,o.loB,o.hiB):null;
+    if(a===null || (o.two && b===null)) return toast('THAT DOES NOT LOOK RIGHT');
+    o.onSave(a,b);
+  };
+  if(o.onDel) box.querySelector('#nsDel').onclick=async()=>{
+    const ok=await askConfirm('Remove this?','It cannot be undone.','Remove');
+    if(!ok) return numSheet(o);
+    o.onDel();
+  };
+}
+/* A month of readings as a line, with the average through it. Enough to see the
+   shape of the thing; the numbers themselves are underneath. */
+function chart(rows,val,days){
+  const W=300,H=110,P=4;
+  const cut=days||31;
+  const pts=rows.filter(x=>daysAgo(x.d)<cut).map(x=>({t:daysAgo(x.d),v:+val(x)}));
+  if(pts.length<2) return '<div class="pgnote">Not enough readings in the last month to draw yet.</div>';
+  const vs=pts.map(p=>p.v);
+  let lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs);
+  const pad=((hi-lo)||1)*0.25; lo-=pad; hi+=pad;
+  const avg=vs.reduce((a,b)=>a+b,0)/vs.length;
+  const x=t=>P+(1-t/cut)*(W-P*2);
+  const y=v=>H-P-((v-lo)/(hi-lo))*(H-P*2);
+  const d=pts.slice().sort((a,b)=>b.t-a.t).map((p,i)=>(i?'L':'M')+x(p.t).toFixed(1)+' '+y(p.v).toFixed(1)).join(' ');
+  const dots=pts.map(p=>'<circle cx="'+x(p.t).toFixed(1)+'" cy="'+y(p.v).toFixed(1)+'" r="1.8"/>').join('');
+  return '<svg class="chart" viewBox="0 0 '+W+' '+H+'">'+
+    '<line class="avg" x1="'+P+'" y1="'+y(avg).toFixed(1)+'" x2="'+(W-P)+'" y2="'+y(avg).toFixed(1)+'"/>'+
+    '<path class="line" d="'+d+'"/><g class="dots">'+dots+'</g></svg>'+
+    '<div class="chartkey"><span>'+Math.min.apply(null,vs)+'</span>'+
+      '<span class="mid">average '+(Math.round(avg*100)/100)+'</span>'+
+      '<span>'+Math.max.apply(null,vs)+'</span></div>';
+}
+/* Every reading for one measure: the month as a line, then the entries themselves,
+   each one tappable to correct or remove. */
+function openTrack(kind){
+  const isW=kind==='wt', isPh=kind==='ph';
+  const arr = isPh?DB.photos : isW?DB.wt : DB.waist;
+  const title = isPh?'Photographs' : isW?'Weigh-ins' : 'Waist';
+  let h='<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>'+title+
+    '<button class="shx back" id="tkBack" aria-label="Back">\u2039</button></h3><div class="pgbody">';
+  if(!arr.length) h+='<div class="pgnote">Nothing logged yet.</div>';
+  else if(!isPh) h+=chart(arr, x=>isW?x.kg:x.cm, 31);
+  if(arr.length){
+    h+='<div class="tklist">'+arr.slice().reverse().map(x=>{
+      const i=arr.indexOf(x);
+      return '<button class="tkrow" data-k="'+kind+'" data-i="'+i+'">'+
+        '<span class="ed">'+esc(longDate(x.d))+'</span>'+
+        '<span class="ev">'+(isPh?'\u2713':isW?x.kg+'kg':x.cm)+'</span></button>';
+    }).join('')+'</div>';
+  }
+  h+='</div></div>';
+  /* one track panel at a time: if one is already open, it is replaced */
+  if(document.querySelector('#sheetWrap .layer .tklist, #sheetWrap .layer .chart')) dropLayers(1);
+  setSheet(h, !!topSheet());
+  const box=topSheet().parentNode.querySelector? topSheet().parentNode : document;
+  const veils=document.querySelectorAll('#sheetWrap .veil');
+  const back=()=>{ if(document.querySelectorAll('#sheetWrap .layer').length) popSheet(); else openProgress(); };
+  veils[veils.length-1].onclick=back;
+  (box.querySelector? box : document).querySelector('#tkBack').onclick=back;
+  document.querySelectorAll('.tkrow').forEach(b=>{
+    b.onclick=()=>{
+      const i=+b.dataset.i;
+      /* drop the editor and the list beneath it, then draw the list again */
+      const again=()=>{ dropLayers(2); openTrack(kind); };
+      if(isPh) return numSheet({title:'Photographs', note:'Logged '+longDate(DB.photos[i].d),
+        a:'', loA:0, hiA:0, onSave:()=>popSheet(),
+        onDel:()=>{ DB.photos.splice(i,1); save(); toast('REMOVED'); again(); }});
+      const a2=isW?DB.wt:DB.waist, row=a2[i];
+      numSheet({title:isW?'Weigh-in':'Waist', note:longDate(row.d),
+        a:isW?row.kg:row.cm, loA:isW?30:15, hiA:isW?250:200,
+        onSave:(v)=>{ if(isW) a2[i].kg=v; else a2[i].cm=v; save(); toast('UPDATED'); again(); },
+        onDel:()=>{ a2.splice(i,1); save(); toast('REMOVED'); again(); }});
+    };
+  });
+}
+function openProgress(){
+  const wv=wtVerdict(), wa=waistLine(), ph=photoDue();
+  const v=volume(28), vT=volTarget();
+  let h='<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>Progress'+
+    '<button class="shx back" id="pgBack" aria-label="Back to settings">\u2039</button></h3>'+
+    '<div class="pgbody">';
+
+  const eye='<svg viewBox="0 0 24 24"><path d="M3 17l5.5-6 4 4L21 6"/></svg>';
+  const head=(t,id,view)=>'<div class="pghead"><h4 class="pgh">'+t+'</h4>'+
+    (view?'<button class="pgview" id="'+view+'" aria-label="History">'+eye+'</button>':'')+
+    (id?'<button class="pgadd" id="'+id+'" aria-label="Add">+</button>':'')+'</div>';
+
+  h+=head('THE SCALE','pgWt','vwWt')+
+     '<div class="pgline'+(wv.bad?' warn':'')+'">'+esc(wv.line)+'</div>'+
+     '<div class="pgnote">'+esc(wv.note)+'</div>';
+
+  h+=head('WAIST','pgWa','vwWa')+
+     '<div class="pgline">'+esc(wa.line)+'</div>'+
+     '<div class="pgnote">'+esc(wa.note)+'</div>';
+
+  h+=head('PHOTOGRAPHS','pgPh','vwPh')+
+     '<div class="pgline'+(ph.due<=0?' warn':'')+'">'+esc(ph.line)+'</div>'+
+     '<div class="pgnote">'+esc(ph.note)+'</div>';
+
+  h+=head('SETS A WEEK')+'<div class="vol">';
+  MUSCLES.forEach(m=>{
+    const got=Math.round((v[m]/4)*10)/10, want=vT[m]||0;
+    h+='<div class="volrow"><span class="vm">'+m+'</span>'+
+       '<span class="vbar"><i style="width:'+Math.round(Math.min(1,want?got/want:0)*100)+'%" class="'+
+         (want&&got>=want*0.85?'ok':'')+'"></i></span>'+
+       '<span class="vn">'+got+'</span><span class="vt">/'+want+'</span></div>';
+  });
+  h+='</div>';
+
+  h+=head('STRENGTH')+'<div class="trends">';
+  Object.keys(VOL).filter(id=>EX[id]).forEach(id=>{
+    const pts=liftTrend(id);
+    if(pts.length<2) return;
+    const sp=liftSpan(id);
+    if(!sp) return;
+    const unit=sp.bw?' reps':'kg';
+    h+='<div class="trow"><span class="tn">'+esc(EX[id].n)+'</span>'+
+       spark(pts,52,18)+
+       '<span class="tends">'+kgTxt(sp.lo)+'<i>\u2013</i>'+kgTxt(sp.hi)+unit+'</span>'+
+       '<span class="tpct'+(sp.pct>0?' up':'')+'">'+(sp.pct>0?'+':'')+sp.pct+'%</span>'+
+       '</div>';
+  });
+  h+='</div></div></div>';
+  setSheet(h);
+  document.getElementById('veil').onclick=closeSheet;
+  document.getElementById('pgBack').onclick=openSettings;
+  document.getElementById('pgWt').onclick=()=>logBody('wt');
+  document.getElementById('pgWa').onclick=()=>logBody('waist');
+  document.getElementById('pgPh').onclick=async()=>{
+    const ok=await askConfirm('Photographs taken?','Logs today against the 28-day cycle.','Log');
+    if(!ok) return openProgress();
+    logPhoto();
+  };
+  document.getElementById('vwWt').onclick=()=>openTrack('wt');
+  document.getElementById('vwWa').onclick=()=>openTrack('waist');
+  document.getElementById('vwPh').onclick=()=>openTrack('ph');
+}
+
 /* ---------- session history ----------
    Every session in the log, newest first: what was done, at what weight, for how
    many reps. One session open at a time so the list stays scannable. */
@@ -2783,7 +3252,35 @@ function longDate(iso){
 }
 /* One row per lift on a grid, so the weight and each set sit in the same column all
    the way down the session however long the lift's name is. */
-function histSets(id,v){
+/* Corrections. A set logged wrong days ago can be fixed or removed here, and a
+   session that should never have been saved can go entirely. */
+function editSet(si,id,ix){
+  const s=DB.sess[si], e=EX[id], row=s.sets[id][ix];
+  numSheet({
+    title:e.n, note:longDate(s.d)+' \u00b7 set '+(ix+1)+(e.bw?' \u00b7 reps only':''),
+    two:!e.bw, a:e.bw?row.reps:row.kg, b:e.bw?undefined:row.reps,
+    stepA:e.bw?'1':'0.5', phA:e.bw?'reps':'kg', phB:'reps',
+    loA:e.bw?1:0.5, hiA:e.bw?200:200, loB:1, hiB:200,
+    back:openHistory,
+    onSave:(a,b)=>{
+      if(e.bw) row.reps=Math.round(a);
+      else { row.kg=a; row.reps=Math.round(b); }
+      save(); toast('UPDATED'); openHistory();
+    },
+    onDel:()=>{
+      s.sets[id].splice(ix,1);
+      if(!s.sets[id].length) delete s.sets[id];
+      save(); toast('SET REMOVED'); openHistory();
+    }});
+}
+async function delSession(si){
+  const s=DB.sess[si];
+  const ok=await askConfirm('Delete this session?',
+    longDate(s.d)+' and everything logged in it. It cannot be undone.','Delete');
+  if(!ok) return openHistory();
+  DB.sess.splice(si,1); save(); toast('SESSION DELETED'); rTrain(); openHistory();
+}
+function histSets(id,v,si){
   const e=EX[id]||{n:id};
   const done=(v||[]).filter(x=>+x.reps>0);
   if(!done.length) return '';
@@ -2792,7 +3289,8 @@ function histSets(id,v){
   let cells='';
   for(let i=0;i<3;i++){
     const x=done[i];
-    cells += x ? '<span class="pc">'+((!bw&&!same)?kgTxt(+x.kg||0)+'\u00d7':'')+x.reps+'</span>'
+    cells += x ? '<button class="pc" data-fix="'+si+':'+id+':'+(v.indexOf(x))+'">'+
+                   ((!bw&&!same)?kgTxt(+x.kg||0)+'\u00d7':'')+x.reps+'</button>'
                : '<span class="pc blank"></span>';
   }
   return '<div class="hex"><span class="hn">'+esc(e.n||id)+'</span>'+
@@ -2822,6 +3320,8 @@ function histOpen(i){
     return;
   }
   sess.classList.add('open');
+  const mon=sess.closest('.hmbody');
+  if(mon && mon.style.height && mon.style.height!=='auto') mon.style.height='auto';
   body.classList.add('anim');
   body.style.height='0px';
   requestAnimationFrame(()=>{ body.style.height=body.scrollHeight+'px'; });
@@ -2834,33 +3334,103 @@ function histOpen(i){
 }
 function openHistory(){
   const l=ledger(), n=DB.sess.length;
-  let h='<div class="veil" id="veil"></div><div class="sheet"><h3>History'+
-    '<button class="shx back" id="hiClose" aria-label="Back to settings">\u2039</button></h3>';
+  let h='<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>History'+
+    '<button class="shx back" id="hiClose" aria-label="Back to settings">\u2039</button></h3>'+
+    '<div class="pgbody">';
   if(!n) h+='<div class="muted">Nothing logged yet.</div>';
-  h+='<div class="hist">';
+
+  /* Grouped by the month the session happened in, newest first. Only the current
+     month is open to begin with — a year of sessions is otherwise a very long list. */
+  const months=[];
   for(let i=n-1;i>=0;i--){
-    const s=DB.sess[i], p=l.per[i]||{};
-    const order=(W[s.w]?W[s.w].ex:Object.keys(s.sets)).filter((x,k,a)=>a.indexOf(x)===k);
-    const rest=Object.keys(s.sets).filter(x=>order.indexOf(x)<0);
-    const body=order.concat(rest).map(id=>s.sets[id]?histSets(id,s.sets[id]):'').join('')
-      || '<div class="hnone">Logged before this app \u2014 no set detail.</div>';
-    h+='<div class="hsess'+(i===n-1?' open':'')+'">'+
-      '<button class="hhead" data-h="'+i+'">'+
-        '<span class="ho">OP '+String(i+1).padStart(3,'0')+'</span>'+
-        '<span class="hw">'+s.w+'</span>'+
-        '<span class="hd">'+esc(longDate(s.d))+'</span>'+
-        '<span class="hg">'+(p.grade||'')+'</span>'+
-      '</button>'+
-      '<div class="hbody" id="hb-'+i+'"'+(i===n-1?' style="height:auto"':'')+'>'+
-        '<div class="hinner">'+body+'</div></div></div>';
+    const key=DB.sess[i].d.slice(0,7);
+    let g=months.find(m=>m.key===key);
+    if(!g){ g={key:key, idx:[]}; months.push(g); }
+    g.idx.push(i);
   }
-  h+='</div></div>';
+  h+='<div class="hist">';
+  months.forEach((g,mi)=>{
+    const open=mi===0;
+    const p=g.key.split('-');
+    const label=MONTHS[+p[1]-1]+' '+p[0].slice(2);
+    let inner='';
+    g.idx.forEach(i=>{
+      const s2=DB.sess[i], pr=l.per[i]||{};
+      const order=(W[s2.w]?W[s2.w].ex:Object.keys(s2.sets)).filter((x,k,a)=>a.indexOf(x)===k);
+      const rest=Object.keys(s2.sets).filter(x=>order.indexOf(x)<0);
+      const body=order.concat(rest).map(id=>s2.sets[id]?histSets(id,s2.sets[id],i):'').join('')
+        || '<div class="hnone">Logged before this app \u2014 no set detail.</div>';
+      const first=(i===n-1);
+      inner+='<div class="hsess'+(first?' open':'')+'">'+
+        '<button class="hhead" data-h="'+i+'">'+
+          '<span class="ho">OP '+String(i+1).padStart(3,'0')+'</span>'+
+          '<span class="hw">'+s2.w+'</span>'+
+          '<span class="hd">'+esc(longDate(s2.d))+'</span>'+
+          '<span class="hg">'+(pr.grade||'')+'</span>'+
+        '</button>'+
+        '<div class="hbody" id="hb-'+i+'"'+(first?' style="height:auto"':'')+'>'+
+          '<div class="hinner">'+body+
+          '<button class="btn ghost hdel" data-del="'+i+'">[ DELETE SESSION ]</button>'+
+          '</div></div></div>';
+    });
+    h+='<div class="hmon'+(open?' open':'')+'">'+
+       '<button class="hmhead" data-m="'+mi+'">'+
+         '<span class="hmn">'+esc(label)+'</span>'+
+         '<span class="hmc">'+g.idx.length+' op'+(g.idx.length===1?'':'s')+'</span>'+
+       '</button>'+
+       '<div class="hmbody" id="hm-'+mi+'"'+(open?' style="height:auto"':'')+'>'+inner+'</div></div>';
+  });
+  h+='</div></div></div>';
   setSheet(h);
   document.getElementById('veil').onclick=closeSheet;
   document.getElementById('hiClose').onclick=openSettings;   // back where it was opened from
+  document.querySelectorAll('.hmhead').forEach(head=>{
+    head.onclick=()=>monthOpen(head.dataset.m);
+  });
   document.querySelectorAll('.hhead').forEach(head=>{
     head.onclick=()=>histOpen(head.dataset.h);
   });
+  document.querySelectorAll('[data-fix]').forEach(b=>{
+    b.onclick=()=>{ const p=b.dataset.fix.split(':'); editSet(+p[0],p[1],+p[2]); };
+  });
+  document.querySelectorAll('[data-del]').forEach(b=>{
+    b.onclick=()=>delSession(+b.dataset.del);
+  });
+}
+/* Months open and close the same way sessions do, and a month left open is left at
+   its natural height so a session expanding inside it still fits. */
+function monthOpen(mi){
+  const head=document.querySelector('.hmhead[data-m="'+mi+'"]');
+  if(!head) return;
+  const mon=head.parentNode, body=document.getElementById('hm-'+mi);
+  const sheet=mon.closest('.pgbody')||mon.closest('.sheet');
+  const was=mon.classList.contains('open');
+  const mark=mon.getBoundingClientRect().top;
+  document.querySelectorAll('.hmon.open').forEach(o=>{
+    if(o===mon) return;
+    const b=o.querySelector('.hmbody');
+    b.classList.remove('anim'); b.style.height='0px';
+    o.classList.remove('open');
+  });
+  const moved=mon.getBoundingClientRect().top-mark;
+  if(sheet && Math.abs(moved)>1) sheet.scrollTop+=moved;
+  if(was){
+    body.classList.add('anim');
+    body.style.height=body.scrollHeight+'px';
+    requestAnimationFrame(()=>{ body.style.height='0px'; });
+    mon.classList.remove('open');
+    return;
+  }
+  mon.classList.add('open');
+  body.classList.add('anim');
+  body.style.height='0px';
+  requestAnimationFrame(()=>{ body.style.height=body.scrollHeight+'px'; });
+  const done=e=>{
+    if(e.propertyName!=='height') return;
+    body.removeEventListener('transitionend',done);
+    if(mon.classList.contains('open')) body.style.height='auto';
+  };
+  body.addEventListener('transitionend',done);
 }
 function openSettings(){
   const n=DB.sess.length, b=bkBehind();
@@ -2880,6 +3450,9 @@ function openSettings(){
        '<button class="btn" id="musGo">[ PLAYER ]</button>'+
        '<button class="btn ghost" id="sfxBtn">[ '+(DB.sfx===false?'SFX OFF':'SFX ON')+' ]</button>'+
      '</div></div>';
+
+  h+='<button class="srow" id="stProg"><span class="srl"><h3>Progress</h3>'+
+     '<span class="srsub">'+esc(progSub())+'</span></span><span>\u203a</span></button>';
 
   h+='<button class="srow" id="stHist"><span class="srl"><h3>History</h3>'+
      '<span class="srsub">'+esc(sinceStart())+'</span></span><span>\u203a</span></button>';
@@ -2910,6 +3483,7 @@ function openSettings(){
     if(DB.sfx) sfx('confirm');
   };
   document.getElementById('musGo').onclick=openMusic;
+  document.getElementById('stProg').onclick=openProgress;
   document.getElementById('stHist').onclick=openHistory;
   document.getElementById('ghNow').onclick=()=>{ if(ghOn()) ghPush().then(()=>openSettings()); };
   document.getElementById('ghSet').onclick=async()=>{
@@ -3060,15 +3634,18 @@ function openSet(id,ix){
 }
 function askConfirm(title,body,yes){
   return new Promise(res=>{
+    const stack=!!topSheet();
     setSheet(
       '<div class="veil" id="veil"></div><div class="sheet"><h3>'+title+'</h3>'+
       '<div class="muted" style="margin-top:6px">'+body+'</div>'+
       '<button class="btn" id="cfYes">'+yes+'</button>'+
-      '<button class="btn ghost" id="cfNo">Cancel</button></div>');
-    const end=v=>{ closeSheet(); res(v); };
-    document.getElementById('veil').onclick=()=>end(false);
-    document.getElementById('cfNo').onclick=()=>end(false);
-    document.getElementById('cfYes').onclick=()=>end(true);
+      '<button class="btn ghost" id="cfNo">Cancel</button></div>', stack);
+    const box=stack?topSheet().parentNode:document;
+    const end=v=>{ stack?popSheet():closeSheet(); res(v); };
+    const veils=document.querySelectorAll('#sheetWrap .veil');
+    veils[veils.length-1].onclick=()=>end(false);
+    box.querySelector('#cfNo').onclick=()=>end(false);
+    box.querySelector('#cfYes').onclick=()=>end(true);
   });
 }
 async function doImport(txt){
