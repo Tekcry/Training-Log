@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#060A08">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Training Log</title>
@@ -45,7 +45,15 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
   color:var(--dimmer);display:block;-webkit-tap-highlight-color:transparent}
 .musbtn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.2;
   stroke-linecap:round;stroke-linejoin:round}
-.musbtn:active{color:var(--bronze)}
+.musbtn:active,.musbtn.playing{color:var(--bronze)}
+.trks{margin:6px 0 4px;max-height:44vh;overflow:auto}
+.trk{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--hair)}
+.trk .tname{flex:1;text-align:left;background:none;border:none;padding:12px 0;
+  font-size:13.5px;color:var(--tx)}
+.trk.on .tname{color:var(--bronze)}
+.trk .tsrc{font-family:var(--serif);font-size:9px;letter-spacing:.16em;color:var(--dimmer)}
+.trk .tdel{background:none;border:none;color:var(--dimmer);font-size:19px;padding:6px 2px 8px 8px}
+.trk .tdel:active{color:var(--alert)}
 .cog.stale{color:var(--bronze)}
 .cog.stale::after{content:'';position:absolute;top:4px;right:4px;width:7px;height:7px;
   border-radius:50%;background:var(--bronze);border:2px solid var(--bg)}
@@ -213,6 +221,32 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .setbtn.on .sd::after,.setbtn.now .sd::after{content:''}
 .setbtn.mate .sd::after{opacity:1}
 .card h3 .lk{font-family:var(--serif);font-size:9.5px;letter-spacing:.14em;color:var(--dimmer)}
+/* History: a row per session, the sets shown in the same boxes the cards use. */
+.srow{display:flex;align-items:center;justify-content:space-between;width:100%;
+  background:var(--card);border:1px solid var(--cardline);border-radius:14px;
+  padding:13px 14px;color:var(--tx);text-align:left}
+.srow h3{font-size:17px;margin:0}
+.srow span{color:var(--bronze);font-size:18px;line-height:1}
+.srow:active{border-color:var(--bronze)}
+.hist{margin-top:10px}
+.hsess{border-bottom:1px solid var(--hair)}
+.hhead{display:flex;align-items:baseline;gap:10px;width:100%;background:none;border:none;
+  padding:11px 0;text-align:left;color:var(--dim);
+  font-family:var(--serif);font-size:11.5px;letter-spacing:.1em}
+.hhead .ho{color:var(--tx)}
+.hhead .hw{color:var(--bronze)}
+.hhead .hd{color:var(--dimmer);flex:1}
+.hhead .hg{color:var(--champ);font-size:13px}
+.hsess.open .hhead .ho{color:var(--bronze)}
+.hbody{height:0;overflow:hidden}
+.hbody.anim{transition:height .34s cubic-bezier(.22,.72,.28,1)}
+.hinner{padding:0 0 12px}
+.hex{display:flex;align-items:center;flex-wrap:wrap;gap:5px;padding:4px 0}
+.hex .hn{flex:1;min-width:8.5em;font-size:12.5px;color:var(--dim)}
+.hnone{padding:4px 0 6px;font-size:12px;color:var(--dimmer)}
+.hex .hs{display:flex;align-items:center;flex-wrap:wrap;gap:5px;
+  font-size:11px;color:var(--dimmer);font-variant-numeric:tabular-nums}
+
 /* Last time out, under the target. One box per set so three numbers do not read as
    one long line; a weight every set shared is stated once instead of three times. */
 .prev{display:flex;align-items:center;flex-wrap:wrap;gap:5px;margin-top:7px;
@@ -230,9 +264,10 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .splash{position:fixed;inset:0;z-index:300;background:var(--bg);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
   padding:0 34px;text-align:center}
-.splash .spmark,.splash .sptitle,.splash .spline{animation:fuzzin .5s steps(1,end) both}
+.splash .spmark,.splash .sptitle,.splash .spdays,.splash .spline{animation:fuzzin .5s steps(1,end) both}
 .splash .sptitle{animation-delay:.05s}
-.splash .spline{animation-delay:.1s}
+.splash .spdays{animation-delay:.09s}
+.splash .spline{animation-delay:.14s}
 /* and nothing of the interface paints until the splash is dismissed */
 html.booting header,html.booting #v-train,html.booting .fab,html.booting .roll{visibility:hidden}
 .splash.out{animation:crtoff .42s cubic-bezier(.45,.02,.22,1) both;pointer-events:none}
@@ -241,6 +276,8 @@ html.booting header,html.booting #v-train,html.booting .fab,html.booting .roll{v
 .spmark{color:var(--bronze);width:118px;opacity:.9}
 .spmark svg{width:100%;height:auto;display:block}
 .sptitle{font-family:var(--serif);font-size:13px;letter-spacing:.34em;color:var(--dim)}
+.spdays{font-family:var(--serif);font-size:10.5px;letter-spacing:.22em;color:var(--bronze);
+  margin-top:-10px}
 .spline{font-family:var(--serif);font-size:17px;line-height:1.45;color:var(--champ);
   max-width:19em;text-wrap:balance}
 .spgo{position:relative;margin-top:10px;padding:16px 30px;
@@ -262,7 +299,7 @@ html.booting header,html.booting #v-train,html.booting .fab,html.booting .roll{v
 .spgo.out::after{display:none}
 @media (prefers-reduced-motion: reduce){
   .splash,.splash.out,.spgo.on,.spgo.out,
-  .splash .spmark,.splash .sptitle,.splash .spline{animation:none}
+  .splash .spmark,.splash .sptitle,.splash .spdays,.splash .spline{animation:none}
   .spgo.on::after{display:none}
 }
 
@@ -781,6 +818,12 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
    which makes the browser chrome resize and the banner jump. Just stop the
    scrolling instead: no layout change, nothing moves. */
 html.locked,body.locked{overflow:hidden;overscroll-behavior:none;touch-action:none}
+/* No zooming anywhere: pan and tap only, which also removes the double-tap zoom and
+   the 300ms wait that comes with it. */
+html{touch-action:pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{touch-action:pan-y}
+button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 /* Sheets sit on top of the banner, not over it: the clock keeps running and stays
    readable while a set is being entered. --fabh is the measured bar height. */
 .sheet{position:fixed;left:0;right:0;bottom:var(--fabh,0px);z-index:70;background:#140F14;
@@ -813,7 +856,7 @@ html.locked,body.locked{overflow:hidden;overscroll-behavior:none;touch-action:no
    fixed height, or a short screen clips whatever is last. */
 /* Settings never scrolls. It is sized to the space above the bar and the content
    is kept short enough to sit inside it. */
-.sheet.fit{display:flex;flex-direction:column;gap:12px;
+.sheet.fit{display:flex;flex-direction:column;gap:10px;
   max-height:calc(100vh - var(--fabh,0px) - 14px);
   max-height:calc(100dvh - var(--fabh,0px) - 14px);
   height:auto;overflow:hidden}
@@ -824,6 +867,7 @@ html.locked,body.locked{overflow:hidden;overscroll-behavior:none;touch-action:no
 .shx{position:absolute;top:-6px;right:-6px;width:44px;height:44px;line-height:40px;
   background:transparent;border:0;color:var(--dim);font-size:26px;text-align:center}
 .shx:active{color:var(--bronze)}
+.shx.back{font-size:30px;line-height:38px}
 /* Every section is a framed block with its heading on the same left edge. */
 .sheet.fit .card{margin:0;padding:13px 14px 11px;border-radius:14px}
 /* Music is two controls and a label — no reason for it to take a whole block. */
@@ -983,6 +1027,7 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
     </g></svg>
   </div>
   <div class="sptitle">TRAINING LOG</div>
+  <div class="spdays" id="spDays"></div>
   <div class="spline" id="spLine"></div>
   <button class="spgo" id="spGo" type="button"></button>
 </div>
@@ -990,7 +1035,7 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
 
 <header>
   <button class="cog" id="cog" aria-label="Settings"><svg viewBox="0 0 24 24"><path d="M21.98 9.88 L21.98 14.12 L18.95 14.53 L18.71 15.13 L20.55 17.56 L17.56 20.55 L15.13 18.71 L14.53 18.95 L14.12 21.98 L9.88 21.98 L9.47 18.95 L8.87 18.71 L6.44 20.55 L3.45 17.56 L5.29 15.13 L5.05 14.53 L2.02 14.12 L2.02 9.88 L5.05 9.47 L5.29 8.87 L3.45 6.44 L6.44 3.45 L8.87 5.29 L9.47 5.05 L9.88 2.02 L14.12 2.02 L14.53 5.05 L15.13 5.29 L17.56 3.45 L20.55 6.44 L18.71 8.87 L18.95 9.47 Z"/><circle cx="12" cy="12" r="3.4"/></svg></button>
-  <a class="musbtn" id="mus" aria-label="Music" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M9 18V5.2l10-2v12.4"/><circle cx="6.4" cy="18" r="2.6"/><circle cx="16.4" cy="15.6" r="2.6"/></svg></a>
+  <button class="musbtn" id="mus" aria-label="Music"><svg viewBox="0 0 24 24"><path d="M9 18V5.2l10-2v12.4"/><circle cx="6.4" cy="18" r="2.6"/><circle cx="16.4" cy="15.6" r="2.6"/></svg></button>
   <div class="eyebrow" id="hdrK">Session</div>
   <h1 id="hdrT">Today</h1>
   <div class="sub" id="hdrS"></div>
@@ -1012,8 +1057,7 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
 let DB={sess:[],wt:[]}, mem={}, STORE='memory';
-const MUS_DEFAULT='https://youtu.be/t129dlHBY3s';
-const APP_VERSION='2026.09.20.44';
+const APP_VERSION='2026.09.20.58';
 const HOSTED = location.protocol==='https:';
 const STORE_LABEL={
   local: HOSTED
@@ -1203,7 +1247,10 @@ function prescribe(id){
         : 'Add reps until '+e.hi+' on all '+need+' sets.'};
 }
 function nextWorkout(){
-  for(let i=DB.sess.length-1;i>=0;i--){if(DB.sess[i].w)return DB.sess[i].w==='A'?'B':'A'}
+  for(let i=DB.sess.length-1;i>=0;i--){
+    const w=DB.sess[i].w;
+    if(w==='A'||w==='B') return w==='A'?'B':'A';   // a dash means we do not know; keep looking
+  }
   return 'A';
 }
 function lastTrained(){
@@ -1220,18 +1267,24 @@ function lastTrained(){
    No files, nothing to load, works offline. iOS refuses audio until the screen has
    been touched, so the context is built on the first tap and reused. */
 let AC=null, BUS=null;
+/* playback while music is running, ambient the rest of the time */
+function wantSession(){
+  try{
+    if(!navigator.audioSession) return;
+    const playing = typeof PL!=='undefined' && PL.audio && !PL.audio.paused;
+    navigator.audioSession.type = playing ? 'playback' : 'ambient';
+  }catch(e){}
+}
 function acx(){
   if(AC) return AC;
   const C=window.AudioContext||window.webkitAudioContext;
   if(!C) return null;
-  /* Ask for an ambient session before anything makes a sound. Without this, iOS
-     hands the audio session to the page and pauses or ducks whatever else is
-     playing — YouTube in picture-in-picture, music, a podcast. Ambient means mix
-     with them instead. The trade is that the hardware silent switch then mutes
-     these cues, which is the right way round for a training app. */
-  try{
-    if(navigator.audioSession) navigator.audioSession.type='ambient';
-  }catch(e){}
+  /* Ask for the right session before anything makes a sound. Ambient means mix with
+     whatever else is playing rather than interrupting it, at the cost of the silent
+     switch muting us — right for interface cues. But the tap sound fires on the same
+     press as a track, so if it asked for ambient unconditionally it would pull the
+     session out from under the music a moment after it started. wantSession decides. */
+  wantSession();
   try{ AC=new C(); }catch(e){ return null; }
   const inp=AC.createGain(); inp.gain.value=1;
   /* keep the very bottom out so it stays clean on a phone speaker, and take the
@@ -1434,6 +1487,313 @@ function openSheet(){
   };
 }
 function markBacked(){ DB.bk=DB.sess.length; save(); refreshCog(); }
+
+/* ---------- music ----------
+   Two sources, one list. Tracks committed to the repo are fetched from music/ next
+   to the app; tracks imported from the phone are kept in IndexedDB on the device and
+   never leave it. Playback flips the audio session to 'playback' so it survives the
+   screen locking, and hands it back to 'ambient' when it stops, so the interface
+   sounds go back to mixing quietly with anything else. */
+const MDB='tl-music', MSTORE='tracks';
+function idb(){
+  return new Promise((ok,no)=>{
+    if(!window.indexedDB) return no(new Error('no indexeddb'));
+    const r=indexedDB.open(MDB,1);
+    r.onupgradeneeded=()=>{ r.result.createObjectStore(MSTORE,{keyPath:'id'}); };
+    r.onsuccess=()=>ok(r.result);
+    r.onerror=()=>no(r.error);
+  });
+}
+function idbDo(mode,fn){
+  return idb().then(db=>new Promise((ok,no)=>{
+    const t=db.transaction(MSTORE,mode), st=t.objectStore(MSTORE);
+    const req=fn(st);
+    t.oncomplete=()=>ok(req&&req.result);
+    t.onerror=()=>no(t.error);
+  }));
+}
+const mAll=()=>idbDo('readonly',st=>st.getAll()).then(r=>r||[]).catch(()=>[]);
+/* iOS greys out anything outside an accept list rather than filtering it, and it
+   often reports no type at all for a file picked out of Files — so nothing is
+   filtered at the picker, and the type is worked out here from the extension. */
+const MIME={mp3:'audio/mpeg', m4a:'audio/mp4', aac:'audio/aac', wav:'audio/wav',
+            ogg:'audio/ogg', oga:'audio/ogg', opus:'audio/ogg', flac:'audio/flac',
+            caf:'audio/x-caf', aiff:'audio/aiff', aif:'audio/aiff', mp4:'audio/mp4'};
+function mAdd(file){
+  const name=file.name||'track';
+  const ext=(name.split('.').pop()||'').toLowerCase();
+  const declared=/^audio\//.test(file.type||'');
+  /* Accept it if either the file says it is audio or the extension does. Files often
+     reports nothing for a track, and it reports the wrong thing for some; what it
+     must not do is let a PDF through. */
+  if(!declared && !MIME[ext]) return Promise.reject(new Error('not audio'));
+  const type=declared ? file.type : MIME[ext];
+  /* re-wrap so the stored blob always carries a type the audio element understands */
+  const blob=declared ? file : new Blob([file],{type:type});
+  return idbDo('readwrite',st=>st.put({
+    id:'d'+Date.now()+Math.floor(Math.random()*999),
+    name:name.replace(/\.[a-z0-9]+$/i,''), blob:blob, type:type, at:Date.now()}));
+}
+const mDel=(id)=>idbDo('readwrite',st=>st.delete(id));
+
+let PL={list:[], i:-1, audio:null, on:false, url:''};
+/* Tracks committed to the repo, listed in music/index.json. Absent is fine. */
+function repoTracks(){
+  if(PL.repo) return Promise.resolve(PL.repo);
+  return fetch('music/index.json',{cache:'no-store'})
+    .then(r=>r.ok?r.json():[])
+    .then(j=>{
+      const list=(Array.isArray(j)?j:[]).map(x=>{
+        const file=typeof x==='string'?x:(x.file||'');
+        if(!file) return null;
+        /* encode the name, or a track with a space in it never loads */
+        return {id:'r:'+file, src:'music/'+encodeURIComponent(file), repo:true,
+                name:(typeof x==='object'&&x.name)||file.replace(/\.[a-z0-9]+$/i,'')};
+      }).filter(Boolean);
+      PL.repo=list; return list;
+    }).catch(()=>{ PL.repo=[]; return []; });
+}
+function mList(){
+  return Promise.all([repoTracks(), mAll()]).then(([r,d])=>
+    r.concat(d.map(x=>({id:x.id, blob:x.blob, name:x.name, repo:false}))));
+}
+function mAudio(){
+  if(PL.audio) return PL.audio;
+  const a=new Audio();
+  a.preload='none';
+  a.addEventListener('ended',()=>mPlay(PL.i+1));
+  a.addEventListener('play',()=>{ PL.on=true; paintMusic(); });
+  a.addEventListener('pause',()=>{ PL.on=false; wantSession(); paintMusic(); });
+  a.addEventListener('error',()=>{
+    const t=PL.list[PL.i];
+    if(t && !t.repo && !t.tried) return;        // the retry will handle it
+    PL.on=false; paintMusic();
+    toast(t && t.repo ? 'TRACK MISSING FROM THE REPO' : 'TRACK WILL NOT LOAD');
+  });
+  PL.audio=a;
+  return a;
+}
+function mSession(t){
+  if(!navigator.mediaSession) return;
+  try{
+    navigator.mediaSession.metadata=new MediaMetadata({title:t.name, artist:'Training Log'});
+    navigator.mediaSession.setActionHandler('play',()=>mResume());
+    navigator.mediaSession.setActionHandler('pause',()=>mPause());
+    navigator.mediaSession.setActionHandler('nexttrack',()=>mPlay(PL.i+1));
+    navigator.mediaSession.setActionHandler('previoustrack',()=>mPlay(PL.i-1));
+  }catch(e){}
+}
+/* A blob: URL is refused by the media element when the page has an opaque origin —
+   inside a sandboxed frame, for instance. A data: URL is not, so it is the fallback.
+   It costs memory (a third more than the file) but it plays. */
+function blobData(b){
+  return new Promise((ok,no)=>{
+    const r=new FileReader();
+    r.onload=()=>ok(r.result);
+    r.onerror=()=>no(r.error||new Error('read failed'));
+    r.readAsDataURL(b);
+  });
+}
+function mSrcFor(t){
+  return t.blob.type ? t.blob : new Blob([t.blob],{type:t.type||'audio/mpeg'});
+}
+function mPlay(i){
+  const list=PL.list;
+  if(!list.length) return;
+  if(i<0) i=list.length-1;
+  if(i>=list.length) i=0;
+  const t=list[i], a=mAudio();
+  try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}   // before play, or the lock screen stops it
+  if(PL.url){ URL.revokeObjectURL(PL.url); PL.url=''; }
+  a.src = t.repo ? t.src : (PL.url=URL.createObjectURL(mSrcFor(t)));
+  PL.i=i;
+  /* Do not wait on the play event alone — set the state when the call resolves, and
+     let pause and ended correct it. */
+  a.play().then(()=>{ PL.on=true; paintMusic(); })
+          .catch(e=>{
+            const n=(e&&e.name)||'';
+            /* One retry through a data: URL before giving up — this is the case where
+               the page cannot use blob URLs at all. */
+            if(n==='NotSupportedError' && !t.repo && !t.tried){
+              t.tried=true;
+              toast('RETRYING');
+              return blobData(mSrcFor(t)).then(d=>{
+                if(PL.url){ URL.revokeObjectURL(PL.url); PL.url=''; }
+                a.src=d;
+                return a.play().then(()=>{ PL.on=true; paintMusic(); });
+              }).catch(()=>{ PL.on=false; paintMusic(); toast('THIS FILE WILL NOT PLAY HERE'); });
+            }
+            PL.on=false; paintMusic();
+            toast(n==='NotAllowedError' ? 'TAP PLAY AGAIN TO START'
+                : n==='NotSupportedError' ? 'THIS FORMAT WILL NOT PLAY'
+                : 'CANNOT PLAY: '+(n||'ERROR'));
+          });
+  mSession(t);
+  paintMusic();
+}
+function mPause(){ if(PL.audio) PL.audio.pause(); }
+function mResume(){
+  if(!PL.audio || PL.i<0) return mPlay(0);
+  try{ if(navigator.audioSession) navigator.audioSession.type='playback'; }catch(e){}
+  PL.audio.play().then(()=>{ PL.on=true; paintMusic(); })
+    .catch(e=>toast('CANNOT PLAY: '+((e&&e.name)||'ERROR')));
+}
+function mStop(){
+  if(PL.audio){ PL.audio.pause(); PL.audio.removeAttribute('src'); PL.audio.load(); }
+  if(PL.url){ URL.revokeObjectURL(PL.url); PL.url=''; }
+  PL.i=-1; PL.on=false;
+  wantSession();                       // hand the session back
+  paintMusic();
+}
+function paintMusic(){
+  const note=document.getElementById('mus');
+  if(note) note.classList.toggle('playing', !!PL.on);
+  const now=document.getElementById('plNow'), btn=document.getElementById('plGo');
+  if(now) now.textContent = PL.i>=0 && PL.list[PL.i] ? PL.list[PL.i].name : 'nothing selected';
+  if(btn) btn.textContent = PL.on ? '[ PAUSE ]' : '[ PLAY ]';
+  document.querySelectorAll('.trk').forEach(r=>{
+    r.classList.toggle('on', +r.dataset.i===PL.i);
+  });
+}
+function openMusic(){
+  mList().then(list=>{
+    PL.list=list;
+    let h='<div class="veil" id="veil"></div><div class="sheet"><h3>Music'+
+      '<button class="shx" id="plClose" aria-label="Close">\u00d7</button></h3>'+
+      '<div class="muted" id="plNow">nothing selected</div>'+
+      '<div class="trio">'+
+        '<button class="btn" id="plGo">[ PLAY ]</button>'+
+        '<button class="btn ghost" id="plNext">[ SKIP ]</button>'+
+        '<button class="btn ghost" id="plStop">[ STOP ]</button>'+
+      '</div>'+
+      '<div class="trks">';
+    if(!list.length) h+='<div class="muted" style="padding:14px 0">No tracks yet. Add one from your phone, or commit files to music/ with an index.json beside them.</div>';
+    list.forEach((t,i)=>{
+      h+='<div class="trk" data-i="'+i+'">'+
+        '<button class="tname" data-play="'+i+'">'+esc(t.name)+'</button>'+
+        '<span class="tsrc">'+(t.repo?'repo':'phone')+'</span>'+
+        (t.repo?'':'<button class="tdel" data-del="'+esc(t.id)+'" aria-label="Remove">\u00d7</button>')+
+      '</div>';
+    });
+    h+='</div>'+
+      '<input type="file" id="plFile" style="display:none">'+
+      '<button class="btn" id="plAdd">[ ADD FROM PHONE ]</button></div>';
+    setSheet(h);
+    document.getElementById('veil').onclick=closeSheet;
+    document.getElementById('plClose').onclick=closeSheet;
+    document.getElementById('plGo').onclick=()=>{ PL.on?mPause():mResume(); };
+    document.getElementById('plNext').onclick=()=>mPlay(PL.i+1);
+    document.getElementById('plStop').onclick=mStop;
+    const f=document.getElementById('plFile');
+    document.getElementById('plAdd').onclick=()=>f.click();
+    f.onchange=()=>{
+      const file=f.files&&f.files[0]; if(!file) return;
+      mAdd(file).then(()=>{ toast('ADDED'); openMusic(); })
+                .catch(e=>toast(/not audio/.test(e&&e.message)?'NOT AN AUDIO FILE':'COULD NOT SAVE THAT FILE'));
+    };
+    document.querySelectorAll('[data-play]').forEach(b=>{
+      b.onclick=()=>mPlay(+b.dataset.play);
+    });
+    document.querySelectorAll('[data-del]').forEach(b=>{
+      b.onclick=async()=>{
+        const ok=await askConfirm('Remove track?','It is only on this phone, so it will be gone.','Remove');
+        if(!ok) return openMusic();
+        if(PL.list[PL.i] && PL.list[PL.i].id===b.dataset.del) mStop();
+        mDel(b.dataset.del).then(()=>openMusic());
+      };
+    });
+    paintMusic();
+  });
+}
+
+/* ---------- GitHub sync ----------
+   Commits the TL1 backup straight to the repo through the contents API. The token
+   lives in this browser's storage and never goes into the file itself — the file is
+   public on Pages, the token must not be. Owner and repo are read off the Pages URL,
+   so there is nothing to type but the token. */
+const GH_API='https://api.github.com';
+function ghGuess(){
+  const host=(location.hostname||'').toLowerCase();
+  const owner=/\.github\.io$/.test(host) ? host.replace('.github.io','') : '';
+  const seg=(location.pathname||'/').split('/').filter(Boolean);
+  /* user.github.io/repo/... is a project page; user.github.io/... is the user page,
+     whose repo is named after the host. */
+  const repo=seg.length && !/\.html?$/i.test(seg[0]) ? seg[0] : (owner?owner+'.github.io':'');
+  return {owner:owner, repo:repo};
+}
+function ghCfg(){
+  const g=DB.gh||{}, guess=ghGuess();
+  return {tok:g.tok||'', owner:g.owner||guess.owner, repo:g.repo||guess.repo,
+          path:g.path||'backup/training-log.txt', branch:g.branch||'main',
+          sha:g.sha||'', at:g.at||0, err:g.err||''};
+}
+function ghSave(patch){ DB.gh=Object.assign(ghCfg(),patch); save(); }
+function ghOn(){ const c=ghCfg(); return !!(c.tok && c.owner && c.repo); }
+function b64(text){ return btoa(unescape(encodeURIComponent(text))); }
+async function ghReq(path,opt){
+  const c=ghCfg();
+  const r=await fetch(GH_API+path, Object.assign({
+    headers:{Authorization:'Bearer '+c.tok, Accept:'application/vnd.github+json',
+             'X-GitHub-Api-Version':'2022-11-28'}
+  },opt||{}));
+  return r;
+}
+/* Push the current log. Returns a short status string. */
+async function ghPush(quiet){
+  const c=ghCfg();
+  if(!ghOn()) return 'not set up';
+  const body=(sha)=>JSON.stringify({
+    message:'log: '+DB.sess.length+' sessions',
+    content:b64(packDB()), branch:c.branch, sha:sha||undefined});
+  const url='/repos/'+c.owner+'/'+c.repo+'/contents/'+c.path;
+  try{
+    let r=await ghReq(url,{method:'PUT',body:body(c.sha)});
+    if(r.status===409||r.status===422){
+      /* someone or something else moved the file: take the current sha and redo */
+      const g=await ghReq(url+'?ref='+encodeURIComponent(c.branch));
+      const j=g.ok?await g.json():null;
+      r=await ghReq(url,{method:'PUT',body:body(j&&j.sha)});
+    }
+    if(!r.ok){
+      const msg=r.status===401?'bad token':r.status===404?'repo or path not found':'error '+r.status;
+      ghSave({err:msg});
+      if(!quiet) toast('SYNC: '+msg.toUpperCase());
+      return msg;
+    }
+    const j=await r.json();
+    ghSave({sha:(j.content&&j.content.sha)||'', at:Date.now(), err:''});
+    markBacked();
+    if(!quiet) toast('SYNCED TO GITHUB');
+    return 'ok';
+  }catch(e){
+    ghSave({err:'offline'});
+    if(!quiet) toast('SYNC: NO CONNECTION');
+    return 'offline';
+  }
+}
+/* Paste a token, check it can see the repo, store it. */
+async function ghConnect(){
+  if(!(navigator.clipboard && navigator.clipboard.readText)) return toast('CLIPBOARD BLOCKED');
+  let t='';
+  try{ t=(await navigator.clipboard.readText()||'').trim(); }catch(e){ return toast('CLIPBOARD BLOCKED'); }
+  if(!/^(gh[pousr]_|github_pat_)/.test(t)) return toast('NOT A GITHUB TOKEN');
+  const guess=ghGuess();
+  if(!guess.owner || !guess.repo) return toast('OPEN THE APP FROM ITS PAGES URL');
+  ghSave({tok:t, owner:guess.owner, repo:guess.repo, sha:'', err:''});
+  const r=await ghReq('/repos/'+guess.owner+'/'+guess.repo);
+  if(!r.ok){ ghSave({tok:'', err:'token rejected'}); return toast('TOKEN REJECTED'); }
+  toast('CONNECTED');
+  await ghPush();
+  openSettings();
+}
+function ghWhen(){
+  const c=ghCfg();
+  if(!c.tok) return 'not connected';
+  if(c.err) return c.err;
+  if(!c.at) return 'connected, nothing sent yet';
+  const mins=Math.round((Date.now()-c.at)/60000);
+  return mins<1?'synced just now':mins<60?'synced '+mins+'m ago':'synced '+Math.round(mins/60)+'h ago';
+}
 /* Backup format TL1 — plain text, one line per session.
    260824 A gsq 20x10,20x10,20x12 | bp 10x8,10x8
    Weighted sets are kg x reps; bodyweight sets are variant-index x reps. */
@@ -1449,16 +1809,16 @@ function packDB(){
         ? Math.max(0,vs.indexOf(r.v))+'x'+r.reps
         : kgTxt(r.kg)+'x'+r.reps).join(',');
     }).filter(Boolean);
-    if(parts.length) out.push(d6(x.d)+' '+x.w+' '+parts.join(' | '));
+    out.push(parts.length ? d6(x.d)+' '+x.w+' '+parts.join(' | ')
+                          : d6(x.d)+' '+(/^[AB]$/.test(x.w)?x.w:'-'));
   });
   if(DB.wt.length)     out.push('W '+DB.wt.map(x=>d6(x.d)+' '+x.kg).join(' | '));
   if(DB.waist.length)  out.push('M '+DB.waist.map(x=>d6(x.d)+' '+x.cm).join(' | '));
   if(DB.photos.length) out.push('P '+DB.photos.map(x=>d6(x.d)).join(' '));
-  if(DB.mus && DB.mus!==MUS_DEFAULT) out.push('Y '+DB.mus);
   return out.join('\n');
 }
 function unpackDB(txt){
-  const out={sess:[],wt:[],waist:[],photos:[],mus:''};
+  const out={sess:[],wt:[],waist:[],photos:[]};
   txt.split(/\r?\n/).forEach(line=>{
     line=line.trim();
     if(!line || line==='TL1') return;
@@ -1470,11 +1830,15 @@ function unpackDB(txt){
       });
       return;
     }
-    if(line.slice(0,2)==='Y '){ out.mus=line.slice(2).trim(); return; }
+    if(line.slice(0,2)==='Y ') return;    // a link from an older version; no longer used
     if(line[0]==='P'){
       line.slice(1).trim().split(/\s+/).forEach(t=>{ if(/^\d{6}$/.test(t)) out.photos.push({d:d10(t)}); });
       return;
     }
+    /* A session logged before this app existed: date, workout letter (or a dash if
+       it is not known), and nothing after it. It happened; there is just no detail. */
+    const bare=line.match(/^(\d{6})\s+([AB-])$/);
+    if(bare){ out.sess.push({d:d10(bare[1]), w:bare[2], sets:{}}); return; }
     const m=line.match(/^(\d{6})\s+(\S+)\s+(.*)$/); if(!m) return;
     const sets={};
     m[3].split('|').forEach(chunk=>{
@@ -1499,8 +1863,9 @@ function esc(v){
 const DATE_RE=/^\d{4}-\d{2}-\d{2}$/;
 function num(v,lo,hi){ const n=+v; return Number.isFinite(n) && n>=lo && n<=hi ? n : null; }
 function cleanDB(d){
-  const out={sess:[],wt:[],waist:[],photos:[],mus:MUS_DEFAULT,sfx:true,bk:0,seen:true};
-  if(d && typeof d.mus==='string' && d.mus.trim()) out.mus=d.mus.trim();
+  const out={sess:[],wt:[],waist:[],photos:[],sfx:true,bk:0,seen:true};
+  /* carried through untouched, or reloading the app would forget the GitHub token */
+  if(d && d.gh && typeof d.gh==='object') out.gh=d.gh;
   out.sfx = !(d && d.sfx===false);
   if(!d || typeof d!=='object') return out;
   (Array.isArray(d.wt)?d.wt:[]).forEach(x=>{
@@ -1520,7 +1885,8 @@ function cleanDB(d){
   });
   out.photos.sort((a,b)=>a.d<b.d?-1:1);
   (Array.isArray(d.sess)?d.sess:[]).forEach(x=>{
-    if(!x || !DATE_RE.test(x.d) || !W[x.w]) return;
+    if(!x || !DATE_RE.test(x.d)) return;
+    const known=!!W[x.w];
     const sets={};
     Object.keys(x.sets||{}).forEach(id=>{
       if(!EX[id] || !Array.isArray(x.sets[id])) return;
@@ -1532,7 +1898,11 @@ function cleanDB(d){
       }).filter(r=>r.kg!==null && r.reps!==null);
       if(v.length) sets[id]=v;
     });
-    out.sess.push({d:x.d, w:x.w, sets:sets});
+    /* A session with no sets is one that was backfilled from elsewhere — it is kept,
+       with a dash where the workout letter would be if we do not know it. A session
+       with sets but an unrecognised workout is corrupt, and is dropped. */
+    if(!known && Object.keys(sets).length) return;
+    out.sess.push({d:x.d, w:known?x.w:'-', sets:sets});
   });
   out.sess.sort((a,b)=>a.d<b.d?-1:1);
   out.bk=out.sess.length;
@@ -1641,6 +2011,28 @@ function unlockScroll(){
   document.body.classList.remove('locked');
   /* the page never moved, so there is nothing to restore */
 }
+/* Safari on iOS ignores user-scalable, so pinch has to be refused by hand: its own
+   gesture events, any touch that arrives with a second finger, and the double tap. */
+['gesturestart','gesturechange','gestureend'].forEach(t=>{
+  document.addEventListener(t,e=>{ if(e.cancelable) e.preventDefault(); },{passive:false});
+});
+document.addEventListener('touchstart',e=>{
+  if(e.touches && e.touches.length>1 && e.cancelable) e.preventDefault();
+},{passive:false});
+document.addEventListener('touchmove',e=>{
+  if(e.touches && e.touches.length>1 && e.cancelable) e.preventDefault();
+},{passive:false});
+let LASTTAP=0;
+document.addEventListener('touchend',e=>{
+  const now=Date.now();
+  if(now-LASTTAP<320 && e.cancelable) e.preventDefault();   // the second tap of a double tap
+  LASTTAP=now;
+},{passive:false});
+/* Safari can be left zoomed after a system gesture; put it back. */
+window.addEventListener('orientationchange',()=>{
+  if(window.visualViewport && window.visualViewport.scale>1) document.body.style.zoom='';
+});
+
 /* iOS still drags the page under a fixed overlay unless the gesture is refused.
    Swipes on the backdrop are cancelled; swipes inside a sheet are left alone so a
    long sheet can still be scrolled. */
@@ -1806,6 +2198,11 @@ function mergeBest(id,best,peak){
    does not. prev holds every lift's best before this session, weeks how many
    sessions the week already had. */
 function xpForSession(s,prev,gap,weekN,paid){
+  /* Backfilled sessions have no sets to score. They still count as sessions — for
+     the tally, the week and the streak — but they earn nothing and take no grade. */
+  if(!s.sets || !Object.keys(s.sets).length)
+    return {total:0, lines:[], sets:0, planned:0, grade:'\u2014', score:0,
+            recs:0, unlocks:0, week:false, won:[], bare:true};
   let sets=0,qual=0,tops=0,held=0,holdable=0,recs=0,unl=0;
   const won=[];
   for(const id in s.sets){
@@ -2276,6 +2673,7 @@ function saveSession(){
   save(); draft={}; pick=nextWorkout(); resetTimer(); rTrain(); refreshCog();
   /* No scrolling here — the debrief is about to cover the screen anyway. The page
      returns to the top once he closes it. */
+  if(ghOn()) ghPush(true);          // quietly; the debrief is about to open
   setTimeout(()=>debrief(before),450);
 }
 
@@ -2323,6 +2721,85 @@ function debrief(before){
     b>1 ? b+' sessions not backed up.' : 'Paste over your note.');
 }
 
+/* ---------- session history ----------
+   Every session in the log, newest first: what was done, at what weight, for how
+   many reps. One session open at a time so the list stays scannable. */
+function histSets(id,v){
+  const e=EX[id]||{n:id};
+  const done=(v||[]).filter(x=>+x.reps>0);
+  if(!done.length) return '';
+  const bw=e.bw, kgs=done.map(x=>+x.kg||0);
+  const same=!bw && kgs.every(k=>k===kgs[0]);
+  return '<div class="hex"><span class="hn">'+esc(e.n||id)+'</span>'+
+    '<span class="hs">'+
+      (same?'<span class="pw">'+kgTxt(kgs[0])+'kg</span>':'')+
+      done.map(x=>'<span class="pc">'+((!bw&&!same)?kgTxt(+x.kg||0)+'\u00d7':'')+x.reps+'</span>').join('')+
+    '</span></div>';
+}
+function histOpen(i){
+  const box=document.querySelector('.hhead[data-h="'+i+'"]');
+  if(!box) return;
+  const sess=box.parentNode, body=document.getElementById('hb-'+i);
+  const sheet=sess.closest('.sheet');
+  const was=sess.classList.contains('open');
+  const mark=sess.getBoundingClientRect().top;
+  document.querySelectorAll('.hsess.open').forEach(o=>{
+    if(o===sess) return;
+    const b=o.querySelector('.hbody');
+    b.classList.remove('anim'); b.style.height='0px';     // shut instantly
+    o.classList.remove('open');
+  });
+  /* whatever closed above us has moved this row; put it back under the finger */
+  const moved=sess.getBoundingClientRect().top-mark;
+  if(sheet && Math.abs(moved)>1) sheet.scrollTop+=moved;
+  if(was){
+    body.classList.add('anim');
+    body.style.height=body.scrollHeight+'px';
+    requestAnimationFrame(()=>{ body.style.height='0px'; });
+    sess.classList.remove('open');
+    return;
+  }
+  sess.classList.add('open');
+  body.classList.add('anim');
+  body.style.height='0px';
+  requestAnimationFrame(()=>{ body.style.height=body.scrollHeight+'px'; });
+  const done=e=>{
+    if(e.propertyName!=='height') return;
+    body.removeEventListener('transitionend',done);
+    if(sess.classList.contains('open')) body.style.height='auto';
+  };
+  body.addEventListener('transitionend',done);
+}
+function openHistory(){
+  const l=ledger(), n=DB.sess.length;
+  let h='<div class="veil" id="veil"></div><div class="sheet"><h3>History'+
+    '<button class="shx back" id="hiClose" aria-label="Back to settings">\u2039</button></h3>';
+  if(!n) h+='<div class="muted">Nothing logged yet.</div>';
+  h+='<div class="hist">';
+  for(let i=n-1;i>=0;i--){
+    const s=DB.sess[i], p=l.per[i]||{};
+    const order=(W[s.w]?W[s.w].ex:Object.keys(s.sets)).filter((x,k,a)=>a.indexOf(x)===k);
+    const rest=Object.keys(s.sets).filter(x=>order.indexOf(x)<0);
+    const body=order.concat(rest).map(id=>s.sets[id]?histSets(id,s.sets[id]):'').join('')
+      || '<div class="hnone">Logged before this app \u2014 no set detail.</div>';
+    h+='<div class="hsess'+(i===n-1?' open':'')+'">'+
+      '<button class="hhead" data-h="'+i+'">'+
+        '<span class="ho">OP '+String(i+1).padStart(3,'0')+'</span>'+
+        '<span class="hw">'+s.w+'</span>'+
+        '<span class="hd">'+esc(s.d.slice(2))+'</span>'+
+        '<span class="hg">'+(p.grade||'')+'</span>'+
+      '</button>'+
+      '<div class="hbody" id="hb-'+i+'"'+(i===n-1?' style="height:auto"':'')+'>'+
+        '<div class="hinner">'+body+'</div></div></div>';
+  }
+  h+='</div></div>';
+  setSheet(h);
+  document.getElementById('veil').onclick=closeSheet;
+  document.getElementById('hiClose').onclick=openSettings;   // back where it was opened from
+  document.querySelectorAll('.hhead').forEach(head=>{
+    head.onclick=()=>histOpen(head.dataset.h);
+  });
+}
 function openSettings(){
   const n=DB.sess.length, b=bkBehind();
   const XL=levelOf(ledger().total), LP=ledger().per;
@@ -2338,11 +2815,11 @@ function openSettings(){
 
   h+='<div class="card musrow"><h3>Music</h3>'+
      '<div class="duo">'+
-       '<a class="btn" id="musGo" target="_blank" rel="noopener"'+
-         (musicHref()?' href="'+esc(musicHref())+'"':'')+'>[ PLAY ]</a>'+
-       '<button class="btn ghost" id="musSet">[ LINK ]</button>'+
+       '<button class="btn" id="musGo">[ PLAYER ]</button>'+
        '<button class="btn ghost" id="sfxBtn">[ '+(DB.sfx===false?'SFX OFF':'SFX ON')+' ]</button>'+
      '</div></div>';
+
+  h+='<button class="srow" id="stHist"><h3>History</h3><span>\u203a</span></button>';
 
   h+='<div class="card"><h3>Backup</h3>'+
      '<div class="muted">'+n+' op'+(n===1?'':'s')+' logged'+(b?' · <b style="color:var(--bronze)">'+b+' not backed up</b>':' · up to date')+'</div>'+
@@ -2353,6 +2830,13 @@ function openSettings(){
      '</div>'+
      '<textarea id="exText" readonly class="hide">'+esc(packDB())+'</textarea></div>';
 
+  h+='<div class="card"><h3>GitHub</h3>'+
+     '<div class="muted">'+esc(ghWhen())+(ghOn()?' \u00b7 '+esc(ghCfg().owner+'/'+ghCfg().repo):'')+'</div>'+
+     '<div class="duo">'+
+       '<button class="btn" id="ghNow"'+(ghOn()?'':' disabled')+'>[ SYNC ]</button>'+
+       '<button class="btn ghost" id="ghSet">[ '+(ghOn()?'FORGET':'CONNECT')+' ]</button>'+
+     '</div></div>';
+
   h+='<div class="tiny">v'+APP_VERSION+(HOSTED?' \u00b7 hosted':' \u00b7 local')+'</div></div>';
   setSheet(h);
   document.getElementById('veil').onclick=closeSheet;
@@ -2362,15 +2846,12 @@ function openSettings(){
     document.getElementById('sfxBtn').textContent='[ '+(DB.sfx?'SFX ON':'SFX OFF')+' ]';
     if(DB.sfx) sfx('confirm');
   };
-  document.getElementById('musSet').onclick=()=>{
-    if(!(navigator.clipboard && navigator.clipboard.readText)) return toast('CLIPBOARD BLOCKED');
-    navigator.clipboard.readText().then(t=>{
-      t=(t||'').trim();
-      if(!/^https?:\/\/\S+$/i.test(t)) return toast('NOT A LINK');
-      DB.mus=t; save(); syncMusic();
-      document.getElementById('musGo').setAttribute('href',t);
-      toast('LINK SAVED');
-    }).catch(()=>toast('CLIPBOARD BLOCKED'));
+  document.getElementById('musGo').onclick=openMusic;
+  document.getElementById('stHist').onclick=openHistory;
+  document.getElementById('ghNow').onclick=()=>{ if(ghOn()) ghPush().then(()=>openSettings()); };
+  document.getElementById('ghSet').onclick=async()=>{
+    if(ghOn()){ ghSave({tok:'',sha:'',at:0,err:''}); toast('TOKEN FORGOTTEN'); openSettings(); }
+    else await ghConnect();
   };
   document.getElementById('exFile').onclick=exportFile;
   document.getElementById('exCopy').onclick=()=>{
@@ -2616,10 +3097,20 @@ const LINES=[
  'Good things are being built quietly. Add to them.',
  'Start. That is the whole win.'
 ];
+/* How long this has been going on, counted from the first session in the log. */
+function sinceStart(){
+  if(!DB.sess.length) return 'DAY ONE';
+  const days=daysAgo(DB.sess[0].d)+1;
+  if(days<7) return 'DAY '+days;
+  const wk=Math.floor(days/7)+1;
+  return 'WEEK '+wk+' \u00b7 DAY '+days;
+}
 function splash(){
   const el=document.getElementById('splash');
   if(!el){ document.documentElement.classList.remove('booting'); return; }   // never leave it hidden
   const line=document.getElementById('spLine'), go=document.getElementById('spGo');
+  const days=document.getElementById('spDays');
+  if(days) days.textContent=sinceStart();
   if(line) line.textContent=LINES[Math.floor(Math.random()*LINES.length)];
   if(go) go.textContent='[ INITIALISE ]';
   /* Let the line sit on its own first — the button arriving too early turns it
@@ -2847,33 +3338,37 @@ document.addEventListener('change',e=>{
   if(e.target && e.target.tagName==='SELECT' && Date.now()-SFXAT>=150) sfx('tap');
 },false);
 document.getElementById('cog').onclick=openSettings;
+document.getElementById('mus').onclick=openMusic;
 /* Hands the link to YouTube rather than trying to play it here: an embedded player
    stops the moment the screen locks, which is most of a session.
    It has to be a real link with a real href — iOS only routes a tap to the app when
    it is a genuine link tap. Opening it from script lands in a browser tab instead. */
-function musicHref(){
-  const u=(DB.mus||MUS_DEFAULT).trim();
-  return /^https?:\/\/\S+$/i.test(u) ? u : '';
-}
-function syncMusic(){
-  const a=document.getElementById('mus'), h=musicHref();
-  if(!a) return;
-  if(h) a.setAttribute('href',h); else a.removeAttribute('href');
-}
-load();
-go();
-watchSheets();
-splash();
-zapLoop();
-setTimeout(rollPass, RND(1500,9000));
-drawStatic();
-fuzzNext();
-if(HOSTED && 'serviceWorker' in navigator)
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
-runTick();
-refreshCog();
-if(!DB.seen && !DB.sess.length && !DB.wt.length) setTimeout(openRestore,500);
-else if(STORE==='memory') setTimeout(()=>toast('Not saving — export before closing'),600);
+function syncMusic(){ paintMusic(); }
+/* The interface is hidden until the splash is dismissed, so anything that throws on
+   the way up would leave a blank screen. Each step is isolated, and a watchdog
+   uncovers the app regardless after a few seconds. */
+const boot=(name,fn)=>{ try{ fn(); }catch(e){ console.error('start-up: '+name, e); } };
+setTimeout(()=>{
+  const r=document.documentElement;
+  if(r.classList.contains('booting')){
+    r.classList.remove('booting');                 // never stay blank
+    const sp=document.getElementById('splash');
+    if(sp && !document.getElementById('spGo')) sp.remove();
+  }
+},7000);
+boot('load',load);
+boot('render',go);
+boot('sheets',watchSheets);
+boot('splash',splash);
+boot('interference',()=>{ zapLoop(); setTimeout(rollPass, RND(1500,9000)); drawStatic(); fuzzNext(); });
+boot('worker',()=>{ if(HOSTED && 'serviceWorker' in navigator)
+  navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+boot('tick',runTick);
+boot('cog',refreshCog);
+boot('restore',()=>{
+  if(!DB.seen && !DB.sess.length && !DB.wt.length) setTimeout(openRestore,500);
+  else if(STORE==='memory') setTimeout(()=>toast('Not saving \u2014 export before closing'),600);
+});
 </script>
 </body>
 </html>
