@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#060A08">
+<meta name="theme-color" content="#020a05">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Training Log</title>
 <link rel="manifest" href="manifest.webmanifest">
@@ -124,20 +124,90 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
              box-shadow .28s ease, transform .28s ease}
 .setbtn .sl{flex:none;font-family:var(--serif);font-size:11.5px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--dim);transition:color .28s ease}
-.setbtn .sd{flex:1;font-family:var(--serif);font-size:13.5px;color:var(--champ);
-  text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+.setbtn .sd{flex:none;font-family:var(--serif);font-size:10px;white-space:nowrap;
   transition:color .28s ease}
-.setbtn .sc{flex:none;width:16px;text-align:center;font-size:13px;color:transparent;
-  transition:color .28s ease}
-.setbtn.now{border-color:var(--bronze);background:var(--card);
-  box-shadow:inset 2px 0 0 var(--bronze), 0 0 22px -14px var(--bronze)}
-.setbtn.now .sl{color:var(--champ)}
+/* The entry itself, sitting in the row. Flat fields, no chrome, no arrows: it should
+   read as the set's numbers, not as a form. */
+/* Weight on the left, reps on the right, the same width either side of the operator
+   so the numbers line up down the card however long they are. */
+.setbtn .sf{flex:1;min-width:0;display:grid;
+  grid-template-columns:minmax(0,1fr) 12px minmax(0,1fr);gap:4px;
+  align-items:baseline;font-family:var(--serif);font-size:13.5px;color:var(--champ)}
+/* a variant name is three or four times the length of a weight, so it gets the room */
+.setbtn .sf.bw{grid-template-columns:minmax(0,1.9fr) 10px minmax(0,1fr)}
+.setbtn .rw{display:flex;align-items:baseline;justify-content:center;gap:5px;min-width:0}
+.setbtn select{-webkit-appearance:none;appearance:none;background:none;border:0;
+  padding:2px 0;font-family:var(--serif);font-size:15px;color:var(--champ);
+  width:100%;min-width:0;max-width:100%;text-align:center;text-align-last:center;
+  letter-spacing:.02em;text-overflow:ellipsis;
+  border-bottom:1px dashed var(--cardline);border-radius:0;
+  transition:color .28s ease,border-color .28s ease}
+.setbtn select:disabled{color:var(--dimmer);border-bottom-color:transparent;opacity:1}
+.setbtn .sx{color:var(--dimmer);font-size:12px;text-align:center}
+.setbtn .su{color:var(--dimmer);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase}
+.setbtn .sfix{color:var(--dim);font-size:12.5px;text-align:center;min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* the long names read a shade smaller so they fit whole rather than being cut */
+.setbtn .sf.bw .sv,.setbtn .sf.bw .sfix{font-size:12.5px}
+/* and the row gives up its own padding before the text does */
+@media (max-width:380px){
+  .setbtn{gap:7px;padding:12px 9px}
+  .setbtn .sl{font-size:10.5px;letter-spacing:.1em}
+  .setbtn .su{font-size:9.5px}
+  .setbtn select{font-size:14px}
+  .setbtn .sf.bw .sv,.setbtn .sf.bw .sfix{font-size:11.5px}
+}
+/* The tick is the confirm. Outlined and dark while the set is open, lit and glowing
+   once it is logged, so a glance down the card says what is done. */
+.setbtn .sc{flex:none;width:34px;height:34px;margin:-6px -4px -6px 0;
+  display:flex;align-items:center;justify-content:center;
+  background:none;border:1px solid var(--cardline);border-radius:4px;
+  font-size:15px;line-height:1;color:var(--dimmer);
+  transition:color .28s ease,border-color .28s ease,box-shadow .28s ease,background .28s ease}
+.setbtn .sc:active{border-color:var(--bronze);color:var(--bronze)}
+.setbtn.dead .sc{opacity:.28;border-style:dashed;pointer-events:none}
+.setbtn.arming .sc{border-color:var(--alert);color:var(--alert)}
+.setbtn.on .sc{border-color:var(--cardline);color:var(--dim);
+  background:none;box-shadow:none;text-shadow:none}
+/* The set you are on is the one thing on the card worth looking at, so it is lit
+   and everything else is backed off a little to make room for it. */
+.setbtn.now{border-color:var(--bronze);background:rgba(95,224,138,.07);
+  box-shadow:inset 3px 0 0 var(--bronze),
+             inset 0 0 22px -12px var(--bronze),
+             0 0 26px -6px rgba(95,224,138,.45);
+  animation:nowglow 2.6s ease-in-out infinite}
+.setbtn.now .sl{color:var(--champ);text-shadow:0 0 9px var(--bronze)}
+.setbtn.now select{color:var(--champ);border-bottom-color:var(--bronze);
+  text-shadow:0 0 7px rgba(95,224,138,.55)}
+.setbtn.now .su,.setbtn.now .sx{color:var(--bronze)}
+.setbtn.now .sc{border-color:var(--bronze);color:var(--champ);
+  background:rgba(95,224,138,.12);
+  box-shadow:0 0 14px -2px var(--bronze), inset 0 0 9px -4px var(--bronze);
+  text-shadow:0 0 9px var(--bronze)}
+@keyframes nowglow{
+  0%,100%{box-shadow:inset 3px 0 0 var(--bronze),inset 0 0 22px -12px var(--bronze),
+          0 0 26px -6px rgba(95,224,138,.45)}
+  50%{box-shadow:inset 3px 0 0 var(--bronze),inset 0 0 26px -10px var(--bronze),
+          0 0 34px -4px rgba(95,224,138,.6)}
+}
+/* anything that is neither the current set nor already logged sits back */
+.card .setbtn:not(.now):not(.on):not(.arming){opacity:.72}
 .setbtn.arming{border-color:var(--alert);border-style:dashed}
-.setbtn.arming .sd,.setbtn.arming .sl{color:var(--alert)}
-.setbtn.on{border-color:var(--cardhair);background:var(--card2)}
-.setbtn.on .sl{color:var(--dimmer)}
-.setbtn.on .sc{color:var(--dim)}
-.setbtn.on .sd{color:var(--dim)}
+.setbtn.arming .sl{color:var(--alert)}
+.setbtn.arming select{color:var(--alert);border-bottom-color:var(--alert)}
+/* A logged set is finished with. It drops off the phosphor entirely and goes grey,
+   so what is left in colour on the card is what still has to be done. :not(.now)
+   so that a set logged out of order and still current keeps its lighting. */
+.setbtn.on:not(.now){border-color:#262b28;background:#090c0a;opacity:.6;
+  text-shadow:none}
+.setbtn.on:not(.now) .sl{color:#69716c;text-shadow:none}
+.setbtn.on:not(.now) select{color:#8b938e;text-shadow:none}
+.setbtn.on:not(.now) .sx,.setbtn.on:not(.now) .su,.setbtn.on:not(.now) .sfix{color:#5b625e}
+.setbtn.on:not(.now) .sc{border-color:#343a37;color:#8b938e;text-shadow:none}
+/* except the record badge: that is the one thing worth seeing on a set already done */
+.setbtn.on:not(.now) .rb{opacity:1}
+
+.setbtn.on select{border-bottom-color:transparent}
 .setbtn.flash{background:var(--card);animation:nextping .9s ease-out}
 /* Every few seconds the set you are on takes a hit of interference. */
 @keyframes zap{
@@ -159,10 +229,13 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
   pointer-events:none;mix-blend-mode:screen;
   background:repeating-linear-gradient(0deg,rgba(95,224,138,.16) 0 1px,transparent 1px 3px);
   animation:zapnoise .38s steps(5,end) both}
-@media (prefers-reduced-motion: reduce){.setbtn.zap,.setbtn.zap::before{animation:none}}
+@media (prefers-reduced-motion: reduce){
+  .setbtn.zap,.setbtn.zap::before,.setbtn.now{animation:none}
+}
 @keyframes nextping{from{box-shadow:0 0 0 0 rgba(95,224,138,.5)}to{box-shadow:0 0 0 13px rgba(95,224,138,0)}}
 .setbtn.locked{opacity:.4}
 .setbtn.locked .sl{color:var(--dimmer)}
+.setbtn.locked .sc{opacity:.5}
 .card.cdone .setbtn{opacity:.75}
 .setgrid{display:grid;grid-template-columns:1.35fr 1fr;gap:9px;margin:16px 0 4px}
 
@@ -202,7 +275,7 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .chain::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;
   border-radius:3px;background:var(--bronze);opacity:.45;transition:opacity .35s ease}
 .chain.live::before{opacity:1;box-shadow:0 0 16px -2px var(--bronze)}
-.chead{display:flex;align-items:center;gap:9px;
+.chead{display:flex;align-items:center;gap:9px;width:100%;background:none;border:0;text-align:left;
   padding:7px 13px 7px 16px;border-bottom:1px solid var(--cardhair);
   border-radius:13px 13px 0 0;background:var(--surf);transition:opacity .45s ease}
 .chain.cdone .chead{opacity:.4}
@@ -218,6 +291,35 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .chain .ssjoin::before{left:0;right:0;top:50%;bottom:auto;width:auto;height:1px;
   background:repeating-linear-gradient(90deg,var(--cardline) 0 4px,transparent 4px 8px)}
 .chain .ssjoin svg{background:var(--card2);height:20px;padding:0 4px}
+/* shut: the head is the whole block, and the lifts in it are named on it */
+.chain .cbody{overflow:hidden}
+/* Shut, a block keeps its cards exactly where they are and strips them back to the
+   lift's name. Nothing moves anywhere else on the page and nothing is re-ordered:
+   the target line, the sets and the briefing simply are not there yet. */
+.chain.shut .card .tgt,
+.chain.shut .card .prev,
+.chain.shut .card .setbtn,
+.chain.shut .card .brief,
+.chain.shut .ssjoin{display:none}
+.chain.shut .card{padding-top:9px;padding-bottom:9px}
+.chain.shut .card h3{margin:0}
+.chain.shut .card .upnext{display:none}
+/* A lone lift has no group to frame, so it loses the frame: just the card, with a
+   + at the top corner to open it. The head is still the button — it is lifted out of
+   the flow and sat over the card's heading line so nothing is pushed around. */
+.chain.solo{border:none;background:none;padding:0}
+.chain.solo::before{display:none}
+.chain.solo .chead{position:absolute;top:8px;right:8px;z-index:2;
+  width:38px;height:38px;padding:0;display:flex;align-items:center;justify-content:center}
+.chain.solo .cgap{display:none}
+.chain.solo .cch{width:auto}
+.chain.solo .card{padding:11px 13px 7px 16px}
+.chain.solo .card h3{padding-right:46px}
+.chain.solo.shut .card{padding-bottom:13px}
+.cgap{flex:1}
+.cch{flex:none;width:18px;text-align:center;font-size:15px;color:var(--dimmer);
+  transition:transform .3s ease,color .3s ease}
+.chain:not(.shut) .cch{transform:rotate(45deg);color:var(--bronze)}
 /* Set 2 of the squat, set 2 of the laterals and set 2 of the curl are one trip
    through the block. The other rows of the trip you are on are outlined, so the
    group reads at a glance. */
@@ -359,29 +461,36 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 /* The panel itself is opaque from the very first frame — the tune-in runs on its
    contents instead. Animating the panel meant its opening keyframe was transparent,
    so the workout behind it showed through for a fraction of a second. */
+/* One column, centred on the glass: the mark, what it is, how long it has been,
+   the line, and the way in. Nothing else. */
 .splash{position:fixed;inset:0;z-index:300;background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
-  padding:0 34px;text-align:center}
-.splash .spmark,.splash .sptitle,.splash .spdays,.splash .spline{animation:fuzzin .5s steps(1,end) both}
-.splash .sptitle{animation-delay:.05s}
-.splash .spdays{animation-delay:.09s}
-.splash .spline{animation-delay:.14s}
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+  padding:calc(22px + env(safe-area-inset-top)) 30px calc(22px + env(safe-area-inset-bottom));
+  text-align:center}
+.sphead{display:flex;flex-direction:column;align-items:center}
+.splash .sphead,.splash .spline{animation:fuzzin .5s steps(1,end) both}
+.splash .spline{animation-delay:.09s}
 /* and nothing of the interface paints until the splash is dismissed */
 html.booting header,html.booting #v-train,html.booting .fab,html.booting .roll{visibility:hidden}
-.splash.out{animation:crtoff .42s cubic-bezier(.45,.02,.22,1) both;pointer-events:none}
+.splash.out{animation:fuzzout .34s steps(1,end) both;pointer-events:none}
+.splash.out::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:2;
+  mix-blend-mode:screen;
+  background:
+    repeating-linear-gradient(0deg,rgba(95,224,138,.13) 0 1px,transparent 1px 3px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 2px,transparent 2px 6px);
+  animation:fuzznoiseout .34s steps(8,end) both}
 .splash::before{content:'';position:absolute;inset:0;pointer-events:none;
   background:repeating-linear-gradient(180deg,rgba(0,0,0,.34) 0 1px,transparent 1px 3px)}
-.spmark{color:var(--bronze);width:118px;opacity:.9}
+.spmark{color:var(--bronze);width:96px;opacity:.9;margin-bottom:18px}
 .spmark svg{width:100%;height:auto;display:block}
-.sptitle{font-family:var(--serif);font-size:13px;letter-spacing:.34em;color:var(--dim)}
-.spdays{font-family:var(--serif);font-size:10.5px;letter-spacing:.22em;color:var(--bronze);
-  margin-top:-10px}
-.spline{font-family:var(--serif);font-size:17px;line-height:1.45;color:var(--champ);
+.splash .eyebrow{font-size:10.5px;letter-spacing:.3em;color:var(--dim)}
+.splash .spdays{color:var(--bronze);font-size:10.5px;letter-spacing:.22em;
+  text-transform:uppercase;margin-top:8px}
+/* the line stands on its own: no frame, nothing around it */
+.spline{font-family:var(--serif);font-size:17px;line-height:1.55;color:var(--champ);
   max-width:19em;text-wrap:balance}
-.spgo{position:relative;margin-top:10px;padding:16px 30px;
-  border:1px solid var(--bronze);border-radius:6px;overflow:hidden;
-  background:transparent;color:var(--bronze);
-  font-family:var(--serif);font-size:12.5px;letter-spacing:.22em;
+.spgo{position:relative;overflow:hidden;width:auto;min-width:15em;margin-top:2px;
+  border-color:var(--bronze);color:var(--champ);
   opacity:0;pointer-events:none;transition:background .2s ease,color .2s ease}
 /* same tune-in as the screen itself, static and all */
 .spgo.on{opacity:1;pointer-events:auto;animation:fuzzin .46s steps(1,end) both}
@@ -392,12 +501,12 @@ html.booting header,html.booting #v-train,html.booting .fab,html.booting .roll{v
     repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0 2px,transparent 2px 6px);
   animation:fuzznoise .46s steps(8,end) both}
 .spgo:active{background:var(--bronze);color:var(--bg)}
-/* and the same collapse on the way out */
-.spgo.out{animation:crtoff .3s cubic-bezier(.45,.02,.22,1) both;pointer-events:none}
+/* and the same way out as the screen it sits on */
+.spgo.out{animation:fuzzout .34s steps(1,end) both;pointer-events:none}
 .spgo.out::after{display:none}
 @media (prefers-reduced-motion: reduce){
   .splash,.splash.out,.spgo.on,.spgo.out,
-  .splash .spmark,.splash .sptitle,.splash .spdays,.splash .spline{animation:none}
+  .splash .sphead,.splash .spline{animation:none}
   .spgo.on::after{display:none}
 }
 
@@ -485,6 +594,8 @@ html.glitching .fab{animation-delay:.04s}
   animation:fuzznoise var(--gdur,.46s) steps(8,end) both}
 @media (prefers-reduced-motion: reduce){
   html.glitching header,html.glitching #v-train,html.glitching .fab{animation:none}
+  .sheet.fit.full.hit>*,
+  #v-train.hit>*{filter:none}
   .uistatic{display:none}
 }
 @media(prefers-reduced-motion:reduce){ body::after{animation:none} .roll{display:none} }
@@ -553,9 +664,9 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
   font-family:var(--serif);font-size:16px;letter-spacing:.05em;color:var(--bronze);
   text-shadow:0 0 16px rgba(95,224,138,.5);animation:xpfloat 2.15s cubic-bezier(.2,.7,.3,1) forwards}
 @keyframes xpfloat{
-  0%{opacity:0;transform:translate(-100%,-40%) scale(.8)}
-  8%{opacity:1;transform:translate(-100%,-90%) scale(1.06)}
-  16%{transform:translate(-100%,-105%) scale(1)}
+  0%{opacity:0;transform:translate(-100%,-60%) scale(.8)}
+  8%{opacity:1;transform:translate(-100%,-150%) scale(1.06)}
+  16%{transform:translate(-100%,-175%) scale(1)}
   62%{opacity:1;transform:translate(-100%,-150%) scale(1)}
   100%{opacity:0;transform:translate(-100%,-280%) scale(1)}}
 .xppop.lvl{left:50%;font-size:19px;color:var(--champ);
@@ -590,14 +701,26 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 .xcap{margin-top:5px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--dimmer);font-variant-numeric:tabular-nums;white-space:nowrap}
 .xcap b{color:var(--bronze);font-weight:400}
-.fstrip .xbar{margin-top:7px}
 .fab.go .xbar{background:rgba(14,11,14,.22)}
 .fab.go .xbar i{background:var(--bg);box-shadow:none}
 .fab.go .xcap{color:rgba(14,11,14,.6)}
 .fab.go .xcap b{color:var(--bg)}
-.xbar{height:4px;margin-top:8px;background:var(--cardhair);border-radius:2px;overflow:hidden}
-.xbar i{display:block;height:100%;background:var(--bronze);border-radius:2px;
-  box-shadow:0 0 10px -2px var(--bronze);transition:width .45s ease}
+/* The clearance bar is the bottom edge of the banner itself: full width, hard to
+   the corners, under the safe-area padding so it sits on the very lip of the glass. */
+.xbar{position:absolute;left:0;right:0;bottom:0;height:2px;margin:0;
+  background:var(--cardhair);border-radius:0;overflow:hidden}
+.xbar i{display:block;height:100%;background:var(--bronze);border-radius:0;
+  box-shadow:0 0 10px -2px var(--bronze);transition:width .95s cubic-bezier(.22,.72,.28,1)}
+/* What was just earned, laid over the stretch of bar it is filling. It is torn
+   through the same kind of field a settings page changes under, rather than pulsed:
+   no glow, no brightness, just the strip breaking up and settling. */
+.xbar .xspark{position:absolute;top:-1px;bottom:-1px;display:block;opacity:0;
+  background:var(--dimmer);border-radius:0}
+.xbar .xspark.on{opacity:1;filter:url(#xpwarp)}
+.xbar .xspark.off{opacity:0;transition:opacity .28s linear}
+@media (prefers-reduced-motion: reduce){
+  .xbar .xspark.on{filter:none}
+}
 .xfoot{margin-top:6px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
   color:var(--dimmer);font-variant-numeric:tabular-nums}
 .xled{margin-top:4px}
@@ -906,6 +1029,9 @@ html{touch-action:pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{touch-action:pan-y}
 button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+/* the entry fields are controls, not chrome: they must stay tappable */
+.setbtn select,.setbtn .sc{-webkit-user-select:auto;user-select:auto;
+  -webkit-touch-callout:default;touch-action:manipulation}
 /* Sheets sit on top of the banner, not over it: the clock keeps running and stays
    readable while a set is being entered. --fabh is the measured bar height. */
 .sheet{position:fixed;left:0;right:0;bottom:var(--fabh,0px);z-index:70;background:#140F14;
@@ -975,6 +1101,9 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
 .sheet.fit .card{margin:0;padding:13px 14px 11px;border-radius:14px}
 .sheet.fit .tiny{text-align:center;opacity:.8}
 .veil{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:65}
+/* Behind a panel: opaque, and above the banner, so a swap can never flash the
+   screen underneath. Held and incoming panels both sit above it. */
+.veil.panel{background:var(--bg);z-index:69}
 /* Sheets tune in like a screen coming on: a scanline opens out, the panel jitters
    and settles, and a field of static crawls over it and burns off. */
 @keyframes fuzzin{
@@ -989,24 +1118,6 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
   82%{opacity:.9;transform:none}
   100%{opacity:1;transform:none;filter:none}
 }
-/* Closing is a screen being switched off: the picture wobbles, collapses inward to
-   a bright horizontal line, that line pinches to a point and dies. Eased rather
-   than stepped, and scaled about the centre so nothing reads as sliding away. */
-@keyframes crtoff{
-  0%{opacity:1;transform:scaleY(1) scaleX(1);filter:none}
-  14%{opacity:1;transform:scaleY(.99) scaleX(1.004) translateX(3px);filter:brightness(1.6) contrast(1.25)}
-  28%{opacity:1;transform:scaleY(.94) scaleX(1) translateX(-2px);filter:brightness(1.9) contrast(1.4)}
-  62%{opacity:1;transform:scaleY(.035) scaleX(1);filter:brightness(2.6) contrast(1.6)}
-  80%{opacity:1;transform:scaleY(.016) scaleX(.62);filter:brightness(3)}
-  100%{opacity:0;transform:scaleY(.01) scaleX(.05);filter:brightness(3.4)}
-}
-@keyframes crtline{
-  0%{opacity:0}
-  55%{opacity:0}
-  66%{opacity:.85}
-  88%{opacity:.6}
-  100%{opacity:0}
-}
 @keyframes fuzznoise{
   0%{opacity:.95;background-position:0 0,0 0}
   25%{opacity:.8;background-position:0 -7px,11px 0}
@@ -1015,22 +1126,63 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
   100%{opacity:0;background-position:0 0,0 0}
 }
 @keyframes veilin{from{opacity:0}to{opacity:1}}
+@keyframes veilout{from{opacity:1}to{opacity:0}}
+/* fuzzin's own frames, mirrored: 100-p for every p, same values. */
+@keyframes fuzzout{
+  0%{opacity:1;transform:none;filter:none}
+  6%{opacity:.9;transform:none}
+  12%{opacity:1;transform:translateX(1px);filter:none}
+  20%{opacity:.78;transform:translateX(-2px)}
+  30%{opacity:1;transform:scaleY(1) translateX(3px);filter:brightness(1.2)}
+  42%{opacity:.62;transform:scaleY(1) translateX(-4px)}
+  56%{opacity:1;transform:scaleY(.45) translateX(5px);filter:brightness(1.6) contrast(1.6)}
+  70%{opacity:.5;transform:scaleY(.06) translateX(-7px)}
+  86%{opacity:1;transform:scaleY(.015) translateX(0);filter:brightness(2.6) contrast(2.2)}
+  100%{opacity:0;transform:scaleY(.015);filter:brightness(2.6) contrast(2.2)}
+}
+/* and the static over it, mirrored the same way */
+@keyframes fuzznoiseout{
+  0%{opacity:.2;background-position:0 0,0 0}
+  20%{opacity:.4;background-position:0 -3px,6px 0}
+  45%{opacity:.6;background-position:0 5px,-9px 0}
+  72%{opacity:.8;background-position:0 -7px,11px 0}
+  100%{opacity:.95;background-position:0 0,0 0}
+}
 .sheet{animation:fuzzin .46s steps(1,end) both;will-change:transform,opacity}
 .veil{animation:veilin .3s ease both}
 .sheet.out{transform-origin:50% 50%;
-  animation:crtoff .36s cubic-bezier(.45,.02,.22,1) both}
-/* the bright line the picture collapses into */
-.sheet.out::after{content:'';position:absolute;left:0;right:0;top:50%;height:2px;
-  margin-top:-1px;background:var(--champ);box-shadow:0 0 18px 2px var(--champ);
-  pointer-events:none;z-index:3;opacity:0;animation:crtline .36s ease both}
-.veil.out{animation:veilin .34s ease reverse both}
-/* the static, laid over whichever sheet is arriving */
-.sheet:not(.out)::before{content:'';position:absolute;inset:0;z-index:2;
+  animation:fuzzout .34s steps(1,end) both}
+.veil.out{animation:veilout .26s ease both}
+/* the static, laid over a sheet arriving or leaving */
+.sheet::before{content:'';position:absolute;inset:0;z-index:2;
   pointer-events:none;mix-blend-mode:screen;
   background:
     repeating-linear-gradient(0deg,rgba(95,224,138,.13) 0 1px,transparent 1px 3px),
     repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 2px,transparent 2px 6px);
   animation:fuzznoise .46s steps(8,end) both}
+.sheet.out::before{animation:fuzznoiseout .34s steps(8,end) both}
+/* Settings arrives from the dashboard and leaves back to it like any other sheet: it
+   tunes in, it tunes back out, the backdrop fades either way. What is different is
+   moving between its own pages, which is one screen changing what it shows and must
+   never tune in a second time. JS marks those panels .cut, and this is the only place
+   a panel's own animation is decided — one screen arriving two different ways with two
+   different animations is the trap this has fallen into repeatedly. */
+.sheet.cut,.sheet.cut:not(.out),.sheet.cut.out,.sheet.cut.swapin:not(.out){animation:none}
+.sheet.cut::before{display:none}
+/* Changing page inside it is the one thing that is animated. The contents are run
+   through a turbulence field and displaced by it, so the lines themselves go wavy and
+   tear sideways by different amounts at different heights — a picture losing its hold
+   rather than a box being shaken. The panel, its background and its backdrop are
+   outside the filter and never move. No transform and no opacity anywhere in it. The
+   noise field is stepped from JS rather than animated here, because filter primitives
+   cannot be driven from CSS; this is the ONLY rule in the file that touches a panel's
+   contents during a change, and anything else added here is the duplicate coming back. */
+.sheet.fit.full.hit>*,
+#v-train.hit>*{filter:url(#uiwarp)}
+
+/* the panel being left, frozen under the one arriving — above the banner, inert */
+.sheet.held{animation:none !important;z-index:69;pointer-events:none}
+.sheet.held::before,.sheet.held::after{display:none}
 /* sheet replacing a sheet: the backdrop stays put and the tune-in is quicker */
 .veil.noanim:not(.out){animation:none}
 .veil.vstack{background:rgba(0,0,0,.55)}
@@ -1130,12 +1282,133 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
   font-size:11px;letter-spacing:.08em;color:var(--dimmer);font-variant-numeric:tabular-nums}
 .chtop{margin-bottom:6px}
 .chsel{margin-top:6px}
-.chsel b{color:var(--champ);font-weight:400}
-.chbox{position:relative;touch-action:pan-y;cursor:grab;-webkit-user-select:none;user-select:none}
+.chsel b,.chtop b{color:var(--champ);font-weight:400}
+.chbox{position:relative;touch-action:pan-y;cursor:grab;-webkit-user-select:none;user-select:none;
+  padding-left:2px}
+/* one mark per reading: its weight above it, its date on the rail below */
+.tlv,.tld{position:absolute;pointer-events:none;font-family:var(--serif);
+  white-space:nowrap;font-variant-numeric:tabular-nums;transform:translateX(-50%)}
+.tlv{font-size:12.5px;color:var(--champ);margin-top:-20px;
+  background:var(--bg);padding:1px 5px;border:1px solid var(--bronze)}
+.tld{bottom:0;font-size:9.5px;letter-spacing:.04em;color:var(--dimmer)}
+.tld.on{color:var(--bronze)}
+/* the scale down the left edge */
+.chy{position:absolute;left:0;transform:translateY(-50%);pointer-events:none;
+  font-family:var(--serif);font-size:9.5px;letter-spacing:.04em;color:var(--dimmer);
+  font-variant-numeric:tabular-nums;background:var(--bg);padding-right:4px}
+.chy.avg{color:var(--dim)}
+.chart .rail{stroke:var(--cardline);stroke-width:1}
+.chart .pick{stroke:var(--bronze);stroke-width:1;stroke-dasharray:3 3;opacity:.8}
+.chart .ring{fill:none;stroke:var(--bronze);stroke-width:1.2;opacity:.9}
+.chwrap{padding-bottom:4px}
+.chsel{margin-top:16px}
 .chbox:active{cursor:grabbing}
 .chart .pick{stroke:var(--bronze);stroke-width:1;stroke-dasharray:3 3}
 .chart .dots circle.sel{fill:var(--bronze);r:3.4}
 .chempty{padding:26px 0;text-align:center;font-size:11.5px;color:var(--dimmer)}
+
+/* ==========================================================================
+   PIP-BOY CRT
+   A layer over the stylesheet above rather than a rewrite of it: every earlier
+   rule still applies and this only repaints them. No markup, ids or script
+   behaviour is touched, so the log itself reads exactly as it did.
+   ========================================================================== */
+:root{
+  --pb:#00ff66;                     /* the phosphor */
+  --pb-glow:rgba(0,255,102,.6);
+  --pb-dim:#0a7d38;
+  --pb-amber:#ffb000;               /* one accent, kept for warnings */
+
+  --bg:#020a05; --surf:#05150b; --surf2:#082010;
+  --line:#177a41; --hair:#0d3f22;
+  --card:#04120a; --card2:#020c06; --cardline:#156b3a; --cardhair:#0d3f22;
+  --tx:#5cff9a; --dim:#2fd274; --dimmer:#1c9b52;
+  --bronze:var(--pb); --champ:#b9ffd4;
+  --alert:var(--pb-amber);
+}
+
+/* ---- text glow: everything on the glass is lit, not printed ---- */
+body{text-shadow:0 0 4px rgba(0,255,102,.3)}
+h1,h2,h3,.gletter,.freqnum,.pv,.tv,.sd{text-shadow:0 0 6px rgba(0,255,102,.35)}
+.tiny,.muted,.dim,.pk,.hd{text-shadow:0 0 3px rgba(0,255,102,.2)}
+[class*="alert"],.tup,.rb,.capwarn,.warn{text-shadow:0 0 5px rgba(255,176,0,.3)}
+
+/* ---- the tube ----
+   A real screen is not lit evenly. The phosphor has a hot patch where the beam
+   spends most of its time, weaker pools off to the sides, and corners that never
+   quite come up. Six offset radials at different sizes and strengths give that
+   instead of one symmetrical bloom, and the whole field drifts a little over a
+   couple of minutes so the unevenness never settles into a fixed pattern. */
+.crt-glow{position:fixed;inset:-8%;pointer-events:none;z-index:198;
+  background:
+    radial-gradient(58% 42% at 46% 34%,rgba(0,255,102,.055) 0,rgba(0,255,102,.02) 55%,transparent 78%),
+    radial-gradient(44% 30% at 74% 62%,rgba(0,255,102,.032) 0,transparent 72%),
+    radial-gradient(38% 46% at 18% 70%,rgba(0,255,102,.026) 0,transparent 74%),
+    radial-gradient(30% 22% at 62% 14%,rgba(0,255,102,.022) 0,transparent 70%),
+    radial-gradient(52% 34% at 30% 92%,rgba(0,255,102,.018) 0,transparent 76%),
+    radial-gradient(120% 96% at 50% 46%,rgba(0,255,102,.012) 0,transparent 68%),
+    radial-gradient(128% 108% at 50% 50%,transparent 56%,rgba(0,0,0,.2) 86%,rgba(0,0,0,.36) 100%);
+  animation:crtbreathe 7s ease-in-out infinite, crtdrift 96s ease-in-out infinite}
+@keyframes crtbreathe{0%,100%{opacity:1}50%{opacity:.96}}
+/* a slow wander, a few per cent of the screen — enough that the hot patch is never
+   in quite the same place twice, not enough to notice it moving */
+@keyframes crtdrift{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  25%{transform:translate3d(1.6%,-1.1%,0) scale(1.015)}
+  50%{transform:translate3d(-1.2%,1.4%,0) scale(1.03)}
+  75%{transform:translate3d(-1.8%,-0.6%,0) scale(1.012)}
+}
+
+/* the scanlines themselves, over everything, passing taps through */
+.crt-lines{position:fixed;inset:0;pointer-events:none;z-index:199;
+  background:repeating-linear-gradient(180deg,
+    rgba(0,0,0,.17) 0 1px, rgba(0,0,0,.05) 1px 2px, transparent 2px 3px);
+  animation:crtrefresh 6.2s steps(1,end) infinite}
+/* the refresh: a frame or two of lift every few seconds, nothing more */
+@keyframes crtrefresh{
+  0%,92%{opacity:.85}
+  93%{opacity:.74}
+  94%{opacity:.89}
+  95%{opacity:.78}
+  96%,100%{opacity:.85}
+}
+
+/* ---- selection ----
+   A phone has no pointer, so :hover there is whatever was last tapped: it latches
+   on after the press and stays lit until something else is touched, which is why
+   buttons were coming up on their own. Hover is now behind a query only a real
+   pointer satisfies; touch gets :active, which lasts exactly as long as the finger.
+   And it is a tint rather than a full invert — a solid phosphor fill is the
+   brightest thing on the screen by a distance. */
+@media (hover:hover) and (pointer:fine){
+  .setbtn:hover,.srow:hover,.btn:hover,.bsum:hover,.hhead:hover,.hmhead:hover,
+  .trk .tname:hover,.pgadd:hover,.pgview:hover,.tkrow:hover,.ent:hover,.pc:hover{
+    background:rgba(0,255,102,.13);
+    color:var(--champ);
+    border-color:var(--pb-dim,#0a7d38)}
+  .setbtn.on:hover{background:rgba(255,176,0,.12);border-color:var(--pb-amber)}
+}
+.setbtn:active,.srow:active,.btn:active,.bsum:active,.hhead:active,.hmhead:active,
+.trk .tname:active,.pgadd:active,.pgview:active,.tkrow:active,.ent:active{
+  background:rgba(0,255,102,.16);
+  color:var(--champ);
+  border-color:var(--pb-dim,#0a7d38)}
+.setbtn.on:active{background:rgba(255,176,0,.14);border-color:var(--pb-amber)}
+:focus-visible{outline:2px solid var(--pb-amber);outline-offset:2px}
+/* ---- boot-up: the interface warms in once, after the splash ---- */
+html.booted header{animation:pbwarm .55s ease-out both}
+html.booted #v-train{animation:pbwarm .55s .06s ease-out both}
+html.booted .fab{animation:pbwarm .55s .12s ease-out both}
+@keyframes pbwarm{
+  0%{opacity:0;filter:brightness(1.7) blur(1px);transform:scaleY(.992)}
+  40%{opacity:1;filter:brightness(1.25) blur(.3px)}
+  100%{opacity:1;filter:none;transform:none}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .crt-glow,.crt-lines{animation:none}
+  html.booted header,html.booted #v-train,html.booted .fab{animation:none}
+}
 </style>
 <!-- Home-screen icon: a dumbbell over a field of static, drawn for this app. -->
 <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABmJLR0QA/wD/AP+gvaeTAAAgAElEQVR4nOy9ebBtzVUf9lvdvc85d3z33jd/IxqRQEMYLIQBEwsssIvZyHKFwdgQUBJiSDkEQUSYqnDZqTjYVXFslyt2jEliBw8YbBBFAIMZBJGEEAKhWd/83rtvvsM5e3f3yh+rx733OfdcAZUqQ1d97zt3Dz3t1at/a2zC/39ltrd78U1E/Dlgeg1AT6pG77HnidFKAUQEkDwq/2MwbGt71VSPVJdJU7pR3WaAHct1TQAVd5kBEEgTfOcAAEoToFWqhy0P2xteAHsPcLirFFSj4UL/9URXz7q2Axggo6C0hlt0saujRU00VOhT3XfAdQ5sGaRyt5bVE+cBIJAhwDOIAVL1eDwz2LnYNnvPXhEse2qZ/HNw/G6G+/e60T9+eHj4/JLm/tDL8Cv8IZbd3f2/SOBv1Gry6Ypov2yfGfDOgSIpL+kiAdBGQykDAGjbFsxe7hkFUmrwfFnYMdh5QKmzB889MjAFEVqPppmkBmzXgblYJGPVOa4WEDsettEvKixrBuBlnAxZIBz+XtV3anS9XuMPxwBG3i+6w54xubgJJoI7aWGP23SPGhkHt1KHNjLvtnMA+wce/teN0v/TnQd3fnr1AP9gyx86QV+6cOkzO4XvN6TeQFAzMOdJI0qTHb9ZuAxmyh87PJd4LQnRMzO886DIqUgVzwFgBnsuKwVD/k9E4B5zHiwdlo+aNoHiYfYsi4cArTU8e7D1QtQKIPS4JyD3KNeT+raqEACEthhC4ADgXepxqqUYb+KwkbDjxBRtc5yXMf7tZeHTRMbIlgtunueN4/eM30gB3od+KAKzP/XO/gtP7tsePHhw5+wB//7KHxpB7+1d/HJF+m+TpielldCUkw8PAKT1YGuL3WJmwIXnFGXOW3Ibz2AGVKP7t0JbQvBQKtJzIuZEpFX7I7DBetm6+9eLddJMp9Jc28F5Hz7sGEFXf42Me9ktBhnBD3pmAAbsaVu0IS+w9/CWhbg0QAx4J+MlApgCfAp94biwRxpmz/KdWIh0fPHV15TW0MbAWgtvbWY0AJi9h+d3EOOv3H54+/3LB//7K3/gBH3p0qWv8aC/BdCVyFG99+Aub2+RQ5V0zukfQE8MoKnoHNWE3PmwZdbdZ/ZQWmMynaTXmIHF6Rx6owlEAbjjLm3fNEatVZ29D0llh+suLJvMsgoyBGV6+Nk6wa6m35de254FvwPCqVd13frcxUG9I33sXHpeadTwquyK93BBtgCAyd5mWvDdwzl8G3ZMNVwAvvMIS+kXPLmv/sPg2H9gBL17+fJLteOfVKBPZs+AHxJc2SSRTDQzAicmQCkolYndO87bdMFJOdS9tPNEFZyJ71QLZFUZuW0ak1tkD2ujgGQGu4xbdCsZcL9M9mbwDvAnCzBJK9760A8lMgIhcLwS5EIWwvKlJNs/0XCXYYgsAUBpJTtZGDtXALAoEc5oGpkjTjuvMgbsGd65ALF6T3oPz2wdu//t4dH9b1kxNecufyAEvb978e+S1t+iKEha3oNH5RWquLIyBGbKGoewVUeSZvZZ0EowgXrEWVZP1e8ST4/3p+pa/0fVhm50usLM8IGgqdGDL8adPRdBmwszsPNwpxZEslg5EjSJ5iETdK/qKBguaU9kgEzQ5WNcQLr4Wy6Mw5AKj6tek0lzxNBagcHwlgdyCjjuegHDMz9tQV/w4MGtDy6fofXL74ugr1y5crVr3TvY4ckojacKfX+7rol5dWcIpFWFwYBQn60pk4wasoBYbG5/tjkb3HbOwToLkJIPXwg9esMs72govvNJECOlQFqwfwmvqn6eWSFXWNU0uQ/OWjADZsMM56X4xY7hTrsVjXD6l4yCmhbjZIY/tVl7Un2w/F4S7CmuNwYVEEV5zn3k6k3Ac9rdijueGD9w7+jO96/o+FrlEyboC9sX3gyo/10pNY2Eq6dmUCV7n7ludUs4bf3x660sb215U40YMhKPCC0qzG/YLIUBgIigir3W+bAFqlJBu1x1RoqqDzVWuPNBCOvvqxjVilWPRDhlSmyEpP8GREXJnuG9F86oaQneBnxrRznrmFaFlPSZkYXDQnUx7CsAtg7sGU2x0Lz3IgNQQfgMwfdEgPcgrVdsWA7sZbcghXfcvX/nT+LMmVtePiGC3t+5+Fal9A9FOmMWQpJV2f+wEcvW3BrxUpq8EVymCNRDiEIEhCTxAaImi0yFlPQnaAComGifVHhFUwOZj3L/aOReajZwFxbiKGF0IpwzYEepxquggE9sLfefZJNWJNs5jajbOMoc/TsU6iuFU0VB9SkLciD8xsEVxQfoUxl0kqpQnvWFGi+2S0omrZy3MLhA/07mEQreuWcmrD/jxtGNmysnb0k5N0Hv7+7/r2D1FmV0EuBcZxFhQr39Z5jBNutN+1y3pLCMmVXPwDLsccTSpChhZGoIcAyjTdUWM8PZvpWxrpiIoHvbuXcMHxiGMRqAAjsHH405agiNfOfG+16Mb7yMc0YiAk00uHWDtsonmUUw67edyC0QmwrEDADOeaiJhg+4f9CDXn9Fg7Gs6wJ5GIwR4Aw4TiCDFGWdOkOEHEURYx972E+9d+/ex5cMdmk5F0HvX7r044r0l5VvRwEOQIXdTNMknedoUwx0rQUIaBoDbfI21rVdmjTfiR5Y0XDrjzzKF5hvqZVxlJBEv60mqn85/c/brDcfmy41NdW3844D94t/i8pSqYIQGFmrsFYpsP3MFIaUkSc9w7d20K/qcQbcvAv6/f6YuKqWA67XQUao6vIezvXgD/fqYB5ZJABQzmvg4hAuro2BI3/qFF774Nb5hMW1CXrvwsE/1Ep/Y/m1Ba8WEnKBJevJDBgu4t84gLgVJXWQQJZBpwpsF7myMhpgApd0Hi111TI7Y9jBCDFYb5ahjV7KaQHAWp8XCoWeR8OF83nrXVYqBTVGjTGxj6CKzGQuHCcfk0Q1nIVb3fQhIMN7FEQ8ypLDjhu6X2GpHsSJ/y9M8BHni9W0D8vDd1aC17111XsRRkUm5Znnjvkzj47uvG98YoblbFEewN72xbdppb+xxHMVyVD+f7RK5ULVz/hXHFR+hKBK/FrWi/4lygaR8hGlgl52rCyBL5WOtmw7WtiWayeIegQJquZi2RiWdW/p4qns+bGfnPoYLyWaKeSJ/CKnqlQUEtMHqQk7jpn60KEnNMY7nrJ+XFR6Mg9UPlT0m0h2Bu69F+UXAoMVQXuaaeXf8cjOI5/03MPnDscnpzdVZz1w4cLBm8jhn4MIaqKLN4pXO5eMHaqSvntYzgWNh0aaQwJGHYW4UGGRiqIhDR1ySEzfY4THnStkzoJwA/GpiQbpGsr4zsEvMtYeI7ISB6ftthDICPLBIhQS2WJQTS4OYPZL3AAQceVauDw6DcEhc8Bq0Q4FSWoMEqJbAvGjN2DRaPofEcAqAsCiz47RTJu087Snc7k3WGf9Rins/jKnZNSNO3duPQZglRAU3lxRLl68+Khr+SMAJlRhqLHXCCi2kKXPBCacCX/MztXbjpbVl7h1WPklh+zhZzIKzYVJLYj2SntvHj7wyOKwPKKa6zns9FVpPb0y0dDs3S9JZbf6MVkEgSWM0Xn0QAxsJvtwOAbr3uiDkxeIkl9Mdds6eOfEF6TsPzPgGd5lzYqe5jkQ+UHcWCuSLYVArZYQNcBdVkMy83vuH939T1bOCc4g6L0L+x/RavKiuAyVguDWPm4E9RxY6moJBdSMfhxKZXVf5Ex9b7b0u7jHHKTjgswjc0h/5I8sljKGUkrM1GUbpecfAL+w0qcRTYLsLjVESv2J/S05LCE5Q8kDqEz79RZV9CFa75bBj1Rd0ffiUdXo7FgUX4g65tgf6lWGOE8ABb137B8Fry7pl8xNSXrEQSiP49SF5Ft5O9ZjyCpLFGrLmqi9C4ar0A9W/u/fuXv4lvGJGTZTlf2d/b/PUN+sJjpCzTDw4GcAIUoYAnHGRWPEDJB0znFY4SQr22d/iD6bKf8Sh5fA3R0D5ixf5oDRAHDr8jVDlQ7VW19zWIWzTeQAyOQ2IuX60vlKYaDaYhvfy+PzdvgsR5QwxqEDPu4vylJWm13dhn24gD3pWwt5+DPqsks3XUPgzicCi5ZY7koBOOIMyG7mudpReeSXUgpccOrkyUcAGpGf+kTtWwYHGtHaQBvN7bz7U3cf3voPI7MjXRu7uP/I/hM4VR9lTwrOAwrD6IjwesmsvGU0kwYAYDsbJoCgG41mMkHXdfAAiDMHoUYPOGIfYvjOCX5fCj4oqNfCApmawtCRt1pfQaLVhfT49hsLe7HMycMEM5NnXSfqKD2r1WbshQsqQ/Cd7DKrHP3cXOpWRlVQZpWM6VsH7xh6q1nK4f3CwgfPOqVVb4zyvWxQv6qZydd7iICdQ9/yiNJd1LrA+AorJAPss1ffZDKB0kGgqprJ9dqugw32A2o0SOH0zuGtSwBOxsY3OuoLO/u/o3XzymgZizt6VNqPun8WC72smHpCInGNK+MXUkFwEKGv162Ilcc6W2kmsNTwUHLiZYWIUuTFWHGlw1AxDlHvjT+fBMVlAl/sX4Qs/a3Z11xu9N0II85oo8T0ZtNkLh45baF1qOqP//rgtlvCppFxVI5OYUzsfAFRe7ruATQbEf6Ld9j7n7t3dOcLxoY4UNsdXDh4M1i9UiRRTjyRIBEesj32VTIUwFSpzgmLoRDSEpZOlwoRLa7gUbY1Ljj2/yyh0SdShCaWE7SngC0T+JXxqqSF6T1fuCTIfK3qHA/633fjrOe833laypVTfYRUH2kNCkoDDq+pIgazT6wMErN2NY7cv/S0okQH8kTA3BSxe1YJZuTDAeplXM0D076o8+R5/YaD3auvv/Pgxq8NpqF/4eLFKzfdwl6GVpXLZNw6zO4sTSx3Ht3DU5DprwsCh+2YFIGjWo4Zm4/sAlrj9IWH4M71elD8YX1qP/XAixpHKSV+BUZh45EdwDFOnrk3Npy6Vz0Oxj5DJEBiGp0fmo77ZZlH3PjDSFsmEPynV8GGrt7KzcysHBazwJNmOoFewqEZwOJ0kfprQlSJ7WzY1SA+MPHhwHWoUmgwfOsBPQY/e0TdN707H7Q3DKVNQdyyY3g7IriMwA8iga+hozcP79y82n+tavny5atvhsf/BYiNX49ucbJyXGkdNDkiOrFKxwk+ENBThcky1FNToWJmD3fUBSviGe6WjgFDmGxPq8veMuxxC20UtAq41ntxNh8pA4t4nzEsKaQgFrGuJO5MAaKMKeQA76tquQ+91iwiRA4JN1lhVQ27mD241N6O0XxilZwsnem65VpoBQIHHuLqEhYo0ydqBhpdXXfBVbXyNoxk7IMbgaahgB3+Ye9/4N69w+8t71WtHuxd+ZjWWmIAfaHI72FjpsilAjnqgpgDJIHzlaquVHmlCS+JNniYsXXB0NIHkwW+jNhFESg6IUUIxiwRMEoFguLE2UfLsuv9D8+oOU+AU6XZv8S4PrjNxnfYuyEBrHRUWtKnZbgqeugR6nllriDASoIGho5HKUi41pIkU/YSou4H6UrdKujXw/foBGoM9NQE8acPgbZDZ6ig2fH+4eHdm7v9VwEA+9v7r1KzyXsjhklc04tKimiZUJYHCQoGE6Xgg7pMqVJKF+Q0vbg10Fcsbh6F1ap71sagj7QCMUAYvAtAFlCYnNKHmb2vuNfSOLwycmYMRXiJ7u4XFzQnk1m9U7TzRTA0mKIfOZKHkjyyojDy8xrLfT3i466of9VYw3hWqShJIVj/eh2KxcXABowsEk5aHUBoIArbwtsZtu0gsIYSy00MMPmChAXTjAirjqEVwTP997fv3vih1O/4Y3dn/98q0J/LF8teisDRTJv+a7ko2dpzgx7sgmpIaXjvRAGfNAlDoS7hZc5mWyINFa1PPWL2C1ELxcVUcmFlNBpdU6b3Hl23KppjeRG1VHa+YgeRASDhWd5yss6VUeUcnfEHtMEo9XacktrUz3rrxazP4pY5asXsYixfL5LFhneWYetSuzA2ZiD5x2R32UiEwUIYveR6OUaG1sH8l2dA9ccRIFjOCKAy5C3wtHMuQNmwQzM9vPPgMHHpzKF3Lp2Splna3ntDW+ZwlByK0g7Dsv2W2oLKv9JHVJ2V98GNsQIZrpgDAlRDAZLU2+cqAa78YJUfr0fahiUYgEbXaNlQir8rzP+Vl+EgiHccGfT7BSzT8edSuppWfsSIayJwPxZXVSpdVZeUigCL3TdaIHM7Ecvl90pVpJ4V0Sg1BcN3Pu1geeDlozWMUYqqRV7el1c9vPcFtItxie5rD+8e/igQ1HZ7exe/gjxmol7ts/c+1KDerz4xBBVWQhm9r8qU34wrL3hn1Tgq4zPRy8ct6yx/keIuFXOoMvEz+fpVGsNpZZ9LHDjEhkudBJd0L4oA5fOrAJ3vC6rlnKoCr1oFhgcp7hHGWCnUZmVfOTdWR+8ESECcniEFMXagINByXN7X7kTFBwk15IERQFDJwoviqdA8JAK+dNISVZ5l+k4AP5qGsX/h4k8T6IuGRo0wzQmY18TMcaYJMNMGAMG3XYWZ6znkIiYwYuviUzIkciJcmcymgX5yPc452M6mVFjLo1oIasOg2Z0O7wNo752eaWzp032/SIag9Rz1qamdejhAiZUqPJ+3eQArtSKUBK4VxSHPWdFu0gEvq9uoAGciR0xvhuEQ0PnwPYNw7zyccygXDgDoaQPvLJQ2MFvNKKeO73QPF8F1Ie8S5fO6MVCKwMTc3Voc3MO9ewQABwdXDknh4vDzkWgdOP9d/YqLlyK2zMQpusXAiXVOTVD1XI+EWXGeglHhDzXsUE3WJKT7TgIv+/4QbEW1toob2hBdLf0eQhFx/F/+vrMsLpwD2AYAPIBM4fJokIHcK4TVJSq7WEd8LuJTxRRMy+PFdl2KsyQagT7McINFX0OQ/kJIMDLuhgwxnPTqJaVDuoNhHWBG23YFpMwqzix6ZGvi1u4W2Lm//ezzz3y7ATAzWh+UkxsLAfBJJ9eHGsWPAAnK66WrpdK9DxygDQ22+pGP1Z/PngVJtqjeNR3yYFXRFgC0GGVGJzH1NROAOKGXuAWA9qO+1+m29hFD9PoNyGCLcK44r1wLbqU3o/y/wF79MSUOwnKheibOzfh4SSnoWPdYOBYDGmGbirg1eN3VHYxEnmc2+T2BQcEBvgayoc0ksxVj9oBRgs0jU+JynEQCgUL7znmwdV8EAObg4OA/c+wTcOFgqUo4OHmUodBnkijICwomHyN3AWgVDAcC4JlD0hhbCFGDydXJ8bvizKHdlCphZiqDPUO0C37hRv2RU3FhIrQHPMPNgxalF/Qp8mGcRQDsqtRXYQaxsriA+anY4iNXD/9r1LjFkBloW7HqJY1Ghcnyz+h5CHAQBmPahUhYjPhCGbQwVkgpYGRY7DyoUZjuTcHMWNw6BhCcphIdyg/JHixtR9dPZUJAR++LC7Lwov1qfapGGQoZYsWokhhM0F/7LsC8gsksTudgdi8DANrbPfhHYPqG3vBgjIJpsprOczALc+GzqxT01rTu6ggOL0fhuqB/7LUXS2MMnM2WPcmXXKi3nB83la5ZyAyjtKXfLOZZwmCbZq4dblZ74fWcc87TN10kpTyjftXPa131dbVsEIuaGtHKxRTDREs1Lmx9WmC+cylLErTKqjaTQ9a8dRFvJB9wDjGkPmYAIIjWiygszMFghKeAwZ2D1rqCMgO4w/YrDINfaSp9bSY2W+BnRlbRKV0445wGd8AkfRIYPsqKKImVCVDQ6YrSkn4gqmEIALECB38BdmFTcSXc6RF4UsuNf+D0nCsG4nrLKTJPVXDm8r6k7cwXPEJy8JGGwsdhhuhRaQlxsWyVFfeWAaY2xhZG6ktCIb2xaAyEQ+9Qw6ZYQsYyca0IimPGqN6aSIkJnQFNutglGWxUJBDEjiljxAOzTPoe1cdhLhUV89MT+BC6LFmESdoAwOl5Ds5SZTZZ+iKjYZ4Y9j7XmCxPQLbUuTALsqfKo56DP2yIMOCIcQpsxDVnJtKIORwi8bOKmAqprmV4VwZIiROs1En3o6Z74y12zlXNpdfFi8wXL+W6yt/L8DZTIFg1JEppgkdpsN8PoH4/B76W/fDjdY1dXOUKwIGB9FMQE1IOvfQgoYB8nCeYheUxgJRdqVDlDeczeGnqcnEH6JWsovKmd/wZdHBw+QSEjdi5xCA6Dz1tUJXKQMK1VSvcc6cdiBSaphGrXJwg1Se4guuWXInFsjb6kfthTkuKtw4xCLa81j8GonqniMRJvRv5uNEcq2ervey442oRZQsYYZWOOJmTQ9bQZWUkW22uo+cR5yO+joI6A66HqfuBBFXxSEdpLGlRNFkVXJIFmdOa9Ts81HygejL/LWFlAWoSYXZtu1dlwO2tvUMHB1c6IqQ0Q3kOA1YJZ26gv/J5uJKqN0tOR1SbOpnBadvvS8znK8t8HNj7IpxJsjpJQkZfP885RdggHKr4hn2VGUVulatJQykT7HCxywFDNSP7LI8ULYur5nlLWCvs6nnhQv8vGqjlVXDw6GUGmqaB8y7LTGbVLhjwbup31EaUj/DweWY0TYMKagyrhnM25WDhLgdOMCj53hCwMEQxleK4oCZqF/TwKYUvGqXwHjGn+/ECQfVMcaw4PfaJErM0PbLFAgApaSM9Q8LWuK+3ZrGsxef6fazaKbd2Ro8fpX5Qb/Gvqidx67pLa+1Eg0JSP6uctR+AaJlUufushmbxuA9xYcinLIghaDUOcsnZCJAAkUhHQGn9Da3BI8tetRUxvQWQ4O0U1EJBTkvVRKjrNe3vXEqU1+fOuRCgCDqlzKKgFYghSTJJ1H83ELOseBbn8qYRLQaXNv7zpcYqMxRV0+MKidn7sy2B62QXZZGwl2kf+pbC6ZXtpeuzvXkMgDDZECjnOg/bRf/vHjvxwiGt7bLv+YpxLDW4EJLzkuSyXlJJDCUq71fR44Hjc51/pGrKCA35eBQI+iiVA5FnXwwQBlbUcCf9G+nKLbrsJ2OyupUtiwMbE9PBwRXOr4QBFFoHLrRwiRuW89un3+rCCj+QSOxnOOYALNtgfDUm9PMepmng2VXYdzKdolu0YWdZwYm45MqUdOAre2J5dLuWtRnq6wWdjuWKBgCtFbRpRu/F4r2Y+UNHV9DiWdLjeBnz3MuVFrg/cuz4nqLeOOviF53sPInpFHDCcToeThc681iczcmB+lgaAwXBUENCly5ey+/FVVot1mLVMtc62iChsufKgahsm+JzwUBDRIVifCxZYF0GkcXVegnycjnGoNxfua3GdwYEL9usniwR+KyX5Cm8fLFUn2cJGqr63/fP6L3Qv39WeBiAAfEN7pdcbkSlwx49vBtvpE4Mku5kGYJH3i21HQFQRFKLLyZ8lNvm4DKrtM5yWcDeedcKioLQhEmBIHErCfUmHl1K6ox6ayMS9UAwsCepniAuYpzVMylfmg6rNA1+NaaLA5NO1cGoaUMqtzXvgsl6BdcKAl0/EWHUMKgl2fv5tAtpuzjh1cEzpaunViv7Iaq53v2BD0i9YM9F0ITxcK1IsMuwOvuUeKbfFelDrLzoF2r6iYTX10Qk4g14Oh2ZEWmy/iRCJ2XwLkckkbUnKqhsGQAd7F7msqcRAozBaWJKaZ8ms2k2SBT/2s7B+ZAvGsNKxiYj3Yu+E7E4DzU1EonxCVgHyaikXXGnIc/FZIgj/SJbJQfFcYiYGClOcPpa3nA0jvvlxV5KsUIgj0VNDKAYfl6kSEtecMVYghVv7F7RXGUKX5oeARj2OUSSkFGj38Ts1N6NLOxUcoZYJ0dgDJFIeJbh2i5kluWknYnwsZlMKi6dxuxsOrKDrj76WPJfcQuforVBIZddiOvqO+BXZMxIhC5BjcWzRSgOKE5enXdhacYNDXAx2ckVtzdjcpZgtjopWiH8hP6uTn6ey7K0BnE7jP3XkxoPu7YbgTT9Os63SIlUbVVEFPh4kKhdlBRj7fOZQmbR4lKV+arFq2cN1LRwSCq4tH2wCHOXLlV9y9cLZIBMV9yJ9VoZPdx8GDBZwBPZ00evOcq5OKivduup6ZgJiqIA0QtwJci2G5BBctQv61j64VNWh/COgurZmxnC1Ut12JkaLwJ4lTK2fHRZ34grq3Z/USp1xqICgj/5+mXIVAAfTpgdWiR53ErJXEWjr25w+fhXQSmCClEJOZdGxBNEOl0bCH0lQQthDWqOeVvKf1MDBNDFgysF4JI6FCEFSEoOshA0ZQi66eeJqInXz90SzUZI27piLtkxJk0DUsD8ZDG43zTNynClxXwhsMExaIVVUMbJRd678aI3Gyz/bKGeuU1an6RZMYRoio9bO5HqhesXdTi/VkqD2dYGdi7sDK7fvXUnaUNGhcBC0AKA6cZ0oIbsFl3atUzTVDCEvYf1FsEZZ3znKbJEAWGBNxH35tx/RBhognI7clJAu2jTLdUokNFw1okPUYoYqpeCt1aO7HjyyRcngvbMOHlwNJLPuMS1gm0mB5vpup9buJMWAAUTau+k1EWH6XRSTYRtrcSHjaVvDR/YNAabO1sAgOMHR3DWyQGYY7mgvURIRM+ueHiNmQxVY7YTfebY0XFlibnrtM67jvNR975Ci1IKhsGMz4VeXGsxEsSIFLPCjM6F2VkO+UR25B/B5HZeEHZ5O8rVE907ZmO8kM6pf13rqgUxqpOP2Y84H+Oc2w4599I8Sl0+Wmnjo6OZSkvowUnDlA4hJYISMVFSR1y78lhVi3c2d5g5YbFsdQpPlwKHR04qE3XVlcjK0LpyYoZjDxXUdimHRRpDwKaU/WFdJEIad7HkIJnH3HuRWJQSgopYmMGSyShup2PJ1hHcqnzuRxpqnP80tCzdJ0DQ00rEjTT6okhQQimLy/bMPB5SVmlCGHkx9T88YbkxiaIcFDb84K++VG1KEI6c1LL1Tlx3MECQ5O5O/duIBg1dRCkxGJ4B73Iydfm2PSwdJ8JH7HsAACAASURBVD3kvEtq04DFJRyPAWIY6zoJVyKCjvg36QHDKUkxmqHQnsA5RGYVRxlVN5UgQOJ26qJlMKhdZPsKnMo5seX0PhSDg8YEaSDMBS6rZi20zSF/RhDapP9awqKAkHQmRJ6LQ8bQCYi5ig2otlJSVfupvmVYkyUFgAQ6SOIQ6qkf0/isB03HDkcKzKYNQRSjsGJ4FEfpqShaFp1JhRASL65wlHI+C+8FUxvpYHYsw/CIuOzVDBhl0ExN6pdtHeYdR2abrX9F5YlhaInACWeGp3eYJECAANCly9eH1JG2AKR8ESXuoeohZM5QJjmJT1H9bN9Qsn1hG3/2a78Un/K612Dv0h7AwPx0jo/89gfx7370J/DsR55JEzq2xZYlpqAFALM9gdmc5HsLi+7+PLcdT6CNWhKtoGc6RLKcoQXg2iAymU6KROa5tIsun9BVFsLgKIx6ILJ4VwUS+E707SosAN+OR/TmKKHxhZCeCz7efRlFgh7ytVd+xqfgC776jXjsJU9gtjkDM+POrTt418//Bt7+oz8hJ5v1imo01MzAHs0T80wiIaOIjEpdlZzjcXEv8cTzrZP+NdnHni5eus5ILn493FXykTEHpOKCUlQ8kzlteoprYlZG46WveTm++x/+gBDySLFth//lrT+Mn/+xnxm9X/VUZccZ9iVXXbUISs7bczetkibSctfKWCJuVkUOjzGWxtWGurTQquCAWE/KTKRrd1EnoU0Cz3qvhfdG5ZBgtSMab/vr3vpN+Kq3/IWlXfrY734EP/D13407N24v7TQZVdBncLWI/exzdkY+LHXExyP/DLuQVqArl6+z74rtqqLT8o8lBB04MI0QdMWdOUfugoCtvR38nZ/5B9i/vL9k8FK8c/i+r/ku/Pav/dbK5yohqCTolWqVereoUog5P3pc3dLiIs6DuGpSb/6qZtch6D5z6VdSELRWdV495/NRygNtHi3FzlEbUn9LKV/45i/Cf/FD33Zmvz/83g/irV/57XWCmXJcRvoQBxEJOkW7FMSOQnDuC4fFH+l/ShGMpHOKrVVNAwjxZuH43Hw1PKiKvwp9NoePa4xBk1LtEqAlrMtaiy940xuxd3nvTG5FWuHrvvub8N9+2beO32fBnzSaNqAYcMCey1rTWsHbTrawHvFK6BBh4/o27EmH9s5p6lvc8quwp5guLPxzVoAqUAig0Vq6DPV4hjEGRqteqJW8v+hasSoGpE9AysgPAM3+Bia7m6NVnz77QDwW0RO8Gfjq/+ovrrWzvPjVL8Xnv/kL8LM/+lPjAqrryVhVCRdLp6bAFLkITKaJHpyPDsiUmTwpQ7gBBDomnQimDzeYEQJjY5QESbwZSTttZ0VKje0owuzyJl71ua+FX2OCAODFr3kpLl2/hNvP3gp9omoRnp3EMKQSK3vOCBZGAgW3WDIEBZ1wZ98V1FuGmhhM9jfQ3ZuDmNDwOM7trK2OwFDT5ao5oqC/X2aqDqmDAQAa8GC0vuCAvcBcXhS/TcCwwbcZJx725HS8H54qNWfUbV9+/BoOHr289vf69M9/HX7un/0MWGX3U6VVcCmV81Sqwz/LX8wBMvoi5QQAYxKXdp2HLwyxoi4UTZlRvkgCU+AOQpZaAQVSY8TMoqyIVrfKWT1oMoiL2DEAHvAPPWZbG2ut+FguXr2EB7cfFPUHLshZcE2quDQ9ERYVTuvlbhXS3VIZNMuczO3+4QhnDYKkMQ0KhVCajwgzNGpci2gVjFt6cpoPu4YCiMfdaZmiRxkPhGoZB9AzW2aOH+fAYwR+1H9K8GpQcRKhCULp3sH+ub7V7sEFaGWkXyb3Q5HPYXRBkVAKiDnoFZCZDJqzME85oDZYsBWFUDUW2UWaG+KR+CPa/JXhnIW/KL7zUETwmusKCCBHiCcYESglaJNM8KiS/q1Vtgz0hcngMluP9k7IY6FUdXBNvfp5eNBNWGQczvzrY14XLVbIuJdMUG2GR13BKdn53D6h3vHYi3bLeWjTQM8KHxUEPxqug8urcYIlw2lM70AqRU9LW3Xf5XCe4EwfVJrUjxrqaWBIEdgTVEMyjLD1K7Me7s8VM2jWjzEE+KSFXzhoScgHzy7YBzIudJyjxCM2YQDUZHWpDz771CDl6YjKXOOcS39kdkPQTdb/eeIi+UB6RA59X4L1WENWuZaoi6jKS0RDfK5V390/xeL2ca4/5YJQoMLds6yROxecd2ppP32ciHVjXdN8+E88dB4Ik9kM2+DWDS1uK3LdRc7sOpvO005Fx9d5uUMQRJ03nU3ldKi2FU3GxsgqKI6+4w4C+6Z1xZHAfTg8iB1DTTQcHEr/pc7bc30rJoabj6ctZg7pMWBBRsOXXdIC+cBiXQaKXch6+KDvp0b4tluIo5KeGUTtkVERGxernECADXk4SH6zDS6hEfsQxMgROVfBLcqVb8lVOlcfDnx3zGtjMkC83nSANs46MXDECOrBkXxRy6CGURnRWodgdSpUWNzWPUqqLYuRHBmS2YeMqe8t1aoEuMNI2hSuTssNXN8xeExBEOAakRJdb6nZ6I2fAjencDqXGFUU/OkSzYPS1dHIpTDHlsHt+b6VZ4Qg6KDjN9l1QDdGrLrOQ0EVMaW1Wk5NmqR+1UawtCQfyhw8TrufW4E0imDKw8/jj1o2rIXB/Hw/x0ZeGL5gMeUxcPVz5+PQBJUIjJJn31C9VLyw/HrwJEQ006/VgeGDKXyrMgufXWE5h9W1s15Nr60YNzICKV0WqnaHHVptBSSc61tFmSXX3beMCiNSI2MW0g4EXo4XxXynbme4QoE2DU1F0e0WFkoRZpuzgrYJ7byDtZ1kAYrZIqvvIX+4kBlf9RqNYe3lhBCpEOhyDshhW9he9n22DGbZOfQs7wJi7WNMr25XxhKcOGAxhATzo9PzfbDUkPxPIq1LYXRYknqRaDTOMHHlZRmgCAJLOKTScoDabEBguJMMX2I4ksgHrhJaScuc+8A1S5XP4FPY7HciMPwckAMAtE9BFWjdcBF6RucFdujNJvhJZ70/QqpDTDRsxLUqTELsi2KYuDAgc2Pc3CFqB5iB0+PT/E3K9j0D3hbX85rT2mA6m6KzFuzc0DmFJSnNJCSuaTsLVufbxiaTSXp/MY/JDDUu7O3jdW94Pa4+eR3sPT7+gY/h13/2V9EtWrSHgrnLLVRNNfpGBZqoypV0uV8GAHCw4qHyDqMlHzwJoY0emrujlcxQMOSwENISDpxyeATOxnM53L1/egCRhKANXFKj8KsUtna28Po/8ydx9clHAADPfOjjeMfP/Ioc/8ZBgxUPpSec61uxAsz2DL47qRN0FvBPEnkaMMRlgSZ6KLQ6D3/SVfYDZg/4nOjHck5X51sH0wT1k3MBlxKy/+yYMSX8TEkLKFjYSMFoA1Y9f+nCAy7qjQyFvGfn5IpxwI2ZgJnxhjd9Ef7K//At2NjaqJ67+cwN/PBf/Rv4wLvfL5MQtDDMDMVUJLkJ9UZVGoZbfx1wqgorGid/ijGskOXrsCWO2KA5Bg6DQErXMZlBYVXFUKoQVFDCRAqLJnLlFExRvBfNxlqe+9yv+NN4yw9+KzZ3t6ou3XnhEP/zt/9NvO8dv5XwPoDknrluYe+BuYcmk+a+D1HFky/8zOJrvh00NNkpjsJYxDFJBTVohCeRxkw82NEed9lCE9LXZkeSNMvpdzogp5EUUh5ukDaVWCBHzmIa9Y1OBINzTRJXGe1f/8Wfg7f89f8aRJQOtInl0qOX8bYf+UF851f+N3j6gx9PXWLn4dp+zbmoEXOzD/MAAGZK0DuiOvStg5u30MaM5uWSA+AzDoSvBTI540R+J5fY+ovL/ZKpWwSekAUoahT83IIdS1qAONZibj27NIbPeMPr8Ff/1l+Tw0t787Z39QBv+8c/gO9601/DR977QanFh9QC5xEKvUd7GhzByjGVqVjiSQ6Zz6EmaCSuwE6SyHOIGGcOTklpoeWDmUzLwRfViCUnta8IcOL6KNcUmkkD6ztQY+Dn4b3WgWLutMEIZHByYilVHlUeMXvkesVqB2fySVFf993fuFJYmW7O8E3f9xZ8z1/4juS11o8Y8b28z86hmnQzM8UB7jLc7jivCL2p0UCDlILrbIZCqjaQxHZIE3RIMsOe4aK6rEPdcK+QIuipZPz0Hsmy6RcefNJBbw3180DwRuuZ3f/y935z9sceKWba4Ft+8FvxHV8irgZkFFjRub6VwJrhruWtBPA2kwY0peJpIfCu61LKtbRk4y7U5UPvKcOIqn61YWA4Jv5G3PxioYJjIzniK9JA56Gj6ZBUWh0DH18GlHWV2oaDKue8kIPnDO6kjcdf8iQOHrl0Jq77lM9+DS4/fh23n7vVq0zeU0ryDY+5fjrn4VsGWlth6n7Oi05lQdWEfB7MVKnyVJGm159kwhXuTmFHxMroGbbZvB1zJWsEQ9I8GKzKwOMQKaMbA6MMuq7DIy96FNde9OiZ8/bi174Mj7/iRXj+w89Ca4VGmXNyaFQn7KY+BYuzCy4H2XIr8Fab7CcNIKfiJYBMU/eh733nGf6oQwV4B6qV8C8Hwi3vVPpaFdU+Q2zqIcw5YVTB9GGzOCeGDj4A+5cPBtvlsnLlsSu483yfoIs6MSYE8nAmRpQYy1RtMdHuWaWstzfFgzJMONObO667kvTPKoSadcDe5f215+3q41fwwkeelYifFRx9rFBv/safWfZXwTxA9fxgqEOK1zh8C5NzzAWQzjIBUd3lOi+ukd7BNA2mmxsgSDbI0yNxcnGnFptbG3IweSgeHqcPT2AaI2qV5M4J6IkGqz6HXuZsKWWyN8NkdwZA3l83EL+ZGphZUx/ouCSRTOr7aTcaySECyvIPy0wpXMhMx8Ks+s9zOmk2tV34YZ+VshcIUSzBumiUHs2x4Z2Hnhg0m5O15003DZRR8AIO13xLChnCbKcW1H048rrul0tZt/qCIZFoz2p9omjGbGfTdZGhpA6lNMw4IGe4RZe+nfcS0dG5BbqHRTR24LrT2RRPvOJJTDamOHz+Jp776LNhZLJyLLuBifw3fuqX8dHf/lD6e3NrczWHai12tzYBRWjbOX7hX7x9+cNF6WyH/StjAQSyzUW9bWXC3sYAAzI4R+TEbPI9+JGeDVsq+lAlHsbeV2vaLGADQWAs8qGkvhVRz0mX3YtHLYcXnYxica5be94W81PsX90TBtAo/PK//Lm13gOA28/exs5+yOGshxoeZtHWXP+kR3Hh4h5Oj07w9EeeTuZuVMqFmoFE12SJ1jGDJ+jCzoUlCtT+hfHtdTqb4uDqxSrn3cnRCe7dugNmxsHVi5hMZoP39q7tF0ctn13uPH9Hop9JwvAvXB6PcumXuzfuoluMqDYCNlu71JvJ2c+ep+5126aRa8v6M9KHyWyCvSurAypiuX/rHhYnC9lRG4OD6wdrd7dbdLj3wt2lfVNK4cLlfUymRYhcZ3H38I5EmK8aT7HTjz1Iu9tLCLp8aKRuACClsH9pf1SoOj2Z4+TBUdWXsmwfXEhC1DrlweF9+JA3oplOsL2/e8YbUo7u3ke3GDrKDOhhlcmaeZSmRh89q85BfNyKps/4MueTQIBm0mDn4MJazx7dfRCyuIrwuntpvfcA8aM+un1/6f3t/V1Ja9F/zzncP7zXgxmrx5lxtVAZ7W7tjomjdVlSozYapllOlIv5Yum7zbQ50zG/LN2irUKOxvJtjBXb9gJVz0sFJSdYpbpaxlXWbuMTeK98f+yd3nVSau1d0bZdcdoZoRkhwGWFvR9lIlIZYTpbXldXtPuJFDOdjofjeM9JA5CMhj1W8p/++S/EZ3/J5y2t/B9979/DzadeGNVhftV3fg2uveyxtTv6f3//P8atp24ARHjJa1+GL/u2N6313o/9jX+KZz7wlPzBNe7t54OLxQUhatX5325hVzoJpbi9/m0vlreVAgOxeBRW2VF7fVdqtG3JcVL+DYAl/dejn/wEvvo7v3Z5u0X5N3/nn+OjvyUyzsXHr+BN3/MNa70HAC986Bn867/5f4zeu/LEI/jL3/vNS9/91Z/8JfzSv8p43XPWhsWj5BgShTPGYEz0Lyin5lWf9VpcuLgn15SSWRlYsoDXft5n4sWvftnSzn3Ol3w+bj93mCN3yzb+xGtw6fErS98d1PXnPh93nr8NIuCRlz+Ol77qk9d67/Vf/Lm4+coXAEj3E7MmSFxerzCHXCQTLYeLLin21AZ15Dhh+pDPZEB0ISHPqiOLwXJE88BaXjAupWhco+FdnWck6LiVAq48eX3teXvdGz8Hj73oCQDAhasHeMWrX7HWewBwaf8At7/8xvi9Ry6tpJn50Vx8omP3vc05Ujwn+KendbL0+Mss5icDF893/Yd3FE0U220FhgnPPfU0fu+971vauV/9iV/Eg4ClSsGMjMID/3BtAQUA3vEvfxEPD++DFOHqJ13HrdvjE9Yv7/zpX8OdZ2+Lr0ovmCVFoayKsGYgJlHXxqzMbWHbvM2uPCYiROvIYUZrHolhao6c8qWsaqfX3sH1y7jzcFmKgbq88+3vwK2PCyPYuXQBD9oHa70HAPdu3ME7/+2vjt67cHEPx/Pj0XsA8KF3/x7e/+u/veJ0gUzEvvXQRkFrnQl6Mpkg6oBjSlzVGHG8AZCCCQOWJC/eWlobfOYbPwdf8pavWtq5D77rA3h4Rzo/iTpVzzC6wZ/+ui/Biz9j+Urtl6fe9THY44/BWYvHXv5ivPlt37jWe8++/1k8PDzGMuToncdkMoF3Hta7cQTB0uex0rUtqNEgTTDToTbHt2LureILY3SK88EKi/EFRSRH0W2M3AvX3Nyi9LocLWHqH3nJE2vP293n7uPk9ik62+HyE4/iz3/3N6z1HgB8+J0fwG+9/V3VNcmFCDz6shfha79nOeT4yX/wr/DR930MiXCj7j/RcTaVe9dBTZsiqsXBqHAqqViqBCyr4IuQJXVKBC0HB5GYcxVJDNiSopRGfUotxLeWgPOGYDGC7jHkRlvXnXHZCbMpgiKc2kREFabmKDUX/44VZTRCVIPU22tLazEHUHGsL4B8BngcHeU5LjqJHKNUflSkMSltAOWL3bPXz6JNpdQ53EClPa0lOea5LIXEReB0qK2NONivpJk869EI0p/74F+nPMgEM0oMYiHAMDNs50NuOQBMsK3LptQYHBssMZcfuRq7jY3tDfgVVqRJ04yqZ06OTwTrnWOSrLdwLFngrXNrO8vY1mWFfew5EdRmPsc8OZAX8MqdWMlv0cRQ+vFx+tantAFk1Ih1j+DnjGmj0RQaobbrYCH57NIJAo0apOLi4LTUzxiqNoz01kh6heq0KqIUga6KwIfzzFvbdmgXC5imQZncfZ3imUPMZPaB9sdikLMLu5JmtCEYpVI65eQcNta8UUH7FQmaYWabkhY3Q2P5NT8+gUc4ZBzyPw/Gc089m3L9PnzwEG7FBB0fn+D49HRgalZbDdich1tAHKU0QW0YSQm75rvKKDAzzHZeWL71sEfBM07noxu88yJsKA29nY9WcMcLSe+70QBawc27moBisK33sEctZhvTWs21PcXp8SlOj06kHyknBIEaDV3ksONgPIrejm5hU1AshbNG2IVFUDKuMjlOSHdAE10dCq83mrXnbTKdYLYlEMo05/tWHkFGUBJQwZ3LOF/TSppZnC4wP52nsUnUC6f+xyPJY1HBexHMsCctzPz4JHniURG6Lq6n4QB5HbdDTrsjQLh38w6e/sDHlnaumy/A1sIdDV0jDz/6PKabq3WbWmlsBlz66PVr2PSyMC7t7+P+M7dWvZrKlUeuwH/6J2fvzGKXT6W8Vu74PfVz3KnS9+DiZj/ZILJDT+SYXNRZ1guERVGgComWo/DvuHMQIx5PPQ6HfIjCUY2G7xwuX1x/3vb2d/H4S0XLcXD1Ih4+vZ4wCQB03OEVf+KV8puCK2g41/Lytcu48/TNpe9uzKZ4+ae9IrjsVdA5Id80/YULaXSgMta2dU4z39vyXEizFSOlg08CAHzkPb8HVsv9eO/dvg1rxxXsv/0L78Qz7//Iqnmpynt+9V04vv0ADODm4U24zfU4xnt++f/F3edu12mpVikF+oR+1rOR2FcZBdewBI7lzjsr3pZZdqBlWg63kNMF1ETDtw4vvPA81N56hpX3/OJv4PApIbztj+9i8k/H7RVj5f6Ne3j/e36n7qvz8J3Hs89cwOxHtpa8CXzsPR/Ch97z/uKktFgBBn+I+2ngsGH+DJEJUbmxZLZERuWUplQBEwDAq//M6/DG//xLl3bu6fd8DPN7H0gJa8oTkj7vL/1ZfNKnvXTpu/3y0d/8GLoAdR5/7cvwFd/19Wu99+z7n8PJ0fB4CwAyL2ccteJP7OCg91jM7gSm51w/v3GUhEwQKrdPPTOjB1bao0XYIXMAQNWHmDYWGKYLY1SxAcSctFXNZENOWAWADeD6Kz9p7Xm7e/gAD24+hFtY7F+/jC9963oGGQD42Ls/hPf9/HuHNzaAqy99HF/1XX9p6btv/3s/jg+944Mi02U38jDOYjcM2Uoj9GMvx1eYOIGFejkV7hg8t4LxBqpaEt/mFXjIEgNGg7zka065jE+tBIWeR8sxd3BHXeriKsGi7iXDn1r4TixoZHTaioHlXJAL+NFPXAgI1yNPcA97AidCsIOuidPNO/iFB3V+IDg2JfRiMdoUFeY+FMQbI/jH8uGpqEWwvjpl189XC2RlsQ9b+NaHONNzajnA2BxxSDu69xC+8ytpRjXB3df5lKSUgJDkMRIvR1VZ5cnHlmEkxcXyPNCsCBTyJg0DAGj1BHkFRRKloDyBYtB4DHA8R1iPgoJOkR/rhwQRlJxMoKLxqM6itCrz/qgaLBpjoEB+SEyxjwRK4wQgAaMqZP4ZeS/Xn+tA2fwA30tk99iJVn4kbZu8o9eeN0V5vhXU+dIYeIye4aKUJI1cRTMxZVkV5AsWNW/UN2dBLn2P+K8RjLuMoCUShScUCLsuzni4FZ2zXZtSXvnTBfgkGG6mBl6dLzTekUvHU9iuXZtj2M7i8Vc8iS980xdj79L6lsllJUXmMIetr54Vtj4c9rkaAHPv1Kiy6A2z0nGLnU+nFaTcGWUfgYpz3X7+ED/zf/47TGbN2vPmycHHBajPn8agc50clFmUjZ0NNLPJSprxxHJ6Vtjc/NyCZhrBAya2IP+zDghZqPxxC+88zNXrV1FOvmePW8+KMKCnE6ARKdWfSFrcfCwECbZbtXKdh4TVR/4eVlg4u+M825gpzhVkh7VDiR558SP4L3/w29b2zvuPtXzWl38e/u7bfnjteSOWYHYX8nmfL1yO0TRNpcax1sLPFKxaTTNu0cEeLSTlbjg1i+cx9wanCHSJBVXAwsF7n/w9zJ2bd1HvZcgnVjkGeUBpDWWaGnJwdHNYMUFqmDykrOBcynpIWFCUatfOVfzFr4dtGJZX5C/4I1DM7gSf9aWftz6nVRpKGygNmH6A6hnFe4+uJ0hba4GWYI/OwPFKQU8nAe0VeCsQtPbI6ZkBgOVsQ3KSr8O4FZADHFVDWW2XOh0y+680Y7IfizaX93E+DB1zXDCk3XU/zOalHcz9H21ijmXn+t7a86Y1wYTtXJtzYmhCL+iDko+zd241zRBDNXUaiOQ+ygy/4NqZLNC65PlgmEEuOs45j8XFkbFoF7ISNhs0F8QrRgFQ2+ZMgF+ml5WtQiWr47msT87L+dmIOT3WlNbhMfdLnM3/iJXO2/Uhh1LQRsM6h/l8cT55B4xO1e2oqRLcb84QCslL8GxrRc6Qq5kpkrgBTPZm4pOuNXhhU7J046KZFOK8Ev8L7wLBSuWJwQuP7qZ4z3nH6I661Rg6rBU9YhEkyitvnaKmOh3Tpqd67Xdb32L+RxxuxGLV+nJLB4sFOknseE61negeufKhISV+KpLneQWG7jzQsUScE9fJNkPd3nrY4w6Tgw341sE+WEBPtNCIggoH1AfgMVADEYgJihilpKlCDrVVEiuRgiINNXKgD58TQxMDxGEb4vV9Cyz7P4YcoXTerc9pmaC8SqrBc9kMomNUIcjnlLhqJc0ICWoRSim6ZqK2qkYabQFy8pyoUQlG709RY+iqbrBltPdOk07WbE2go1pqslrb4L0FJgBt1YaE9q74j6xxXnuuSwFdyJdm28XaW2eL7o85dCitb9eeN+4sFAiLeQtXRo2sUZzzsG2XHYcQFAiLLkSgrGCCU4LajghBDSBH97CFtw4bW5ughQUxY7o5yXroxeERBkbtYIgAhGFnk7U8J5V6tPNu5WprZhM0SuP05kMAYvpVEw29YULyyXNwaAM0ezNJxKLW13J0cH/MoUOxtD6H7rzD6ekcZncaXFbO8a2I4J2DVqYS7lQzgdpZrYeezma4fu06+pqEe7fu4t6tuwAYZnsK14jGwp1a6M0meRUaM22QCDpkG41SZMTQ6ZQoonSUgJoYKLXa8uSsh+sYm5vijEKKYK2Dc+78PranHv5UDofRan0Mbdn9MYcOpT2HD7pWWnTJjqAn51PbMQFmOgEvGNGfm7ScX8nz1Xro+ckCt1+4jWz7k3+6roWZNYD14NYHVwYSK+bcSZADGCb6AhAIvnPQ2sjh7xixdRHQhWN3lUFIWr58tTln4azF1t52HuzxCbrOwvn1VW8AwNbJmSRaDoFfW8vh7R9rOUKx59ByMDMQMoTSZP0dEQC8YtBEwRWZWhUZ+E7OblxFM5YdFjY7kwlBi7xGjYa3TgRHQKKnKLjdRge4mDjadhbMHq33gKV+K1BTE44PDmFHkLzDq3SK1BDMwRQnPh/02M7nYgEiPqduk+GsFUFjsr5QeO/GPeiXrJeU5j/2cv/WvbXnzTmH7r7ILN3R4lzfigDYkwViqjX2HtNmgmZnC5u7W2fYLlx16FR33CZPMWpIfDpYjtRwzkNvNNAzk0ZlvJI0rd4xtrY2BfP0/DnaeYuu7URhEUuETAAAIABJREFUHjj6xnQqgt0qnaJl2Huy2mQMnCTX86bT1Y1GszGB7zzciV37wzz99t/F5FV7aHaG3l9/lIpvLZ79uQ/i1Z//aWu+EQ770QrN1uR88ND65NC0MZ2mlA2utfDdag7thahSMRtNBadda6W+eIrC3Ca/FgAwJEdyBrUcDZJrUrSbB/9eoqi6U2d7vZHKx70FsyMVHlPnUwURwGGSaX1fjvnhCX7pG/4ZHvvKT8X06nY+eaAfPNs7l7pKxNhL1p6G4z3G/MTD7cqXIUataK1HsJy8EI8FUSPO/mDUGaD6t1M2zqGrweLwCM/+m9/F3sHe+oaV+K1Div3znlNISgU1Vu2oxVhNM/E7y7PppfQjeReGJJv5tvxrPHl4z/De4eT4WHx4y4yVIcu8nMknmY8JwMnpMTq3Wsuxs7eFxcULuP38LUwuxrh7RntvDn8O8zUAONvCdsLtHdYXbvzU4+ELd/He//H/wfTSJtgx3IMF9i4fgJlx/+hByvAfC7cO9qRIZN6YUTdTgWnSj2Y6wWxzLN+AlPnxCbpg6TTbE+it6dJnAcDPu7Tlk1ZLk6H7ziEFYzBDbQQjFhFML5Zz/7GDteeNNQAjjKc9np9P3mHGzv425idzHB8dpTHomcbCzVdrxqYGuxe2AQZu38jCYagZaDSaTRlXd3+RQttUMNwYgrjo6SaEhHdyGKWL55kA0FtTOcVqb4aSHzW705Xbx3RrA1s7W5JVch5OdY2nNOF8vhxyFFNWsq8d9f2gw4aeABcm+YDKbYPj+0fpCAk2fkAwetaArZOcG4W1yp10ws3DuShxLpx1OL7/MHPKES6rlGzD7riDP7Fo9mbojlpJJDMSRlVGgHNxfMaVxyTy/u6du+Aiv3QM/NWTeLBn4dxvvQQmr+tHrilF1yh9Pl8O7z0e3H6Aje1NbF/Yqe91qxUJXdvi+N4R9MRgc3cL7elCAoSJYCaN0M1c9NImuKdGDu1sB8OtqGjIEyTYQrCJLszfqgPQeXS3A9APjbvT1abvo3sPcf/2PRgzATgeuwCwNsnRaN2ilE5egErptSMv9ETD9rZq9h7eQZLHUIAUI11hpQTPLQKRKpITvDSPwoYcblXAmTA/2qghl28ZmuUMEyiqz4CxXCwOVcGXo/vC9dAB+dQrGY+yyPGTxW6vQMDp+hErcAC1snC1Pt+RFFAEbZrRhI10Bkz1nsFEcC5wXq3RxBwkRHBxkQ7qYChomJQfI56fQoJ1i08DH8/L6Gyhnwa6bjXkWCiLhbZQOzqcGmWhNyaieD+ng78AFA6/13dsok0N3qgJyZ0wnG3DOSQr8CGhOvBeNTpw8nHn/SSdJ0GE07uz6Raank92u2jRupB/AgQq8yW7Lqmi9ERV2e/bEOjgg58yxSBRFX3BgnMZtDjLQ9arPQfM897DWQvSCjw5nyMZKwIrDzsSi+nYrg4KYQs2CMfBMWAkYir2KdVZpSXOv42cch9L4L6aAM9ogoVQMspjmG9MD49UKwudOtCxdEAD8FrBPlzIqU3nNKzorQZ6Vz642lw/lEi3BDOvCdCoBthupO9n1NN6RjPTmMxqLYm3DscPj3LQQhhL0zTQjZZk4ZMQkc2M45Are6w8/rIncfPWTbQPFmlRNBemkuhmUAjTKzlq+ugDh4KjPaAmBs2F5dhcT9afN08eJhxhh3NqpOC9+FU0xQIOTEVN9GqaaRS8syBlJMC3alaB5p3YS6amiKcsCFpVDvgFaWuCiyc2tbYXkh+AifUrt7C2c1ic9rMWKTkkns+nh/YnHfxRC/YEd9Rh3XM/Wtti3gasHE9rBSTL0dKEgFJcyGjUtRZdexQUNZygQSlMJhgGD9eJnlSXuZhn4SxIljNs2Hk0jYFSCreevoGu7UQDElRcfOLhTmoLJ7P4E7eHJykzKjtOmo1ZMwFOGPPTRQVXIj53x+vPm25MVp+588k7nj2cc3m+tAIeyvdmu1rV6zoHnnsoz1CWKw0HA5g2U1hYuEUHXjhQk3dYReXh9TL8uvZ4r4/9Ao72hJVZcAgY1Q4QETydbxuLetGYA27ddxlFZDBl7Cvqv9UETTQ+8UsPgR88p3p/U/5/aD8+kzPArqqb6zpQf5qyrrLN+DefI9InqmhjI+fNnNTvQ5p38EqaYeRvEyPo853UtcE8yHWCUdtNZZmpdKrx4SkJd+lFIZxp+vZulCNIRs7zxRR6zufwMdY/tNMtOviuE/xqdMrEGSpNP9kz2pDyN2HSouiZgd6YwHcWbr7alO7D2Y+uszDb06SyNPsT+M5h/pw4a1mV0+nShh6dDbfowJ1P+fginkwbZgNx0jnpcLI4lXQRzUhuj87LXKyb2+6kxewJsbBOrm+fD3KQnNCwsTU0Zm3sbq42rGjxvbfzE+hJg2YvQ6io27cLBxOue+thH8zTA6afyLDiEC7kC5tMMJ1OcPHaZUxn0/TIxQv72KTlFrhHnnwUm64BO+lImY/iwvYONtVqXWxZrj1xDTOvwa3HtScfwaZaz/J37YlrMMc+EdmqQlpha3d75TNd22JxPK/e6TPVKqniTBfGpXDt4mU5MLNX2Hm4kw7N/lCf3d2fp3pNY6C0kiOPja58JqjRICOWWV7kMauZxpWXrD9vV69dBT99AgDYnTfn+lY7sy1cevRyfdGJgLxzYXclzVzc3sOjL30C7F0K6IhwgxeyKGknXhUYxpcKLRRaP4AUhIB9lIKZNiAS/eWt529JRngv6pztFx7Fzv3DpZ177tkX8OCpw9RyUkt5j1u3DkHX1jdH3/j4C7jz4ZuAZ+gntnG4ot2yvPDUC7j54edG80QAqBK1kCJMRqLD2fnEEr0P5+QV7/QputrxTE+wIVHPEdWnzTZTway+8zB3h9mV2uMutau1Fh21B1iJgCp98wkzK6KUQQkIvjA7eu15u/HcC3ju48/BGAO7Cdy+d2et9wDg8PZtvPBUkZCeIDYIAua7wK0VfbhxIxwL6Dwo+AxRmEJ2fuBEL3GrYdwEGG3CB+lDNwfQhEBmEvsEACH1q2DRw/c8DfbLOZ99eAyTVGa5Ad8BH/7p38QL7/7o8lnplfmDh6AmZD199hC/809+Za33Tm/fh9J+mPIrqmpnNad0GKqavHVpIkkR9Kww5TKj7y9QTSX3PoKinHOD89yZZiJm3dmQmAGANxRy4I8DAnMgiI4bAMh6iLqD5OjkJvfEdg7HN++tPW/HL9yFboDploE7XeC3/skvrfUeAJzcelDNEYAUTmUfHOODP/KOJW8Cd973PIxBSCoTjHsB6s7nC3Ah16RZdQwVjlUObkpccRE1LQ4XJwCe4eZWPpTRMBth5aTcyeOFrYfvLNiJPhegfBDPmoJVLHpistbgPLIkgnfgkoSGihTgfOJ+RPnEp3ae3RhJSxYo733iwKQUsvttze3hJRXuZDpNEdDz0wXM9kS0Dd5Lwp3Wpns0RsuMlNcORKL2sh7exYVHRarauFAY3MguII47koZYT9Y/dUxNFEhrzE/moDVOtK26zAy/6EKS91CfVgI73BnipaKUMq6fMUB8qoOAG5Ceb8W3Hq0FiGDa0/DRyu89L9RFcWuksFIWBBxLQ5PDB7jy2EvGO+ZFOFI+tFx87Hm7wOTyJjYfX//su/lpi5M7osudXN7E9PGdM96Q4jQk3zCAM/1yQlzY/HieJjVXFAxMpdVxlZZEAaSBNmRf5VbeW5zMoSYK3gE4WRRYOsgy8Si1aTZf65Ao3XUWOGFJQt/P2dinkvIbMoPmhMnBOeYNHm07F4uq8+f6Vq3rsIgqRyKoaSau9rBDc31zIHSnbr97jtP7J72rEhirtBYGJJcAMFRMIu8l9Iv2dvZrfUj9I7zMqXNlIQL2PvXa6JnU3b05Tp8aP3zROoeDl19Fs70+hj5837PiGwtgureBvZevd4LWvd+7gTZmH41SxIqShjo24b5O8bp0k2HIFJbHJRd4NuWCDueCJ9UT5/rT8cvOJ58OH7A89eqOfVuZeZIIzc4U+598dfyZXrn/oVtY3D8Fe0azMcGlVz261nsA0B3Ncfg7z6e/VS+h5Mb1HWxcGy4s33ncfd8Lo/JODLxNUzV8QBLbX3v8kVyh86gOs19RiAjaGKi5xualC+ncZQCwxy2OTi0mF3MuuXpNEPYvX6qzbp5R6HqHLqjLJjsz7F68uNZ7+hqnhZBK4LK6f/6L9BTWuiRkDO4yZ+PMGagpj3lERlmzSA7kMN/9XSM+4zhkGV1F1MB0dwM7F9c74rg5JrRbc5CXzPn7a74HAHazhT4d9oM7nwhzU29hspe1Od46HD91F5cuXwYQTgAgKs5Vh0QskbgMPLh7L5/7HdwRCATz/NPPLulW1kjn488KU6NH4hL00Wcw2d8UR6DTDu3d0zNDuvmiwdSuz6FvPX8T3fECpBWmpxtw++vhwdvP30R3/3Qkv4PoMFM/FbCS6nyevGUak6XHq3le6v4ZCwdf3yo71RnCQql9WadMTzZhD9ZbWXefu4HFXdn6m60p6Or6zGfxYI7DjzwLcWwaFwxuP3cTZncKtSl2kPbuKfzc5hQIRsHZIu1xudsBmVswgvej5Ioxk3DkQ5SZS7ekqJCKarqkdnNRrUchRZgCH3mRZKEx3dhGdcIlUANYRXj11/8pXHzFtbUn6d9/x4/hwUdvg7TCpVc+htf+d29Y6713ft9P4e7v3ICe1eo49h5sOavOqFywvcKcnfm1zu9w+gfRnXT0dedG9c6gYgv1HPJLlARdzNkI6vMVQVe6weJvinpYHLz0UXz6W984PsZeec9f/1nc+s1nAAC7T1zEZ7/1y9Z6DwBuv/8GfuVt/xqAnBNeW1aDUYwBLAC/sFCNxmS6CSabGIwyBt52g/UqAU8UvonUozSJMsl6mHgaVCRod7xI+kutDaBjPmXKulgrkjM7yYkwmU1xdPch1HYTfHFriyIA4doAyBCmB5u48OQl7L10PTwHAM3ORkpWriYGOy+5fPZLANSkgdmcgnoSfnd/Dk0Kysj4u66DUgKj+oU9o7UtVFP7Z7iFTcnTJ7vTym86PTO3sEfRD7yokwE908kBqLu/ADT1yFKl9n0r260p5JXyGDoXzkOMSd3ZO7AFzKYBaQ07F+/Ctedte4ImHJw0298817eyx5JKt51LOuXZVmkoEqFbvBDlYKMUEzgz1QKlYNZ1Jy1c8AnSuzOYgQ8OY3F/Lhi6xLEEoKmOWCCc3ngIsz0JqQ3ki+gtg0ioHsAcLWAUeOHCAZVy7/T4FGpCIG2qU6jsSSf5y85j+p6LqkvPNOaHR+snmjkWRx1bWNoIlE6e8iGCXI63s5KudQw6aJLTv3yb/QiQdcDupANClEvcKokIZuf/6+1bY2zbsrK+Medce++qU1Wnzrn30A+geakk0D7QHxiDJG1iYuILMBjxH1H/+QMlYjTGGI3PSGKCwUQMQWOEH5p0AInG2LZNRwPaktBNd4Mt/eACt889956qU1V777XWnHP4Y4z5WmvtXedAwzypqrP3Wmu+1phzjuc3VuguDhzXDPRvCbQaGQJPVODJ9ZQ6C/tAFlLYj22+mKpkflPTL5MTQgcCEBh3v3r90vMW3u5Be2nH34yv9q6IwScGlizCzmNgn52p/G4UA5CyV51xoEHSIh1qIvjCYcTbAdQ5WEtYn5zkC5uLFW5f3MIJ5ZcXBBDG7QBnLKyxWHcr+K0HT2Lh6icAFjYEjN1NMQsDkOgC6xtXyNj7V8bl6DYbrFcb+GHEi0+/heeffBMPv+H4rnH7uXew/dwVADn6kh8HhypVg2oZlnk9pAh6uM61fiCT4oPPPLTVsbLnnLLiUPplq9awTKTq+JWEItdJEAI8ZNeNol82awfJLKW+z45AXdvB2Psm6KD/4i3e+tgX8Nof+MrDAwGwf/MGd599DjAkOBqvCAUWIsK15I0xZGAGhku77Thmv3vTGQQO4EGMdexlMVIy9qVxhACjOn/xcGQEMLb9tmGuzNrC2E2H9GP0L5GBtQa2szDOgY2BccKoL/2QrRKJU/vDgOhknck/UKy0yC//Y9X6lTbPn/9HHxLHnQP/Yoz49D//KIyl2c80qp0MDv8owRtnD/6QFcNN8mzLP/VbTqq2Qz/VbfWDxhrRv1rb8OjGUmPI4ZT9t/pZ0nh8/B9+COO2PzhvzBH/9wd/RjHB0wJ5tXfFWW+pYzIE1znRp1eq4UITCp+bnfvUPcBRS9z5e6Puvx2oczDpZ0Vw43ZAGEPmzQiAPXMYx4Dt9Q0AgnWEkGzHOklhGHGyOcXqZIVxP2DkANM5dA/mvhB+OyK82EmmVGeADq8MBbbv97i7ES+19ZNTbN+8wsf+5n/EN/71P4LNkzZNmL/p8Yl//N/w5kfFtM4xii+BFrNxwEnxWgvbUXBHlhQAFgj7gLDd48HFcmqzsR8RhuVMWaVT8oeMASzgTjv47Zj7VTt9jf0okRqOMGJUa2GbSXbQzKx1VtwwdUNYm8yHh7sBZA22X7zBz/6VH8fv/Tt/dKYL9nc9PvlP/jve+KlPFa1MRzlY9qWLMbh4raqbgatnzwFrRAdvATBjvOvBAB48PGsyDqeWxv2Am6sXABTOwFD2W5E58fne0HucnG7g7MaBh4Dh+V77IivArCy6zPdWKpM+CMQqCP1uh16tcNZJqt5wN2Cy38iUOgMO4sBtdIJeaZICY3Oqar67iHHwePqRX8bb/+sNPPmWr8HZ1z4GR8b2C1d4+tOfhb8bshQMpKBXYTXmnncEBytsxVLRNbrf7g768pITDcUh9VxicziKytPfDsLuKG85+No6C/DI2Xi42qzhOumHH0YBWDntZnrpOEQYK05Jfqp7V21H7AOe/9yv4SPf+W/x5Fu+Gudf9xpggO3nr/DFj3wW4/W+7JjpSftqMAYREbd3ovKLPiIOXl0H1KDEknrOnnYAGP2wx+5uK+/KYJaljIhUFpA+sCblNNbAqFDtVgYjIhzGCGMIrkueTZq7giUwk8GNKolpMljtZPEhbo/aJINIchsWH3ujeVteYZKEP6wn2YJA4CHi6Yc+g6cfgqK4SxGM66p+Fq3AEoYGoA7pFewvJ7UQig6UjMPUaznxusit8URNpf2xpvgwLST6aeqMwu6krhpT+kbOwcKDQskqluckCjtlYuHNi3UHjeqQfcTTD/8ynn74l6XnQRa/7TRhUT0X8dVSIzNzhj42xBI9ngMNlAYolih+QIKymcVHI7FSzNKPZJiqAhWE+AlmZNR+AI42FnZjUaPZpd/D9Q6xD1ivC+TuEHw52ohgrUx2HEeszidHMgP+Snbw1eOTNiKDisHmZYo9s+CKs+CtAHHHIcgOYGpvNBTvuAgBlwkBOHHgBZM2DxHrk3XDo47DgN3dFuRMPqmomxg+PCPejaCEf6GWMHe64GAfGKEXuAK7Pm6k4DFgs9rAref1mH7Atu9BkUE8F2STodcYAbbxSePiDBCPaThkvrqLhVOKwivDGJC6TxMMmOenVhiiQDM01bL0n+o5DsKRmyJsi8whZ8awH3B6ugEZueb65zuUdzQXTmKM2G23AAh27eAuV8IC+YjxRY/Ts3Ps77ZYb06we7FToiivnRRLeryRI5a9oAOFV4xYwT7A7oG7F6LmcicdaA3YEwt7Mn+x480Ae9otoxBVxd9J0OWL6xdzLYQVohhe9JIiuqoraSXcaVeeW0nA8fiilxdwUSyhZCzcpUXcjRhVE7SUNBMQVeA+9OCbHdxCqtuVLgjvJRXDoXqAsmmYhRMhBuHLyZnsL+Jv5kitwqu+Cg9NCJrzpC7jzX5GwKl0q67ZacGM4BirBwW3LvQBYadYd4bAkbE5PS3BuAw4YkHciWPAarWCH0PWVVKVfFFGS8BN0rECnVthd7sXVcraYrPWHZqk8Zhy6dVJYJywCqBXYzl879FvB1hjYYyBRQcsoOSKDjaisxY0MjCWVMFTeC+3XsGsTOaRxXzqEcYJj80AjG2Nb51iZfQMELd6etUO8K0IdHVKOUsdumQcURqLzDmfIxigIGj0zAYhBtUMzcdKzsiRq4/aCWHHGHO0DEFM9quTDVa68/f9FjGlb5g0IK6/QVlQ+2osR4wwYxBck8pQktxy5auIqB6Iq1UH182YOa0L2G/3ZWGqyi/t2mM/wA9DfsIZB9EhR5YkMd4Lji8AYwuiD0eINrJ2Zrckx4brYE+LsUUmswd2iQc1zS5CBLB5RXzoiILtZuYvL5Uxxsx3ZXM/J5VUERKJsKh79pHheSo0tkWyuEJPHKmTapZdp4FDYl3v8TsJEb6eCmJln5LKEssEDckm2wDcVKUaLoyCxHfOZuF69EeiwBngQdRv8RU1UpLUqd1wAbQejMFm/sh1Fq5mwxrMDWB/tytRQBP7C7MuNf3eJb/b1QMHjwi/j2BtiANN0hgHIBAuErwTEaCnKt0WCSVeOIR9D/t4syiCJf75lVIjW4MYZYH5CPi7uyK0EcEmjUwnmhaOsiMYMkVAmpSxH+DHQU4MU6xs8UgUDqALNI3MyW62Xm3gdGfe73qMGnArhpHjbM9+nzDs5D6f2o+MbrUSbD0FTNxttxnqC4BEFWlfQgiivjo7xXrT8um3uy3ceYc9euyu9hhvVO3nzEEvPnOiczK+Gg9t1jYH2EqRZ8N2xPaNF/mzO1/BOIsBAbvhDmHncfoVD6ecCrr1A+x+9VosvKeuJejICLtR1wDDCRgjgUePGNRlr9pR5DSirM1gALcNaMpUSUfAtWgGYi8+H42s1gvG3f7Z3avxZbuIB+dn6Pd7hYMi3aV1we10ESazqiME7xEMYBbdRGXHt+v2GsEK4pCWMAawFz+MJb9vAIhk0O967KOiIHUWrgJj7OMIhAi7wA8DUKE7AcSXHdMpBLCHhlYB6E5LvWE/ijm+7j8Z7O/26Pt+5iwVfMg+Him93uaJbE790xt03QrdgiDq/KtZCvdPb3D3mXeQtk53sc4ndPdwA3+9VxVilJA+lu3ckMH+DdE7s09I/2XTAgN+KxunOxGVHxHBnFQ5VqC4zYCFIQmYpSUiJQhMKsvnZs+ZWN5SBygQkik3FUsG0RC++JHP4l0fOBDtMp2gN2+w++INwCw8lCltzM5iI2FhSbNT622mxR5IQN/cQwJrBcLBey0YkQgwafIX6k3qpyPFoA0VM+Ge+6tcONOSCHbhCthUqjzV+VoSlnHJT2T35i2uf/Epzr/+5Rybnv2fX1VeFwAY5BNiIkBesAkBgT8TklX0Li5vLJCFmXobUrWs6kuJ5wDgzMkhBwWC3w6ivF7ZCWFOdM1jhN/pEbspjD9HYSKjj8VLbAXQyuCN//xJfOV3vh+X9/hjAMAv/cjPYnd3lz/bEzeDwE1lfLEgKSo35C7WE5pq33jYB8DHhrcmQnGbVWE5weICEo0h+NFy/MUQsXabhnjHfZ8zqZKlw37TBImKSS8nLo+x3E7wVbqN88tz3FyJNXWZNaZWkRCA8E6ZV2KP8QDkyCe+/8P45n/xHff6dfdv3+ELH/w4mGKGbhOiTRauorYM/Sh4LwDsugNzzF6F5AziGLDerAUSgYHb6xtcPxPfHPYs96l6MirmHX3Ze99bLcninxt8RNzpTZW/gbgoEmANbBTI3PRs9AF9v5/vnCpFp1UovC9h8+QBvvkHvwPnv+P15dlhxmd+5GP4xR/46NFJnBYyBlSp8ngfGsiAe58H4fS8NadHjhi8xACGuxGu6xbcGKWMo2QYoAOLjjToOBX3YD1dWwj7EWQMVo+V7bgV9aJbcC3I7d4MGXaXQGK2Fu7saGEf9Z0u35jM8+/7M+/HN37fBw5uJvtnd/jf3/sTePGpp6gZYWZG9AHuvMhUzBHjTQ9nrWg/WhtY/r3b7bPrbXEB1pMQAG1WTVv05PG7mzMmaXAaHMOk2Sn/kXwXTDnrbCpx0PClUlsOspUFQ9UEE0xn8b5vez9e/0NfJYDkBMS9x93nrvDmT/0SXvyC4DuEGCe+CtxYBpsxEGUBixmKI1f5MXMUdV1VwhBagJgEJ2zk6GbpBGCRoyoAVBqGumfym5J1b+Yo1Gp4ZpbFmFCiKIOOcoTYbNPuPhXSKA22/S6FKRlLYBQskGanrd5zMivnfllqPp++7xJf8R3fgIvf9QT2xAFEGN7Z4urn38QbP/4pxagunRADyqiCN+XIH0ahiykN5edZ+H7TKeRwmqcYJGBZYyXJlkv0+qN3zd4IZYKWnTRDnKWLAMxGFOHTEzxsh2oF60vXYwQg8RqrCJqZsTlZo1uvjvK7gx8xVv4OHMQhZalIugn9EIXo6h13hJdMBVXxt/sscNTFdBZG8S1C3xpXANm9+FC3ldjtxjXYz4n2DpU4Vu6tXG5uwpCq73PkywIrw0FevF07gFjYqon7Qnt/2cnIUqNRafqoiLTr109KPxfKsB3gX+wywhSPsQDHpPmpvPDq3RkxIgwBZuOqJJ4sGRbuhsw7m5Ut7gmPL1/jujbJ+00CYWWtJLpsJGlqXp5ZuYn0T0CM8OqkZM/XglFxNxaibnaktJNKN+zKNabj6Dkj0wMSsDl9GWE3FMvd2XHIqnA3KILo/TGJ7KM61pPwdpobb/Fe5X0FpR8AROU2LWM/LGoMqDONVkLmfJ7rOgYWxH/l28GSZYpAOHt0geA9tjfCF5vTroT9L5ToPWIfWtjbdI3FCW21XheTMwAwY3ebYAZYo3TSzslgH0qSoBDE7YAhVtvk+13Px3XJkCYY1zPeoxwgLNoPq4mEpvMYfQS99z1fyfPthTLrsd/uQM7mXZd9Ydxl1Vf3QwUjBRdsWJVSdbk/66KT03o3UwREL9EWxwJQs4PQfYGoya/BVjx+Oqanz3IFvUuUF8Eh/jE/FjiDx7xMaVRrlW6eLB3Ahz7UMLJgVKR+gjkCGRzHAOucLEaOTeT+Uv0FBzHpLJSoOI2jNYgo1VW+24xxH0BOrak61jh4hMASpGCpriDXyIElTYYoHR6KAAAgAElEQVTN1c7GghDgYmRVnkx5PDnGcuBmCfCQVU9KlgtqPKOe8W30/jJRp1VGZITnZDQsiQFraoUDBG1EyDwUEVIXpmIGLvdyVvO1xRXYKZIQIQJlL7KDhWKTtP2+0vDPhMpYZO5vqy4MEAk7ly2iJPUcul9kfQLrz9H2kspU+6lfgfRkTfAUWrXQFKdNzWQ6MSQp39T8qGMVlfHcE7KSM1LtkaoFW4ohQiQD51wiTiBGxvZmm6vIPgRRXf2YgcDoLtYIO49xP5RwoGpXRycjFDZPjsj0ojp12Am9h1l3CDd7yf2N1lkpv2ensXy+ZGUISbDpJNoh7gXBfnW5zG6Mt2OJJzTCEiWeLPZe+MYgxGUythxXIVfSL8MGq2O7GID9XY8QE6yYwYOHrQfisBsybG93ucm78PBsi9WXnUoARGTsfu0GGGkZHgwQ2YDbhWzIYn26DA2x3W4ruUKwRcgZ9T7UU8VPwOknoO0CnlhxuSEKRFzttJV+N3yFBw8R1FmYlfpsqF9A2p2pE5Yi9gmYpmUomBnYi3eeUT/q6irYyi5Nl2ePsw4k8X/FzFkR6aQkVsI+6Kpjc7LGGALHe75e3jy1cn8zqPDVOi0QqWUR1AAPAoDfe4CBk7MTkDHYvrjTneLwNs2RG88yoAiW9kF38Nm4O2L6TaxILUeE2KSFMyvX+jWwLmjT9kWrQ/AVuuk0n+K0+VB41CW0Jx5joyJ8mbJ+/RTjVY+5jWIyBz5i3Eq0fD6sK2JWA6Bg0kFPn+QoFhX11lTsSxrLxs3ANcNONSVWiD1W2RjqNun1196VCVr8rwXjIB/jQAMaYyq/CIKs4hjEsWlzssGU+jlE7Hc7tCujOHsDkmOcLFU4yi37I4+azGNaazVqXB3ZifOuLaOfOOfX/HeFhQGITMBR+bMDhMPKpx9yRRV3Adl0xAmK8pGfrs/qBBe2beFaFsSNHtmze6D8v9Zjk91tch+jDcC1NEuumsaXiiSJ59npkE76ENTNID1jUAZb90F4kqxeJWMyvgmHKKxDs9BZAYykrykgVi7FhjWMQ1QdO+d+AYCrsSQSH8SazDFFoIjuUmXHSZgSQ3wiNnaNi0txSKlfUWTg9nO3Ra2iv0kTExEk8RAFmvjsVscYAQTZJdlHdM4p38eILglRlYagrwwpZGbYam3/RSBiT41qrSmkAzHL57+wVuJ6mjNmuaIcnUrjrZFgqTnKgqWk21twllLtRpZF1BEemJywVIRECQh2mGbaYAjGcmrbME2MLCpnqGZBXF11nJ3NOM616To/WS0AY5AJmCFus82CZmgwhnw0DwprUfh7JfAEfZa+Ih3j6+9+N88FtlLC3ZhD+ZvbjAp+C89x4LaayQ5FSMk8WwIe7wbYzmqsWVv8i16O1SlxBoa/G++X5lcO1FnE3otu8x61XZz4RNu1a9kKSDDukmHlvuI6h+6IBmPYD4Kk6cxMXz4tPIiHHYhwcrYcxJvvDQH77f7oPQAmTk3tDgigqOI2bma9S8XfqHrUGJy8N0HuM3a/fgMOEet3n7deflza4sjY/orCT2zUx2TSBscoWh2GsCG66dLjy9fTeZT/ELO4LbRUWeiSCDVTePD+5iMhWXXkGVRh8tU9Wg2HOMeby/KP/K6DKbvV6iBLECPDh4VdLsSiJqOiJouhWA2FFZoQ/9FQJjTI+WRMZbXUXW3BD5tZBLNDzvxg5D4di8JJbI8O6sBNsjPWIV7R+5ZtgwpnjUWRs+puvdlUeN3TRS09GPcDvB/FBYAFdi0mQxQ4+8zEKAirqbfeByS/Gdc5nJ6fAWD0+x77u11pI3mgMUtfnYFTjqpQMyspEpYJNAleky27EPvCM9VNc8tte+RIFxI/O6m0XXoazFlaWuI15Vpc5o9zgnU0qSVqT7VFj757s2fV2poi6Jbv532RwFGJjOaF6xpdfH/7hkWVJg0euIllc+H6/akFV49uAKrKq98PZ0MNg6Sd2QFVo3KQqh91zMaAqKiJUxQ4CI2xTebApBoKrTBVakh9kADo+yUmpkePX/cc2cJLqLGpgLZrw4JRi1CiY46x8cXNBoe0y0YCYlQ+CXJ8LsDnpoH72wHOOnz57/wKAMBbv/4W+l6O9NiHgq9XPVjv1rX5c1pqjcOhQpZy/3xyfj9i+g0VToY7W82IJ7MCx9p05qCPNSC4eOyjgLRUPt1+TCyJzRBb0yLaIc5ZttrOKduQQDi1CkMCLtTvBfXIdZ1qYYQOYgjwY4C7WMNrfKA96Rqz9LwjMeMaTtkGAPmdtd+KUG+tzX4eMYQc8FtrNfJnIpycn0Z69PqX9cRYxcFXAgREZ6i7Fivs/+bJGczaYXxnl91FjbXZNVIWg1BaHIpPgKmSvKdJnjoHiVdSO6zo5Shp+WOpKQweiIBdG4RdEEeZ+tl9AJZ2uqZN0Vx090Rh95rIshE8ky58BpcggQdLUTL9bkDaWai7r29QLzgznyst0cuiMmt336GBOERwiLAPVnCLLsOsKdLGRjiPIaKEhFVEWb+qCHAMjaWRGU3+nYaYNV5BXAMmInOMGIchN9GgQ4UIJG2HSapSztHj7MxIrz168hRET2Q3ZlmRyXFcd8FkyrZrh5hM2+nY0tg9jkJ8adfMknYlUQpvXNxPG5YFjDJrZfiS0akaVJKk1XciqYJSv5vBz97ZfAchmnsMppK+H8dRfSfKW02C0YzPVzN8YltqNWes+XhD2dUTNBXEUhucrzWwv1l3xZVxpWXdyJRAjRijQu/yDEQmz4shOGsBLzysePuxxENaqcmPAVnb2nQ1NjGEAvAjfLrNwa+VQAdRzxlDiLHSu+swxAckDaQeV4kfnKpfZU75zjHHL8CYJyC1Hj1wjYI+DcAZC0MWw07RMjsH01FpwEMho4Q4ZQpiBQst5vQYWFJ2ZUIvpRIJC0ANCNHGciXUJtICDcUcW2FpYQNMRqOanxZ120SvqsV1K5ARRx1bg1VWQbcmtm+YuWTIJWNgLyv42wrtkSMwvN3n+8xRN4oggqpqDfL7UZ43+VPUfVjRqvJt9znAmDwB9dENUZ851+HsoeRRef72c4QgJ/BqfZIDWEO4zfgXde8AC3iPaGTDSj4zxho8eHCGhRWQ/4zDgKGXkCxZONS+h+kmxOX7zBk42SA5xiu6fPz4h41z3z0T4LSEnRcCdTZLlMWIgpkQmMrudifEO6t04veReEgfJKYRyCrByWPts4k9mYUWK+FnHS1hczZPZFn6WRLUZDha5Y1Xm3VO2DMt+5utLNHOLAqc6074ambOkvkSj5/cQO2D1eHMADqu2bO+xbsjV7ILUGday2GcL1ippPpvYGEdVm7WXh0VUtSDS/VJRl4/Jr04l7zkUdpwp27ibCZ3hj5gdXkCszLYP7tD3Hs9zSsDi9eFTS2tmxMHDvFn6NH5oz9Bzv1EwxZ48auwxmVIKjlyaiHQiNQqjzUDl/D36ut7iLqwINPbqyO+DhKYT+O8EZdypFAWfg6WpXO0LuloP6S7rlRqgOwYS7WJi1O1PS2NRB3gl4Bh8i0RwKQ/td68hSarO1l9q39sZ5sZjSyZGAhz3W+xwC6Id8lqWVqb9aBumlaCKBB9ULaPKtZ8Pnue40HbQWL/mMMPuec3z3/y8aMnnkAuE4yqU6jm1zKbpoxBpbpribolnpch6tIGTe6oHqz6Mbkye6J0uHr0XoI+UnI9L1fHofvmS3HhPmUjjrVFC/059P9SEpFQ4gvzvdNo0fSeZ16YBIipeTL/3L7zxHa2O13bNCVvTJXDCKQW4clz6VGeuybkdtSrLxL9NAHA5eVrnyFDX+esRdetlqYZgOBNpHQU5GqhTv/GKm6LqOwgKgjWBocyfWKFo6TJSHyfqqwIEiU8c5YnFV4qR57iqL7ErgBuQfMQfcSokaHUib9z7H0253IUv4qSX0Z3686UPh8oPMZJcMRyITJN37wXx/hutYIxJGq0dK8zrd8yR4StB4GweleJyhme3WVBMs96Nf0puHTKo061GHajUGeBM85cabqEa603a1hnDu7M3geMYayE5HIPgSCWbf1ulJyMHAPQtbjYHEvAiRw4ZXTXt88lb/Hj88ffD2P+qtae7e1zzAeqNr7JamEBRD+4GpR/0uVZZTWd71sJdpYSiHc19KZNsB71UofpJhljWayJjVN+U0ViaZZ5QQ6i9TmYTKjq7yKPG1XtdsiC6eMyX9sUwtRTbyrh54hy0MRLrQq8UOHXLgUosIA6WuVVc0qNHDgrBE6RcvoOqR3NuJMCquHdlc2RkC19zhlkD6mKzWgwvNPiSBwOKTBoXW0SakOE9/7pi9urd8kOjctLc9m9U9MqgyYm3skRns6PqhjnZoNMH8R1MOag06Q6kl2CVM2Ecm9qMoU0JQONvl1SqSAlrwTE4UmsTKweZFCQxYWXSFU3F5xqsurrAPZFDBpub0gw5KCYFpV/S8olkkOPalUikThFVbr3pXyGPOlbXuCk8xRTgALnOmpWOR3TKaWzMQYJTIhZgnEZDNhybzP/JMJcpr+0ADWQN7mGpu8YlRZJO8LpOf2c1YwTnrne8VNQbxl4sVLG5Leh7hQxBIQwfvDq5urbHQBc4erqET3+VCTzDbmCEECod0flVZBYpuJIUl5IyAq7GVFbccx3lgAyGSMv+iATverKI01AchSLY/JjUOJwVgTWhti0TzEyQoWdgazgP3B8zL6WL07WKWBgvov2/QgygFuvQbBgZvjbUViTRBgqrLgE8TWMhdCS5F+Zj0031+5wCKhzobp1hcYZvDrqq265oeSmFkEhUpgz2zk4J/Gi3osRY3V+Mmm7kFrcjjCcAMvl+0CiSiSTMh+wJAtKwmkrezZ1UqREz7Or4vXHYOOqk00WdYRsUqGXPpuTTuhQNt5/3Qz74uLizxlyP1pqV15x5h/RDtrYBMTIiFGYd2ZeJmqWVWg7h86JF9U4DjmvNQDEnueec5OXHPejSrzVcgsVP2iKo9EhDogZM1CZfALpRwGU0UPLHkYpAmRcHBRhc+G2UXNvk6HFJKDTQgHoKnw634/an2oDSeyDniYwlGMaySDz2vJd0YKsTtaZMxv7ESEEmJVtWLMprxx2I5LKtrjFTu+EBER7SRLFQEHvd80ulZ+NXtLRmc7oZsUNBxj2w2Rx8KxJs7G752+/fQpMpv7RxaNrY7oLTErkOPNVZgbOHp6BiHGjSeWnFqiGqCedKLyd8GgpacyCbC18Mqt3XqNBkQmhlQORQezHeQOgFkSl4uWQLHoHCnPLIhSCpmwNO1aOLYDShvKnZi5/CE4fKgG10jsfczxKAp2zwg+znFyuPgWrro/j0JjwGeX4N85BwfUbAXyJmFPmgZShIVmf5dqEJVo49TgW0F5Z9OWeGDhDLIgAWhIaDWP/E8+evfWngEmiMgL9UzL8d5udDywO4QsqtYS2mR32Zmxo7S/N1ZOlq8KjERLDpiIIGtVQ4g8n3WCW4E5DELfUo+o3Ku2V8WKa6rLpf+ONNh3ZfcJc6vs9RJ3dV5cOZ60nOfAwUAJPj7Sqk2iIEKgElaZsC7MypndSXxPBTXzyBflUHB5aNqBp2UhYFTcq1ooF4rr5aT9EsG6nYTr/ctEYq74y8nltHvxt4K3FWvHw7PIGjDNJ8tKq0ggpQJVVm1AuVOSnR0e1m3lfkgp5DzTHT5Ju9UUZMxnVPE5RsilZSTm8MHzWMJ6Z37EeGa3fybzEBNUwKdbaRR1v5FhMy7bdaZtzjasA3yVIhMkaydlTdYeuc1/fWwxgVhLxEYfkCF93GkXoJ5qrIHWhbdYbrNQqPN1Zd7db9NsdUjhdjAzXJG5tBxS9shBaVutV1qzU7D9zlGRUVuYotcuad9E4Se8nGx//yvOrd96X6py9nUfnj/5GZP4HNL2sxGCcLWE0QcN6XNn90jNxqFVZk9pIj6faZySPOg+vKrPeAFAH9CosKoctzWudVUdE6NZr+HGURDXLd2Z2B/fx0IFh601Ai/eSeiwFNiSAdOnH0a1WbnEG69dOwSGgf+tO9ORDcWpaxiKRNgp7gslCnJAmC+tjEm9Rlcix6W6bU1EJ2S/h+5dvmOffgZBjBpnV0plkAZrWwmUBWlOSKYgc9Cef3zz/yaraeXl08fjXAHrPElGTqXwXVGVGE7ROoIra4PYC6bGSvcSW5mF+mjUl7/0pAFYJY+oL0RD2AodgnBVesTltJg2Himc1hKlVLJfsWzxhW+oTjTFzkS11LbEwDCQ3yciIu1FON18MC3kOicvcIbEnLQEdEONyU9NRceL/qi0max6SKMIqxC0RbdOFaasKo5D6qzGCjYuu/s5BvsmhLWeV4DeeXz9r0uIuet6wid8FNh+WAXFGLjJkwBwRKo0CETUZtBj1xkMIUZxJTGdUWKBisNFwoZlpJdGMtjcv+kSOgzWLMLXNFAb1JjRlpw0hqiWw7Hhm49qFZifGiZ2f+V4DAIyqIIdqAaQHIwMpJ0s4sCCmJVtcOassGQAq4wPHkPFEYEmNV0vzdYSQD1xhiBoxCaQxeMAz7HnB/eDtKIarlUMcfHmXuhBi5MW6VVyaWFHlPrd2WbdNEFflmFWwurCSZpDj9y1UvVwevfb6h8iaD0xv5V50qbbrjm2i8KNkHKfOwsw81lpddRy84v2WfInpMjNKpAIl5PbycOpD6H1WIfqUrEiRMzlEnCjs7yF2JAZGvy8BpEs+xrIwJTB0fal85cjYP705MhPVqIlAR1R2KZACAKhzBUYgIuvVi765ek4tkpNvy29GzlHiztc5msYYzPKDV4yC4Bqq24Lpyjkf45JJn5v/1kuohRUWzZSwF7rJZf9nVJH3hTWL9Qa6EiSvMIRfeHF79f5JJ47S5Obx5etvkTFnUyIIfmxi8Jox5bNJdswl7ld2ERUgZ2bh5GMw7eCE36S0LOYtJKKwtg3L8pVQ5Q5AEqQSkpAHSQ2dGgm+YFgcM/XHileeslZTdkByCpZ+H9tLU1n2OcyH9MFTYMl/w9g6x2NF0hE5xcf8arpHMwCYFoiREbNJvumfoQaNqa4x7Mfizbe0ses8RiCCwtdeXV19fnrPMVyrfWfttwXCf0EzPVT+1tts6lw26FdBtTVTzK0ekrGkbaDqevqGkWc9d6GeaCXs6mUlj672ISWGakNbfPWxXKx11TSBLJt1uyk1D1u33wK7CI9/4Hg+VJYIMP+d8/J5h5u0woBgL1czXdpQwjo4V5z57KRfzupMNiiTWHpHRJU/STvesFfD0cI01PICxfBDzxeIed6/hfL48es/ZI39i9Obh35EChHKuy3QwILVraR9VFIOV07pE/UfgEpwIk14rxMQiu8DMwqoy8rO2iUAcRhxgAVv25+wFrazlSGmQt0kHEQE5RCPOugLCPtyzmyKdFCDwjEKEA9R44tsN8fjIAExEXOUk2qaxzz1Yhh6paFlIZ19FDaJJk9PaFVAgMTIZRwh7nw5KTuRS8IYEKPA9yY/FmPr/ISq/jyik+cYP399ffXVh8b8EtIJ8PDi8mOI+P1kDbqs0Wgf9aEAMraql/neXhOZO1kpWEnFOqTNfAwCQk5ozOGLbAhPwWGWmJ22EC24gGrC+8n+mUuxEFa9cPeo9DwfDIqNfZA+EGXcNwBFx96utbb/xmDmmVCfUMyVyy61jkR1bQmuOBkLTTFwzTssviVGISQW60NCS5LvuotNpXOvyHfvMWTEf13wPqhGKC5t1mO3cV/17NmzX1/qGnCc5cjl+sXVH3x08fjzROY9yQo0JRdDBmyFLciBAXnnSxSadnRG8okkZpgmjS41G7VVQ4VZ4AkpPyaETffwxTNuPbMk6YRQTz1UdKJqutwnKvx/Hp3BDFywDIcykcxuYLSYeqY8yhOjVlNnHo/OcR0n2QoTMNAYx+keUyenrzQ5IChBk1aRBIF0MlokNOI2sdecxcnd9RGYxF4CQrNpYSTWjnVtx/RO082RmSn+2WPEDLwkQQMYu+C+aRf6z1rjcoBe81oN1KVQ4AMImDjhEKKm/zXOAhr4GgduI5qTlTFFDrvkMjjn8ZJLat3G5JZJmZ8WhkyxKOYFl9aJhAgZGBjrEBQbYhaKFSdHMIrga1Y2z830eo7/i3MgHHmxrUU1VkItla9BhJmfM1c3Bt3tKB0uib1N7G4lKJI1gt+sF8MwyoJO6E+VUCyqUkxKWgCkPu3AuIvg2Le3JU6zloNVZ1/SodSD5L/34ubFB6etTctLsRypPHz48GuI7CcAnAIKbwDlkWa1tnK4H0ukS1KeCxZItcyVFzNWcrGEEIs6N90SS0R4d7aGrRJcYgjwyu9yBGIvXnnU2Rmy/lyVWBXmNvi0q3hIjwO68XlZwvE4eK85YIon2QmnsLtNd8EgP8FTjnEuH0yfCzGjuAKAXR1WxYZhlPsaAbLphPQ1/T8oXgiV+wVHRNoT9dz81OIQMfEJAwg/fH1z9RcODqQqr0TQgBC1gf04iB6Ig70utpXNbASnROyoI07qSVDhKEV6ZD/bioVRB/RmcejcMDOcczk6PEYW31xoF1ic7uUoNpmVSLuQ7MrU4N1RZ0vWKv0u+oBkKOAchHCYMOVFVCdIzUZNLIIF0Sod5ZShZpdVctN6aQJ3WxlcWBBjyVC7EBK1cQKQaTFJFg2gQQS1lNV1OdmQzC0TLfad9V007Es6lHN9kwWpumcCfuz57fPvWmh0sbxCEg8p19fXn714cvH7jO9+jkBnCYXCGco6ZT+kI0Ocz+cDZVBATmJLSKd9ZqbK4LkaLFNhwSvnb+JYwB3JABQzJrHRc7aJwkgAjGO1YyfTdroJIpTCaqRMOtuP7Hg01eBA5oFq19Mk6GSetyL0kMa/JI6VF15ScNR9mTDb2m4jtKUdFOJIZC0187jQJBicHa+a7k76xeq0v7gWmUua4yTz5IVNWseE5fIBEeFf3dze/KWFGg+WV96hq3Jxcfbw4yB6X1ptEnExqTZCJHZjlmmBqaRhq4WA6QDHtMJFlTdtRtpS83Znl4/omNgO3YkPYGoAECiHtKMbC7KidgKUPVhpMO0Rn2hS1KHFEisEekLux1yToQvcv1wCebNyVSWywA5zSNywgNXX8idEgVw78Gzz32R+n46AoWFwVHCkAfBQsLRhUOSSxJ8z/v7z6+d/6+BAD5TfDEEDAC7OLz9IjD8NIHe4ObjrTY+pykR1hJhYfi0Fp07VZkuETZ3B6vIBwm6Av1UMPlfCm4gYcYhZw1HMzQsAN3WJwuNZZ49qVJgFFJwO7OgcI6yx96aW4xgREWVBKTsUvRe9tDUNNBkgwmUSnpOTvdRTLZx8CpUTMF9nnQMsEKamfU7uvVxVUU5ARrdyOLs4x/XzFyXuMpvNmwpL0DRS9whgjDH4P399e/3vj07OgfLy6ZoOlH7Y/9jJakMg+sPGGJPM0XJMy/8IJLgKqeMKG5vwGMo/g5o5IZIAsPYe/Zye1yxd6UkiUh7ZiL9BED6ajMkZvSidvcpfm+o5YsnGJf1d/ifgk+bg9aROlDrrvlZjnvRn6V8aucmftF7WvsI0c5yOuRQE27SnKkoznXOu2qr7O+2L0h6Z+dwgtUwEYyyMsRgV5b/0dfqEjqWeM6L/Zzv6Pc+vnv/sb5Qef9M7dCrn5+dfj2A/RAbv7VYdat0tICq7kB3KS9MEoDtfSWbaAPSaTD3vboRKNUeFd0zRzgr3muAMJtXPilnA5qhLjIBbt/eEfTnujTNtHGKlplosLLGJx2BzCQTf+8z3NuFuKgQnzzWn4WaHSvC+9aFYGm6UI14Er2oMgHgFLg1CcTnS4shVKT9jnZ0k8GT40at2C4qgmjj41Fkdv6PI4H9z9fY7331wYC9ZvmQEncrl2eU/Y4O/XJ/JTSNRBbBKH7fUiRiKzwRBgl4JKUo8sQgSsHno/RLQwPrOjRtLYv3L8KkJq4Oy59isbmaxEFqa0XrMhIRFSyVrOoqsp3Ym41RwiAp8o+Do6o/c5oeZjyH2IsdMOim/k85/5XJfBSG0IsBZlSrEVoJgvpuBGktPAjEWjP4RQIgfN5354++8886vzDr9GyhfcoIGBOeDLsy/I2P+GFGxxYUERVBP7GS3BpClaussmAV3Ie3YjTyciLmmmACNvpjwl3qZqeIZkYQuvZaMDcdmpb5OBCJuciA0JeIgSI34MkAFQvV402dCkHzYeaknXh/IgbMpETxnVdHCXAB5F+a8+x8Zm85vwr2YEbKOt5kL/XPMSy7z3O0EvMEmfs/19fV/ONKjVy6/JQSdyqNHj95v7epHCPxNAJlhGEEs0K0zgTARFRe84NW6Q2SGV83ENOsqAa1wBIi6LjLsosAlO1qsQpNMR0hbfNT82stnRulfrs1gYdcvxYCOJokvC5wyyilDIAvIYMLapLkJAr2rWcTiWDqUx1ITmo9ZlWjMMhB71QKYGONi5gHODlblm/K/aZKlXN/8u8+D+Xuvb7+0hJzKbylBl/L44uLc/wDBfCdAJ0XOFn5xni1VzjGzFKEMYUe6zRpEUD5tBAFYn55gaUjRe8W0QKW/nfIBWZKDWducW7ounCJOFtpgH3PGqrAXfhjGNOzQUbjcaal119J4JsxpZqxETJl4It9vmZwkA613Yx580Z8vpLwINWSXFSKvA37Huz6PXxrjXYz8X4Hw125ubj59tGO/yfLbRNClXJ5dfisTvoeIPkBkLpfuKQ7+KpkfgbGNPlZxdfWA5H/ZCGENeAwZ/6MtpCCM9ZOYzU6CbWDmBnV+ziRX+1JaQMcI7JgUmwtnXn0xL4lGunfny+mh820+wr/YA2C4s7WGhh1oD5LWLy0Yk7FDuL6lKcEHCLoEPWWO/8OS+ZfvvHjnP90zuC9Z+W0n6Lq89tprXx5j/HaK9K3M+N1E9B4w1jGyIyKbdDxk7MGOZjy5+oZyBMhOQSnU54h/AxfDTVtJ+ZQQQpk5J5NcJMZJkAEmfPtiWexTXWXRpiTr2rRNskNlbegAAAA/SURBVHSPn7Ts8uOd6ObtplvYLNp6Q+8lFEs3FwKACGZiBiOAMCDyc7b8BSLzidH7/3lzc/WjACbeSL895f8DdE7G5hrgRmEAAAAASUVORK5CYII=">
@@ -1144,15 +1417,17 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
 <body>
 <script>document.documentElement.classList.add('booting');</script>
 <div class="splash" id="splash">
-  <div class="spmark" aria-hidden="true">
-    <svg viewBox="0 0 120 60"><g stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none">
-      <path d="M38 30h44"/><path d="M26 12v36"/><path d="M40 18v24"/><path d="M94 12v36"/><path d="M80 18v24"/>
-    </g></svg>
+  <div class="sphead">
+    <div class="spmark" aria-hidden="true">
+      <svg viewBox="0 0 120 60"><g stroke="currentColor" stroke-width="7" stroke-linecap="round" fill="none">
+        <path d="M38 30h44"/><path d="M26 12v36"/><path d="M40 18v24"/><path d="M94 12v36"/><path d="M80 18v24"/>
+      </g></svg>
+    </div>
+    <div class="eyebrow">Training log</div>
+    <div class="sub spdays" id="spDays"></div>
   </div>
-  <div class="sptitle">TRAINING LOG</div>
-  <div class="spdays" id="spDays"></div>
   <div class="spline" id="spLine"></div>
-  <button class="spgo" id="spGo" type="button"></button>
+  <button class="btn spgo" id="spGo" type="button"></button>
 </div>
 <div class="roll" aria-hidden="true"><canvas id="rollCv" width="128" height="30"></canvas></div>
 
@@ -1171,17 +1446,40 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
   <span class="fstrip">
     <span class="seg" id="stripSeg"></span>
     <span class="fcap"><span class="segcap" id="stripSets"></span><span class="xcap" id="xpCap"></span></span>
-    <span class="xbar"><i id="xpFill"></i></span>
   </span>
+  <span class="xbar" id="xpBar"><i id="xpFill"></i><b class="xspark" id="xpSpark"></b></span>
 </button>
 <div id="sheetWrap"></div>
+<!-- The displacement field the panel contents are pushed through while a page
+     changes. Stepped from panelHit; at scale 0 it does nothing at all. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false"
+     style="position:absolute;width:0;height:0;overflow:hidden">
+  <filter id="uiwarp" x="-30%" y="-12%" width="160%" height="124%"
+          color-interpolation-filters="sRGB">
+    <feTurbulence id="uiwarpNoise" type="fractalNoise" baseFrequency="0.002 0.09"
+                  numOctaves="2" seed="7" result="n"/>
+    <feDisplacementMap id="uiwarpDisp" in="SourceGraphic" in2="n" scale="0"
+                       xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <!-- the same field again for the clearance bar: its own, because a gain and a
+       page change can happen at the same moment and must not share a scale -->
+  <filter id="xpwarp" x="-40%" y="-400%" width="180%" height="900%"
+          color-interpolation-filters="sRGB">
+    <feTurbulence id="xpwarpNoise" type="fractalNoise" baseFrequency="0.004 0.3"
+                  numOctaves="2" seed="3" result="xn"/>
+    <feDisplacementMap id="xpwarpDisp" in="SourceGraphic" in2="xn" scale="0"
+                       xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+<div class="crt-glow" aria-hidden="true"></div>
+<div class="crt-lines" aria-hidden="true"></div>
 <div class="toast" id="toast"></div>
 
 <script>
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
 let DB={sess:[],wt:[]}, mem={}, STORE='memory';
-const APP_VERSION='2026.09.22.75';
+const APP_VERSION='2026.09.23.47';
 const HOSTED = location.protocol==='https:';
 const STORE_LABEL={
   local: HOSTED
@@ -1263,6 +1561,72 @@ function nextKg(v,id){
 }
 /* Reps offered: the working range plus headroom either side, so a good night
    or a heavy one is still one tap. */
+/* The weight and the reps live in the row itself. There is no window to open, so
+   the whole entry is: change what needs changing, press the tick. Everything the
+   window used to do — arming the set, starting the rest, the score, the record —
+   still happens, just triggered from here. */
+function setFields(id,ix){
+  const e=EX[id], def=setDefaults(id,ix), lock=T.start?'':' disabled';
+  const reps='<span class="rw"><select class="sr"'+lock+' aria-label="Reps">'+
+    repOpts(e).map(r=>'<option value="'+r+'"'+(def.reps===r?' selected':'')+'>'+r+'</option>').join('')+
+    '</select><span class="su">reps</span></span>';
+  if(e.bw){
+    const vs=e.vars||['Bodyweight'];
+    const left = vs.length===1
+      ? '<span class="sfix">'+esc(vs[0])+'</span>'
+      : '<select class="sv"'+lock+' aria-label="Variant">'+
+        vs.map(v=>'<option value="'+esc(v)+'"'+(def.v===v?' selected':'')+'>'+esc(v)+'</option>').join('')+
+        '</select>';
+    return '<span class="sf bw">'+left+'<span class="sx">\u00b7</span>'+reps+'</span>';
+  }
+  return '<span class="sf">'+
+    '<select class="skg"'+lock+' aria-label="Weight">'+
+      ladder(id).map(v=>'<option value="'+v+'"'+(def.kg===v?' selected':'')+'>'+kgTxt(v)+'kg</option>').join('')+
+    '</select><span class="sx">\u00d7</span>'+reps+'</span>';
+}
+/* What the row currently shows, written into the draft. Called on every change so
+   the next set can carry the weight forward whether or not this one is ticked. */
+function readFields(id,ix){
+  const e=EX[id], cell=draft[id][ix], b=document.getElementById('sb-'+id+'-'+ix);
+  if(!b||!cell) return;
+  const k=b.querySelector('.skg'), v=b.querySelector('.sv'), r=b.querySelector('.sr');
+  if(k) cell.kg=k.value;
+  if(e.bw) cell.v = v ? v.value : (e.vars||['Bodyweight'])[0];
+  if(r) cell.reps=r.value;
+}
+/* Change the weight on set one and the sets under it follow, unless they have been
+   set by hand already. The window used to do this by reading the row above whenever
+   it opened; the rows are drawn once now, so they have to be told. */
+function syncAhead(id,ix){
+  const src=draft[id][ix]; if(!src) return;
+  for(let j=ix+1;j<draft[id].length;j++){
+    const c=draft[id][j];
+    if(!c || c.tk || c.pending || c.touched) continue;
+    if(src.kg!=='' && src.kg!==undefined) c.kg=src.kg;
+    if(src.reps!=='' && src.reps!==undefined) c.reps=src.reps;
+    if(src.v) c.v=src.v;
+    paintSet(id,j);
+  }
+}
+function confirmSet(id,ix){
+  const cell=draft[id][ix], b=document.getElementById('sb-'+id+'-'+ix);
+  if(!cell || !b) return;
+  const was=xpLive(), lw=levelOf(was.base+was.live);   // score before this set lands
+  readFields(id,ix);
+  /* The tick is the end of the set: this is the moment the rest starts and the
+     clock is stamped, every time, whatever was touched on the way here. */
+  dropPending(id,ix);
+  startRest(id,ix);
+  updateStrip();
+  cell.tk=true; cell.pending=false;
+  syncAhead(id,ix);
+  const at=b.getBoundingClientRect();                  // before anything repaints
+  paintSet(id,ix); updateNext(true); paintFab();
+  const now=xpLive(), ln=levelOf(now.base+now.live);
+  xpPop(at,(now.base+now.live)-(was.base+was.live));
+  sfx(isRecord(id,ix)?'record':'confirm');
+  if(ln.lvl>lw.lvl) setTimeout(()=>{ lvlPop(ln); sfx('level'); },420);
+}
 function setDefaults(id,ix){
   const e=EX[id], d=draft[id][ix], p=prescribe(id);
   const prior=draft[id].slice(0,ix).reverse();
@@ -1603,14 +1967,24 @@ function openSheet(){
   document.getElementById('shReset').onclick=async()=>{
     const n=Object.values(draft).reduce((a,x)=>a+x.filter(c=>c.tk).length,0);
     const ok=await askConfirm('Reset timer?',
-      n ? 'This also clears the '+n+' set'+(n===1?'':'s')+' you have logged in this session. It cannot be undone.'
-        : 'Clears the clock and starts the session again.',
+      n ? 'Clears the clock, the rest and the '+n+' set'+(n===1?'':'s')+
+          ' you have logged, and puts the session back to the start. It cannot be undone.'
+        : 'Clears the clock and the rest, and puts the session back to the start.',
       'Reset');
     if(!ok){ openSheet(); return; }
     /* The confirm pops back to the timer sheet it was opened over, so close that
        too — a reset should land on the dashboard, not on the panel it started from. */
     closeSheet();
-    draft={}; resetTimer(); rTrain(); glideTo(0,700); toast('TIMER AND ENTRIES CLEARED');
+    toast('TIMER AND ENTRIES CLEARED');
+    /* No fold, no glide: the screen is replaced under one burst of interference,
+       the same one a page change uses. Everything moves at once, behind it —
+       the blocks shut, the page goes back to the top, START SESSION returns. */
+    draft={}; resetTimer();             // the session stops too: START SESSION comes back
+    rTrain(); updateNext(false);
+    resetBlocks();                      // collapsed, with no block remembered
+    paintFab();
+    window.scrollTo(0,0);
+    panelHit(document.getElementById('v-train'));
   };
 }
 function markBacked(){ DB.bk=DB.sess.length; save(); refreshCog(); }
@@ -1663,7 +2037,7 @@ function mAdd(file){
 }
 const mDel=(id)=>idbDo('readwrite',st=>st.delete(id));
 
-let PL={list:[], i:-1, audio:null, on:false, url:''};
+let PL={list:[], i:-1, audio:null, on:false, url:'', loaded:false};
 /* Tracks committed to the repo, listed in music/index.json. Absent is fine. */
 /* Only a successful read is remembered. A failure — offline at start-up, Pages still
    deploying — is left uncached so the next look tries again rather than showing an
@@ -1785,7 +2159,7 @@ const ICON_PAUSE='<svg viewBox="0 0 24 24" fill="none"><path d="M9.5 5.6v12.8M14
    on start-up, paused. Nothing plays on its own — the button is simply ready. */
 function mPreselect(){
   mList().then(list=>{
-    PL.list=list;
+    PL.list=list; PL.loaded=true;
     if(!list.length) return paintMusic();
     let i=list.findIndex(t=>t.id===DB.trk);
     if(i<0) i=0;
@@ -1816,70 +2190,93 @@ function paintMusic(){
    the header it is a panel of its own. Either way it covers the screen, so the
    dashboard never shows through behind it. */
 let MUSBACK=null;
+/* The panel used to wait on mList() before it drew anything, and mList() goes to the
+   network for music/index.json and to IndexedDB for whatever is on the phone. On a
+   slow connection that is a second of nothing happening after the tap. It now draws
+   from the list already in hand and refills the track rows in place when the real
+   list lands, so only the rows change, never the panel. */
+function musTrks(list,loading){
+  if(loading && !list.length)
+    return '<div class="muted" style="padding:14px 0">Reading tracks\u2026</div>';
+  if(!list.length)
+    return '<div class="muted" style="padding:14px 0">No tracks yet. Add one from your phone, or commit files to music/ with an index.json beside them.</div>';
+  return list.map((t,i)=>'<div class="trk" data-i="'+i+'">'+
+    '<button class="tname" data-play="'+i+'">'+esc(t.name)+'</button>'+
+    '<span class="tsrc">'+(t.repo?'repo':'phone')+'</span>'+
+    (t.repo?'':'<button class="tdel" data-del="'+esc(t.id)+'" aria-label="Remove">\u00d7</button>')+
+  '</div>').join('');
+}
+function musBindTrks(){
+  document.querySelectorAll('[data-play]').forEach(b=>{
+    b.onclick=()=>mPlay(+b.dataset.play);
+  });
+  document.querySelectorAll('[data-del]').forEach(b=>{
+    b.onclick=async()=>{
+      const ok=await askConfirm('Remove track?','It is only on this phone, so it will be gone.','Remove');
+      if(!ok) return openMusic();
+      if(PL.list[PL.i] && PL.list[PL.i].id===b.dataset.del) mStop();
+      mDel(b.dataset.del).then(()=>{ PL.loaded=false; openMusic(); });
+    };
+  });
+}
 function openMusic(from){
   if(from==='settings' || from==='header') MUSBACK=from;
   const inSet = MUSBACK==='settings';
+  const loading=!PL.loaded;
+
+  let h='<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>Music'+
+    '<button class="shx'+(inSet?' back':'')+'" id="plClose" aria-label="'+
+      (inSet?'Back to settings':'Close')+'">'+(inSet?'\u2039':'\u00d7')+'</button></h3>'+
+    '<div class="pgbody">'+
+    '<div class="muted" id="plNow">nothing selected</div>'+
+    '<div class="trio">'+
+      '<button class="btn" id="plGo">[ PLAY ]</button>'+
+      '<button class="btn ghost" id="plNext">[ SKIP ]</button>'+
+      '<button class="btn ghost" id="plStop">[ STOP ]</button>'+
+    '</div>'+
+    '<div class="trks" id="plTrks">'+musTrks(PL.list,loading)+'</div>'+
+    '<input type="file" id="plFile" style="display:none">'+
+    '<div class="duo">'+
+      '<button class="btn" id="plAdd">[ ADD FROM PHONE ]</button>'+
+      '<button class="btn ghost" id="sfxBtn">[ '+(DB.sfx===false?'SFX OFF':'SFX ON')+' ]</button>'+
+    '</div></div></div>';
+  setSheet(h);
+
+  const back=()=>{ if(inSet) openSettings(); else closeSheet(); };
+  document.getElementById('sfxBtn').onclick=()=>{
+    DB.sfx = DB.sfx===false; save();
+    document.getElementById('sfxBtn').textContent='[ '+(DB.sfx?'SFX ON':'SFX OFF')+' ]';
+    if(DB.sfx) sfx('confirm');
+  };
+  document.getElementById('veil').onclick=closeSheet;
+  document.getElementById('plClose').onclick=back;
+  document.getElementById('plGo').onclick=()=>{ PL.on?mPause():mResume(); };
+  document.getElementById('plNext').onclick=()=>mPlay(PL.i+1);
+  document.getElementById('plStop').onclick=mStop;
+  const f=document.getElementById('plFile');
+  document.getElementById('plAdd').onclick=()=>f.click();
+  f.onchange=()=>{
+    const file=f.files&&f.files[0]; if(!file) return;
+    mAdd(file).then(()=>{ toast('ADDED'); PL.loaded=false; openMusic(); })
+              .catch(e=>toast(/not audio/.test(e&&e.message)?'NOT AN AUDIO FILE':'COULD NOT SAVE THAT FILE'));
+  };
+  musBindTrks();
+  paintMusic();
+
+  /* and the real list, whenever it gets here: rows only, and only if the panel it
+     was opened for is still the one on screen */
   mList().then(list=>{
-    PL.list=list;
-    let h='<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>Music'+
-      '<button class="shx'+(inSet?' back':'')+'" id="plClose" aria-label="'+
-        (inSet?'Back to settings':'Close')+'">'+(inSet?'\u2039':'\u00d7')+'</button></h3>'+
-      '<div class="pgbody">'+
-      '<div class="muted" id="plNow">nothing selected</div>'+
-      '<div class="trio">'+
-        '<button class="btn" id="plGo">[ PLAY ]</button>'+
-        '<button class="btn ghost" id="plNext">[ SKIP ]</button>'+
-        '<button class="btn ghost" id="plStop">[ STOP ]</button>'+
-      '</div>'+
-      '<div class="trks">';
-    if(!list.length) h+='<div class="muted" style="padding:14px 0">No tracks yet. Add one from your phone, or commit files to music/ with an index.json beside them.</div>';
-    list.forEach((t,i)=>{
-      h+='<div class="trk" data-i="'+i+'">'+
-        '<button class="tname" data-play="'+i+'">'+esc(t.name)+'</button>'+
-        '<span class="tsrc">'+(t.repo?'repo':'phone')+'</span>'+
-        (t.repo?'':'<button class="tdel" data-del="'+esc(t.id)+'" aria-label="Remove">\u00d7</button>')+
-      '</div>';
-    });
-    h+='</div>'+
-      '<input type="file" id="plFile" style="display:none">'+
-      '<div class="duo">'+
-        '<button class="btn" id="plAdd">[ ADD FROM PHONE ]</button>'+
-        '<button class="btn ghost" id="sfxBtn">[ '+(DB.sfx===false?'SFX OFF':'SFX ON')+' ]</button>'+
-      '</div></div></div>';
-    setSheet(h);
-    const back=()=>{ if(inSet) openSettings(); else closeSheet(); };
-    document.getElementById('sfxBtn').onclick=()=>{
-      DB.sfx = DB.sfx===false; save();
-      document.getElementById('sfxBtn').textContent='[ '+(DB.sfx?'SFX ON':'SFX OFF')+' ]';
-      if(DB.sfx) sfx('confirm');
-    };
-    document.getElementById('veil').onclick=closeSheet;
-    document.getElementById('plClose').onclick=back;
-    document.getElementById('plGo').onclick=()=>{ PL.on?mPause():mResume(); };
-    document.getElementById('plNext').onclick=()=>mPlay(PL.i+1);
-    document.getElementById('plStop').onclick=mStop;
-    const f=document.getElementById('plFile');
-    document.getElementById('plAdd').onclick=()=>f.click();
-    f.onchange=()=>{
-      const file=f.files&&f.files[0]; if(!file) return;
-      mAdd(file).then(()=>{ toast('ADDED'); openMusic(); })
-                .catch(e=>toast(/not audio/.test(e&&e.message)?'NOT AN AUDIO FILE':'COULD NOT SAVE THAT FILE'));
-    };
-    document.querySelectorAll('[data-play]').forEach(b=>{
-      b.onclick=()=>mPlay(+b.dataset.play);
-    });
-    document.querySelectorAll('[data-del]').forEach(b=>{
-      b.onclick=async()=>{
-        const ok=await askConfirm('Remove track?','It is only on this phone, so it will be gone.','Remove');
-        if(!ok) return openMusic();
-        if(PL.list[PL.i] && PL.list[PL.i].id===b.dataset.del) mStop();
-        mDel(b.dataset.del).then(()=>openMusic());
-      };
-    });
+    PL.list=list; PL.loaded=true;
+    const box=document.getElementById('plTrks');
+    if(!box) return;
+    box.innerHTML=musTrks(list,false);
+    musBindTrks();
     paintMusic();
+  }).catch(()=>{
+    const box=document.getElementById('plTrks');
+    if(box && !PL.list.length) box.innerHTML='<div class="muted" style="padding:14px 0">Could not read the track list.</div>';
   });
 }
-
 /* ---------- GitHub sync ----------
    Commits the TL1 backup straight to the repo through the contents API. The token
    lives in this browser's storage and never goes into the file itself — the file is
@@ -2228,6 +2625,60 @@ function watchSheets(){
 /* Writing a new sheet over an old one used to rebuild the veil too, so the page
    behind flashed at full brightness for the length of the fade. When a veil is
    already up it is left alone and the incoming sheet just rises into place. */
+/* The same interruption the dashboard takes, aimed at one panel. Randomised in
+   length so two moves in a row never look identical. */
+/* The dashboard's interference, aimed at one panel. Identical keyframes, stagger and
+   static wash; the only difference is what it lands on. Anything already running is
+   cleared first, so a fast tap cannot leave two of them layered. */
+let HITIV=null, HITEND=null;
+/* Anything already running is stopped before another starts, so a fast tap cannot
+   leave two fields fighting over the same contents or a static wash stranded. */
+function panelHitStop(){
+  if(HITIV){ clearInterval(HITIV); HITIV=null; }
+  if(HITEND){ clearTimeout(HITEND); HITEND=null; }
+  const disp=document.getElementById('uiwarpDisp');
+  if(disp) disp.setAttribute('scale',0);
+  document.querySelectorAll('.uistatic').forEach(x=>{ if(x.parentNode) x.parentNode.removeChild(x); });
+  document.querySelectorAll('.sheet.hit,#v-train.hit').forEach(x=>{ x.classList.remove('hit'); x.style.removeProperty('--gdur'); });
+}
+function panelHit(sh){
+  if(!sh) return;
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce || document.hidden) return;
+  panelHitStop();
+  const dur=Math.round(RND(190,260));
+  sh.style.setProperty('--gdur',dur+'ms');
+  sh.classList.add('hit');
+  const st=document.createElement('div');
+  st.className='uistatic';
+  /* the wash reads --gdur off itself: it hangs on the body, not on the panel, so the
+     panel's copy of the variable never reaches it */
+  st.style.setProperty('--gdur',dur+'ms');
+  document.body.appendChild(st);
+  /* How hard the field pushes, and how coarse it is, frame by frame: a hard tear,
+     then a couple of smaller ones, settling to nothing. The vertical frequency is the
+     one that matters — it decides how many waves fit down the panel. */
+  const F=[[62,'0.006 0.20'],[16,'0.002 0.07'],[48,'0.008 0.26'],[9,'0.001 0.04'],
+           [38,'0.005 0.17'],[6,'0.002 0.09'],[24,'0.007 0.22'],[3,'0.001 0.05'],
+           [14,'0.004 0.13'],[0,'0.002 0.09']];
+  const disp=document.getElementById('uiwarpDisp'), noise=document.getElementById('uiwarpNoise');
+  let i=0;
+  const step=()=>{
+    const f=F[i++];
+    if(!f) return;
+    if(disp) disp.setAttribute('scale',f[0]);
+    if(noise){ noise.setAttribute('baseFrequency',f[1]); noise.setAttribute('seed',Math.floor(RND(1,90))); }
+  };
+  step();
+  HITIV=setInterval(step, Math.max(16, Math.round(dur/F.length)));
+  HITEND=setTimeout(()=>{
+    clearInterval(HITIV); HITIV=null;
+    if(disp) disp.setAttribute('scale',0);
+    sh.classList.remove('hit');
+    sh.style.removeProperty('--gdur');
+    if(st.parentNode) st.parentNode.removeChild(st);
+  }, dur+30);
+}
 function topSheet(){
   const l=document.querySelectorAll('#sheetWrap .sheet:not(.out)');
   return l.length ? l[l.length-1] : null;
@@ -2243,18 +2694,52 @@ function setSheet(html,stack){
   const had=!!wrap.querySelector('.veil:not(.out)');
   if(stack && had){
     const depth=wrap.querySelectorAll('.sheet').length;
+    const below=topSheet();
     const box=document.createElement('div');
     box.className='layer';
     box.innerHTML=html;
     const v=box.querySelector('.veil'), sh=box.querySelector('.sheet');
     if(v){ v.style.zIndex=65+depth*10; v.classList.add('noanim'); v.removeAttribute('id'); v.classList.add('vstack'); }
     if(sh) sh.style.zIndex=70+depth*10;
+    /* stacked over a full panel it is still the same screen: interference, no tune-in */
+    const same = sh && below && sh.classList.contains('full') && below.classList.contains('full');
+    if(same && sh) sh.classList.add('cut');
     wrap.appendChild(box);
+    if(same) panelHit(sh);
+    lockScroll();
+    return;
+  }
+  /* Moving between full-screen panels — settings and everything it opens — is one
+     screen changing what it shows, not a new screen arriving. The outgoing panel is
+     backdrop it is standing on is reused, the incoming panel replaces the outgoing one
+     outright, and the contents take the hit. Nothing behind it is ever exposed. */
+  const oldSh=had?topSheet():null;   // the one on screen, not the first in the markup
+  const tmp=document.createElement('div');
+  tmp.innerHTML=html;
+  const nv=tmp.querySelector('.veil'), ns=tmp.querySelector('.sheet');
+  if(oldSh && ns && oldSh.classList.contains('full') && ns.classList.contains('full')){
+    /* ids must not be answered by the panel on its way out */
+    oldSh.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));
+    oldSh.removeAttribute('id');
+    oldSh.classList.add('held');
+    /* two moves in quick succession must not leave a pile of frozen panels */
+    wrap.querySelectorAll('.sheet.held').forEach(x=>{
+      if(x!==oldSh && x.parentNode) x.parentNode.removeChild(x);
+    });
+    wrap.querySelectorAll('.veil').forEach(v=>{ v.classList.add('noanim'); v.classList.add('panel'); });
+    if(nv && nv.parentNode) nv.parentNode.removeChild(nv);   // the backdrop is already there
+    ns.classList.add('cut');        // same screen, new contents: no tune-in
+    wrap.appendChild(ns);
+    /* the backdrop behind it is opaque, so the panel being left can go at once */
+    if(oldSh.parentNode) oldSh.parentNode.removeChild(oldSh);
+    panelHit(ns);
     lockScroll();
     return;
   }
   wrap.innerHTML=html;
   lockScroll();                 // immediately, not a tick later on the observer
+  const bv=wrap.querySelector('.veil'), bs=wrap.querySelector('.sheet');
+  if(bv && bs && bs.classList.contains('full')) bv.classList.add('panel');
   if(!had) return;
   const v=wrap.querySelector('.veil'); if(v) v.classList.add('noanim');
   const sh=wrap.querySelector('.sheet'); if(sh) sh.classList.add('swapin');
@@ -2276,13 +2761,25 @@ function popSheet(){
   const layers=wrap.querySelectorAll('.layer');
   if(!layers.length) return closeSheet();
   const box=layers[layers.length-1], sh=box.querySelector('.sheet'), vl=box.querySelector('.veil');
+  /* A full panel closing onto another full panel is the same screen again: the layer
+     just goes and what it covered takes the hit, rather than switching off a set that
+     is still on. */
+  const under=[...wrap.querySelectorAll('.sheet')].filter(x=>x!==sh).pop();
+  const same=sh && under && sh.classList.contains('full') && under.classList.contains('full');
   sfx('close');
+  if(same){
+    if(box.parentNode) box.parentNode.removeChild(box);
+    panelHit(under);
+    return;
+  }
+  if(sh) sh.classList.remove('cut');
   if(sh) sh.classList.add('out');
   if(vl) vl.classList.add('out');
   setTimeout(()=>{ if(box.parentNode) box.parentNode.removeChild(box); },380);
 }
 function closeSheet(){
   const wrap=document.getElementById('sheetWrap');
+  panelHitStop();
   const sh=topSheet()||wrap.querySelector('.sheet'), vl=wrap.querySelector('.veil');
   /* Release the page now, not when the markup goes. The body is pinned while a
      sheet is open, so anything that scrolls straight after closing — the glide to
@@ -2292,6 +2789,7 @@ function closeSheet(){
   if(TOPAFTER){ TOPAFTER=false; setTimeout(()=>glideTo(0,600),60); }
   if(!sh){ wrap.innerHTML=''; return; }
   sfx('close');
+  sh.classList.remove('cut');    // leaving for the dashboard is not a page change
   sh.classList.add('out');
   wrap.querySelectorAll('.veil').forEach(v=>v.classList.add('out'));
   setTimeout(()=>{ if(document.getElementById('sheetWrap')===wrap) wrap.innerHTML=''; },380);
@@ -2320,7 +2818,14 @@ function askUnset(id,ix){
     closeSheet(); paintSet(id,ix); updateNext(false); paintFab(); toast('Set '+(ix+1)+' cleared');
   };
 }
-function resetTimer(){ T={start:0,restEnd:0,src:'',stamps:[],tick:T.tick,buzzed:false}; paintFab(); }
+/* Older builds armed a row on touch and left it marked if it was never confirmed.
+   Nothing sets that flag now, so sweep any that survived in a restored draft. */
+function clearArmed(){
+  for(const k in draft) draft[k].forEach((c,i)=>{
+    if(c && c.pending){ c.pending=false; paintPending(k,i,false); }
+  });
+}
+function resetTimer(){ T={start:0,restEnd:0,src:'',stamps:[],tick:T.tick,buzzed:false}; LIVEBLK=''; paintFab(); }
 
 /* ---------- timeline ---------- */
 const PLAN={total:72,perWeek:3};
@@ -2541,8 +3046,8 @@ function xpPop(rect,gain){
   p.className='xppop';
   p.textContent='+'+gain+' XP';
   const r=rect||{top:window.innerHeight*0.55,height:0,right:window.innerWidth-28};
-  p.style.left=Math.round(r.right-14)+'px';
-  p.style.top=Math.round(r.top+(r.height||0)/2)+'px';
+  p.style.left=Math.round(r.right-52)+'px';          // inside the row, past the tick
+  p.style.top=Math.max(64,Math.round(r.top-10))+'px';  // above it, never under the header
   document.body.appendChild(p);
   setTimeout(()=>p.remove(),2200);
   const fill=document.getElementById('xpFill');
@@ -2552,11 +3057,12 @@ function lvlPop(L){
   const p=document.createElement('div');
   p.className='xppop lvl';
   p.textContent='CLEARANCE '+L.lvl+' \u00b7 '+L.rank;
-  p.style.top=Math.round(viewH()*0.42)+'px';
+  p.style.top=Math.round(viewH()*0.24)+'px';   // high on the glass, clear of the sets
   document.body.appendChild(p);
   setTimeout(()=>p.remove(),2700);
   try{ navigator.vibrate && navigator.vibrate([25,60,25]); }catch(e){}
 }
+let XPWAS=-1;
 function paintXp(){
   const cap=document.getElementById('xpCap'), fill=document.getElementById('xpFill');
   if(!cap) return;
@@ -2564,7 +3070,50 @@ function paintXp(){
   /* Exact progress to the next clearance, mirrored by the bar. */
   cap.innerHTML='CLEARANCE '+L.lvl+' \u00b7 '+L.into+' / '+L.need+
     (x.live?' <b>+'+x.live+'</b>':'');
-  if(fill) fill.style.width=Math.round(L.into/L.need*100)+'%';
+  const pct=Math.round(L.into/L.need*100);
+  /* Light the stretch between where the bar was and where it is going, so the gain
+     is visible as a length of bar rather than a number somewhere else. */
+  if(XPWAS>=0 && pct>XPWAS) xpSpark(XPWAS,pct);
+  XPWAS=pct;
+  if(fill) fill.style.width=pct+'%';
+}
+/* The stretch just earned, torn through its own displacement field. Same idea as a
+   page change: a hard tear, a couple of smaller ones, settling to nothing — stepped
+   so it snaps between states instead of easing through them. */
+let XPIV=null, XPEND=null;
+function xpSpark(from,to){
+  const sp=document.getElementById('xpSpark'); if(!sp) return;
+  sp.style.left=from+'%';
+  sp.style.width=Math.max(1.5,to-from)+'%';
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(XPIV){ clearInterval(XPIV); XPIV=null; }
+  if(XPEND){ clearTimeout(XPEND); XPEND=null; }
+  sp.classList.remove('off');
+  sp.classList.add('on');
+  if(reduce){
+    XPEND=setTimeout(()=>{ sp.classList.add('off'); sp.classList.remove('on'); },900);
+    return;
+  }
+  const F=[[54,'0.006 0.34'],[12,'0.002 0.12'],[44,'0.008 0.42'],[7,'0.001 0.08'],
+           [34,'0.005 0.30'],[5,'0.002 0.14'],[22,'0.007 0.38'],[3,'0.001 0.09'],
+           [13,'0.004 0.22'],[6,'0.002 0.12'],[0,'0.003 0.16']];
+  const disp=document.getElementById('xpwarpDisp'), noise=document.getElementById('xpwarpNoise');
+  const dur=1150;
+  let i=0;
+  const step=()=>{
+    const f=F[i++];
+    if(!f) return;
+    if(disp) disp.setAttribute('scale',f[0]);
+    if(noise){ noise.setAttribute('baseFrequency',f[1]); noise.setAttribute('seed',Math.floor(RND(1,90))); }
+  };
+  step();
+  XPIV=setInterval(step, Math.round(dur/F.length));
+  XPEND=setTimeout(()=>{
+    clearInterval(XPIV); XPIV=null; XPEND=null;
+    if(disp) disp.setAttribute('scale',0);
+    sp.classList.add('off');
+    sp.classList.remove('on');
+  }, dur);
 }
 
 /* ---------- set order ---------- */
@@ -2613,6 +3162,104 @@ function updateStrip(){
   if(t) t.textContent = done ? done+' / '+total+' CLEARED' : total+' OBJECTIVES';
   if(g) [...g.children].forEach((b,i)=>b.className = i<done ? 'on' : '');
 }
+/* A tick is live on the set you are on and on sets already logged (to clear them).
+   Every other row's tick is dead, so a stray press cannot log a set out of order. */
+/* Completing a card hides its target line and its briefing, so the card loses
+   about a third of its height the instant the last set lands and everything below
+   it snaps upward. Measure the card before and after the class goes on and glide
+   between the two heights, so the page settles instead of jumping. Returns how
+   long that will take, so whatever runs next can wait for it. */
+const CARDFOLD=420;
+function foldCard(card,done){
+  if(!card) return 0;
+  const was=card.classList.contains('cdone');
+  if(was===done) return 0;
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ card.classList.toggle('cdone',done); return 0; }
+  const h0=card.offsetHeight;
+  card.classList.toggle('cdone',done);
+  const h1=card.offsetHeight;
+  if(h0===h1) return 0;
+  card.style.height=h0+'px';
+  card.style.overflow='hidden';
+  void card.offsetHeight;                       // commit the start height
+  card.style.transition='height '+CARDFOLD+'ms cubic-bezier(.22,.72,.28,1)';
+  card.style.height=h1+'px';
+  clearTimeout(card._fold);
+  card._fold=setTimeout(()=>{
+    card.style.height=''; card.style.overflow=''; card.style.transition='';
+  },CARDFOLD+40);
+  return CARDFOLD;
+}
+/* A block is shut to its title line until it is the one being worked, and opens
+   by gliding its own height rather than appearing. Manual presses are respected;
+   the automatic opening only steps in when the block being worked changes. */
+let LIVEBLK='';
+function blockOpen(ch,open,quiet){
+  if(!ch) return 0;
+  const body=ch.querySelector('.cbody'), head=ch.querySelector('.chead');
+  if(!body) return 0;
+  const shut=ch.classList.contains('shut');
+  if(shut!==open) return 0;                       // already where it should be
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  clearTimeout(body._fold);
+  body.style.height=''; body.style.transition=''; body.style.overflow='';
+  const h0=body.offsetHeight;                     // measure before the class lands
+  ch.classList.toggle('shut',!open);
+  if(head) head.setAttribute('aria-expanded',open?'true':'false');
+  if(reduce||quiet) return 0;
+  const h=body.scrollHeight;              // what it wants to be in the new state
+  body.style.height=h0+'px';
+  body.style.overflow='hidden';
+  void body.offsetHeight;
+  body.style.transition='height '+CARDFOLD+'ms cubic-bezier(.22,.72,.28,1)';
+  body.style.height=h+'px';
+  clearTimeout(body._fold);
+  body._fold=setTimeout(()=>{
+    body.style.height=''; body.style.overflow=''; body.style.transition='';
+  },CARDFOLD+40);
+  return CARDFOLD;
+}
+/* Whichever block the next set lives in is the one that should be open. */
+function syncBlocks(){
+  const k=nextKey();
+  const ex=k ? k.slice(0,k.lastIndexOf('-')) : '';
+  const g=ex ? (pairOf(ex)||[ex]) : null;
+  const key=g ? g[0] : '';
+  if(!T.start){ LIVEBLK=''; return 0; }
+  if(key===LIVEBLK) return 0;                     // nothing moved, leave his choices alone
+  LIVEBLK=key;
+  let ms=0;
+  document.querySelectorAll('.chain').forEach(c=>{
+    ms=Math.max(ms, blockOpen(c, c.dataset.blk===key));
+  });
+  return ms;
+}
+/* Every block shut, nothing pinned, and no record of a block being worked — because
+   after a reset none is. Leaving a key here makes the next START SESSION look like a
+   block that has not changed, and open nothing. */
+function resetBlocks(){
+  document.querySelectorAll('.chain').forEach(c=>{
+    if(!c.classList.contains('shut')){
+      blockOpen(c,false);                 // folds, the same as any other close
+      return;
+    }
+    const body=c.querySelector('.cbody');
+    if(body){                             // already shut: just make sure nothing is pinned
+      clearTimeout(body._fold);
+      body.style.height=''; body.style.transition=''; body.style.overflow='';
+    }
+  });
+  LIVEBLK='';
+}
+function syncTicks(){
+  document.querySelectorAll('.setbtn').forEach(b=>{
+    const t=b.querySelector('.sc'); if(!t) return;
+    const live = T.start && (b.classList.contains('now') || b.classList.contains('on'));
+    t.disabled = !live;
+    b.classList.toggle('dead', !live);
+  });
+}
 function updateNext(scroll){
   updateStrip();
   const k=nextKey();
@@ -2623,17 +3270,19 @@ function updateNext(scroll){
   document.querySelectorAll('.chain.live').forEach(c=>c.classList.remove('live'));
   document.querySelectorAll('.setbtn.on').forEach(b=>b.classList.remove('now','arming'));
   document.documentElement.classList.toggle('session', !!T.start);
-  if(!T.start) return;                     // nothing is "current" before the session starts
+  if(!T.start){ LIVEBLK=''; syncTicks(); return; }   // nothing is "current" yet, and
+                                                     // no block is the live one
   if(k){ const b=document.getElementById('sb-'+k); if(b) b.classList.add('now'); }
+  let fold=syncBlocks();
   for(const id in draft){
     const card=document.getElementById('cd-'+id);
-    if(card) card.classList.toggle('cdone', draft[id].every(x=>x.tk));
+    if(card) fold=Math.max(fold, foldCard(card, draft[id].every(x=>x.tk)));
   }
   document.querySelectorAll('.chain').forEach(c=>{
     const cards=[...c.querySelectorAll('.card')];
     c.classList.toggle('cdone', cards.length>0 && cards.every(x=>x.classList.contains('cdone')));
   });
-  if(!k){ document.documentElement.classList.remove('session'); autoSaveIfDone(); return; }
+  if(!k){ syncTicks(); document.documentElement.classList.remove('session'); autoSaveIfDone(); return; }
   const kid=k.slice(0,k.lastIndexOf('-')), kix=+k.slice(k.lastIndexOf('-')+1);
   const card=document.getElementById('cd-'+kid);
   if(card) card.classList.add('up');
@@ -2650,10 +3299,14 @@ function updateNext(scroll){
     });
   }
 
+  syncTicks();
   const tag=document.getElementById('un-'+k.slice(0,k.lastIndexOf('-'))); if(tag) tag.classList.remove('hide');
   const row=document.getElementById('sb-'+k);
   if(scroll && row){
-    scrollToNext();
+    /* A card folding shut moves everything under it, so the scroll target is not
+       where it will be. Let the fold finish first, then go. */
+    if(fold) setTimeout(scrollToNext, fold - 60);
+    else scrollToNext();
     row.classList.add('flash');
     setTimeout(()=>row.classList.remove('flash'),900);
   }
@@ -2733,10 +3386,14 @@ function rTrain(){
 
   blocks.forEach((g,bi)=>{
     const chained=g.length>1;
-    if(chained) h+='<div class="chain" id="ch-'+g[0]+'">'+
-      '<div class="chead">'+
-        '<span class="cx">SUPERSET '+(bi+1)+'</span>'+
-      '</div>';
+    /* A single lift gets the same frame as a chain, so it collapses and opens the
+       same way. It is labelled with the lift rather than a superset number. */
+    h+='<div class="chain'+(chained?'':' solo')+' shut" id="ch-'+g[0]+'" data-blk="'+g[0]+'">'+
+      '<button class="chead" type="button" data-open="'+g[0]+'" aria-expanded="false">'+
+        (chained?'<span class="cx">SUPERSET '+(bi+1)+'</span>':'')+
+        '<span class="cgap"></span>'+
+        '<span class="cch" aria-hidden="true">+</span>'+
+      '</button><div class="cbody">';
 
     g.forEach((id,gi)=>{
     const e=EX[id], p=prescribe(id);
@@ -2765,16 +3422,15 @@ function rTrain(){
       })();
     for(let s=0;s<ns;s++){
       const d=draft[id][s], on=!!d.tk;
-      const detail = on
-        ? (e.bw ? (d.v&&d.v!=='Bodyweight' ? esc(d.v)+' \u00b7 ' : '')+d.reps+' reps'
-                : kgTxt(+d.kg)+'kg \u00d7 '+d.reps)
-        : (d.pending ? 'IN PROGRESS' : '');
-      h+='<button class="setbtn'+(on?' on':'')+(d.pending&&!on?' arming':'')+(T.start?'':' locked')+
-         '" id="sb-'+id+'-'+s+'" data-x="'+id+'" data-s="'+s+'">'+
+      h+='<div class="setbtn'+(on?' on':'')+(d.pending&&!on?' arming':'')+(T.start?'':' locked')+
+         '" id="sb-'+id+'-'+s+'" data-x="'+id+'" data-s="'+s+'" role="group"'+
+         ' aria-label="'+esc(e.n)+' set '+(s+1)+'">'+
          '<span class="sl">SET '+(s+1)+'</span>'+
-         '<span class="sd">'+detail+'</span>'+
+         setFields(id,s)+
+         '<span class="sd"></span>'+
          '<span class="rb'+(on&&isRecord(id,s)?'':' hide')+'">REC</span>'+
-         '<span class="sc">'+(on?'\u2713':'')+'</span></button>';
+         '<button class="sc" type="button" aria-label="Confirm set '+(s+1)+'">\u2713</button>'+
+         '</div>';
     }
     h+='<div class="brief"><button class="bsum" type="button" data-br="'+id+'">BRIEFING</button>'+
       '<div class="bbody" id="br-'+id+'"><div class="binner">'+
@@ -2792,7 +3448,7 @@ function rTrain(){
           '</svg></div>'
         : '');
     });
-    if(chained) h+='</div>';
+    h+='</div></div>';
   });
 
   h+='<button class="btn ghost" id="saveS">COMPLETE</button>';
@@ -2803,6 +3459,7 @@ function rTrain(){
     const logged=Object.values(draft).some(a=>a.some(x=>x.tk||x.pending));
     if(logged){ toast('SETS ALREADY LOGGED'); return; }
     pick = pick==='A' ? 'B' : 'A'; draft={}; rTrain();
+    panelHit(document.getElementById('v-train'));   // same change, same interference
   };
   /* Commit whatever the two dropdowns currently show. They are pre-set to the
      previous weight and the top of the rep range, so the common case is one tap. */
@@ -2812,13 +3469,34 @@ function rTrain(){
     st.classList.add('gone');
     setTimeout(()=>{ startSession(); rTrain(); updateNext(false); paintFab(); },260);
   };
-  document.querySelectorAll('.setbtn').forEach(b=>b.onclick=()=>{
-    if(!T.start){ toast('START THE SESSION FIRST'); return; }
+  document.querySelectorAll('.setbtn').forEach(b=>{
     const id=b.dataset.x, ix=+b.dataset.s;
-    if(draft[id][ix].tk){ askUnset(id,ix); return; }
-    openSet(id,ix);
+    const live=()=>{ if(T.start) return true; toast('START THE SESSION FIRST'); return false; };
+    b.querySelectorAll('select').forEach(sel=>{
+      sel.addEventListener('change',()=>{
+        if(!live()) return;
+        readFields(id,ix);
+        draft[id][ix].touched=true;      // set by hand, so nothing overwrites it
+        syncAhead(id,ix);
+      });
+    });
+    b.querySelector('.sc').onclick=e=>{
+      e.stopPropagation();
+      if(!live()) return;
+      if(draft[id][ix].tk){ askUnset(id,ix); return; }
+      if(!b.classList.contains('now')){ toast('FINISH THE SET YOU ARE ON'); return; }
+      confirmSet(id,ix);
+    };
+    /* the row itself does nothing: the fields and the tick are the controls */
+  });
+  document.querySelectorAll('.chead').forEach(hd=>{
+    hd.onclick=()=>{
+      const ch=hd.closest('.chain'); if(!ch) return;
+      blockOpen(ch, ch.classList.contains('shut'));
+    };
   });
   document.getElementById('saveS').onclick=saveSession;
+  clearArmed();
   updateNext();
 }
 function saveSession(){
@@ -3057,91 +3735,102 @@ function numSheet(o){
    older, left for newer — and any reading in view can be tapped to read it off.
    Kept in one place so panning and selecting only redraw the graph, never the sheet. */
 let CH=null;
-const CH_W=300, CH_H=110, CH_P=6;
+/* A timeline, not a plot: one mark per weigh-in, evenly spaced, oldest on the left.
+   Spacing readings by the day they fell on packs a month into an unreadable tangle
+   and leaves gaps wherever a few days were missed — every reading gets the same room
+   instead, with its weight above it and its date below. Swiping steps back through
+   the older ones a reading at a time. */
+const CH_W=320, CH_H=150, CH_TOP=30, CH_BOT=26, CH_SIDE=34;
+/* A timeline: every reading on screen, spaced by the days between them. The graph
+   carries the shape and the average; the list underneath carries the numbers, so
+   nothing here has to be printed twice. */
 function chWindow(){
-  const pts=CH.rows.filter(x=>{ const t=daysAgo(x.d); return t>=CH.end && t<CH.end+CH.win; })
-                   .map(x=>({d:x.d, t:daysAgo(x.d), v:+CH.val(x)}));
-  return pts.sort((a,b)=>b.t-a.t);
-}
-function chMaxEnd(){
-  if(!CH.rows.length) return 0;
-  return Math.max(0, daysAgo(CH.rows[0].d)-CH.win+1);
+  return CH.rows.map(x=>({d:x.d, t:daysAgo(x.d), v:+CH.val(x)}));
 }
 function chPaint(){
   const box=document.getElementById('chBox'); if(!box) return;
   const pts=chWindow();
-  const xOf=t=>CH_P+(1-(t-CH.end)/CH.win)*(CH_W-CH_P*2);
-  let svg;
-  if(!pts.length){
-    svg='<div class="chempty">No readings in this window.</div>';
-  } else {
-    const vs=pts.map(p=>p.v);
-    let lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs);
-    const pad=((hi-lo)||1)*0.25; lo-=pad; hi+=pad;
-    const avg=vs.reduce((a,b)=>a+b,0)/vs.length;
-    const yOf=v=>CH_H-CH_P-((v-lo)/(hi-lo))*(CH_H-CH_P*2);
-    const d=pts.map((p,i)=>(i?'L':'M')+xOf(p.t).toFixed(1)+' '+yOf(p.v).toFixed(1)).join(' ');
-    const sel=pts.find(p=>p.d===CH.sel);
-    const dots=pts.map(p=>'<circle'+(p.d===CH.sel?' class="sel" r="3.4"':' r="1.8"')+
-      ' cx="'+xOf(p.t).toFixed(1)+'" cy="'+yOf(p.v).toFixed(1)+'"/>').join('');
-    svg='<svg class="chart" viewBox="0 0 '+CH_W+' '+CH_H+'" preserveAspectRatio="none">'+
-      '<line class="avg" x1="'+CH_P+'" y1="'+yOf(avg).toFixed(1)+'" x2="'+(CH_W-CH_P)+
-        '" y2="'+yOf(avg).toFixed(1)+'"/>'+
-      (sel?'<line class="pick" x1="'+xOf(sel.t).toFixed(1)+'" y1="'+CH_P+
-        '" x2="'+xOf(sel.t).toFixed(1)+'" y2="'+(CH_H-CH_P)+'"/>':'')+
-      (pts.length>1?'<path class="line" d="'+d+'"/>':'')+
-      '<g class="dots">'+dots+'</g></svg>';
-    const top=document.getElementById('chTop');
-    if(top) top.innerHTML='<span>'+esc(shortDate(pts[0].d))+' \u2013 '+
-      esc(shortDate(pts[pts.length-1].d))+'</span><span>avg '+
-      (Math.round(avg*100)/100)+CH.unit+'</span>';
-    const line=document.getElementById('chSel');
-    const show=sel||pts[pts.length-1];   // nothing picked reads the latest in view
-    if(line) line.innerHTML='<span>'+esc(shortDate(show.d))+'</span><b>'+
-      (Math.round(show.v*100)/100)+CH.unit+'</b>';
-  }
+  if(!pts.length){ box.innerHTML='<div class="chempty">Nothing logged yet.</div>'; return; }
+
+  const vs=pts.map(p=>p.v);
+  let lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs);
+  if(hi-lo<0.6){ const m=(hi+lo)/2; lo=m-0.4; hi=m+0.4; }   // a flat run still reads as flat
+  const span=hi-lo;
+  lo-=span*0.18; hi+=span*0.18;                             // room for the labels
+  const avg=vs.reduce((a,b)=>a+b,0)/vs.length;
+  const t0=pts[0].t, days=Math.max(1, t0-pts[pts.length-1].t);
+  const xOf=i=>pts.length===1 ? CH_W/2
+    : CH_SIDE + ((t0-pts[i].t)/days)*(CH_W-CH_SIDE-10);
+  const yOf=v=>CH_TOP + (1-(v-lo)/(hi-lo))*(CH_H-CH_TOP-CH_BOT);
+  const sel=CH.sel && pts.some(p=>p.d===CH.sel) ? CH.sel : pts[pts.length-1].d;
+  CH.show=sel;
+  const si=pts.findIndex(p=>p.d===sel);
+  const rail=CH_H-CH_BOT;
+
+  const line=pts.map((p,i)=>(i?'L':'M')+xOf(i).toFixed(1)+' '+yOf(p.v).toFixed(1)).join(' ');
+  let svg='<svg class="chart" viewBox="0 0 '+CH_W+' '+CH_H+'" preserveAspectRatio="none">'+
+    /* the average, across the whole run */
+    '<line class="avg" x1="'+CH_SIDE+'" y1="'+yOf(avg).toFixed(1)+'" x2="'+CH_W+
+      '" y2="'+yOf(avg).toFixed(1)+'"/>'+
+    '<line class="rail" x1="'+CH_SIDE+'" y1="'+rail+'" x2="'+CH_W+'" y2="'+rail+'"/>'+
+    /* the picked reading: a full-height guide, not a stub off the axis */
+    '<line class="pick" x1="'+xOf(si).toFixed(1)+'" y1="'+(CH_TOP-14)+
+      '" x2="'+xOf(si).toFixed(1)+'" y2="'+rail+'"/>';
+  if(pts.length>1) svg+='<path class="line" d="'+line+'"/>';
+  svg+='<g class="dots">'+pts.map((p,i)=>'<circle'+(p.d===sel?' class="sel"':'')+
+      ' r="'+(p.d===sel?4.4:2)+'" cx="'+xOf(i).toFixed(1)+'" cy="'+yOf(p.v).toFixed(1)+'"/>').join('')+
+      '</g>'+
+    /* a ring around the picked one, so it reads as picked at a glance */
+    '<circle class="ring" r="8" cx="'+xOf(si).toFixed(1)+'" cy="'+yOf(pts[si].v).toFixed(1)+'"/>'+
+    '</svg>';
+
+  /* labels are HTML over the top: the graph is stretched to the panel width, and
+     anything drawn inside it stretches with it */
+  const num=v=>Math.round(v*10)/10;
+  const day=iso=>{ const q=(iso||'').split('-'); return q.length===3 ? (+q[2])+'/'+(+q[1]) : iso; };
+  const pcY=v=>(yOf(v)/CH_H*100).toFixed(1);
+
+  /* the scale down the left: highest, average, lowest — three numbers, not thirty */
+  svg+='<span class="chy" style="top:'+pcY(Math.max.apply(null,vs))+'%">'+num(Math.max.apply(null,vs))+'</span>'+
+       '<span class="chy" style="top:'+pcY(Math.min.apply(null,vs))+'%">'+num(Math.min.apply(null,vs))+'</span>'+
+       '<span class="chy avg" style="top:'+pcY(avg)+'%">'+num(avg)+'</span>';
+
+  /* dates along the foot, only where there is room, with the ends always drawn */
+  let lastD=-99;
+  pts.forEach((p,i)=>{
+    const x=xOf(i), end=(i===0||i===pts.length-1);
+    if(x-lastD>=40 || end || p.d===sel){
+      lastD=x;
+      svg+='<span class="tld'+(p.d===sel?' on':'')+'" style="left:'+(x/CH_W*100).toFixed(1)+'%">'+
+           day(p.d)+'</span>';
+    }
+  });
+  /* and the picked reading itself, above its point */
+  svg+='<span class="tlv on" style="left:'+(xOf(si)/CH_W*100).toFixed(1)+'%;top:'+
+       pcY(pts[si].v)+'%">'+num(pts[si].v)+CH.unit+'</span>';
   box.innerHTML=svg;
-  if(!pts.length){
-    const top=document.getElementById('chTop'), line=document.getElementById('chSel');
-    if(top) top.innerHTML='';
-    if(line) line.innerHTML='';
-  }
+
+  const top=document.getElementById('chTop');
+  if(top) top.innerHTML='<span>'+esc(shortDate(pts[0].d))+' \u2013 '+esc(shortDate(pts[pts.length-1].d))+
+    '</span><span>avg <b>'+(Math.round(avg*10)/10)+CH.unit+'</b></span>';
+  const s2=document.getElementById('chSel');
+  const show=pts[si];
+  if(s2) s2.innerHTML='<span>'+esc(longDate(show.d))+'</span><b>'+num(show.v)+CH.unit+'</b>';
 }
 function chBind(){
   const box=document.getElementById('chBox'); if(!box) return;
-  let sx=0, sy=0, end0=0, down=false, moved=false, horiz=false;
-  box.addEventListener('pointerdown',e=>{
-    down=true; moved=false; horiz=false; sx=e.clientX; sy=e.clientY; end0=CH.end;
-  });
-  box.addEventListener('pointermove',e=>{
-    if(!down) return;
-    const dx=e.clientX-sx, dy=e.clientY-sy;
-    if(!horiz){
-      if(Math.abs(dx)<6 && Math.abs(dy)<6) return;
-      if(Math.abs(dx)<=Math.abs(dy)){ down=false; return; }   // that was a scroll
-      horiz=true;
-      try{ box.setPointerCapture(e.pointerId); }catch(err){}
-    }
-    moved=true;
-    const perDay=(box.clientWidth||CH_W)/CH.win;
-    CH.end=Math.max(0, Math.min(chMaxEnd(), Math.round(end0+dx/perDay)));
-    chPaint();
-  });
-  const up=e=>{
-    if(!down) return;
-    down=false;
-    if(moved) return;
+  box.addEventListener('click',e=>{
     const pts=chWindow(); if(!pts.length) return;
     const r=box.getBoundingClientRect();
-    const t=CH.end+(1-(e.clientX-r.left)/r.width)*CH.win;
+    const x=(e.clientX-r.left)/r.width*CH_W;
+    const t0=pts[0].t, days=Math.max(1, t0-pts[pts.length-1].t);
+    const xOf=p=>pts.length===1 ? CH_W/2 : CH_SIDE + ((t0-p.t)/days)*(CH_W-CH_SIDE*2);
     let best=pts[0];
-    pts.forEach(p=>{ if(Math.abs(p.t-t)<Math.abs(best.t-t)) best=p; });
-    CH.sel = CH.sel===best.d ? null : best.d;      // tapping the same point clears it
+    pts.forEach(p=>{ if(Math.abs(xOf(p)-x)<Math.abs(xOf(best)-x)) best=p; });
+    CH.sel=best.d;
     sfx('tap');
     chPaint();
-  };
-  box.addEventListener('pointerup',up);
-  box.addEventListener('pointercancel',()=>{ down=false; });
+  });
 }
 function chartHTML(){
   return '<div class="chwrap"><div class="chtop" id="chTop"></div>'+
@@ -3158,6 +3847,7 @@ function openTrack(kind){
     '<button class="shx back" id="tkBack" aria-label="Back">\u2039</button></h3><div class="pgbody">';
   if(!arr.length) h+='<div class="pgnote">Nothing logged yet.</div>';
   else if(!isPh) h+=chartHTML();
+  /* The graph reads the shape; the list reads the entries. Both, as before. */
   if(arr.length){
     h+='<div class="tklist">'+arr.slice().reverse().map(x=>{
       const i=arr.indexOf(x);
@@ -3177,7 +3867,7 @@ function openTrack(kind){
   (box.querySelector? box : document).querySelector('#tkBack').onclick=back;
   if(arr.length && !isPh){
     CH={rows:arr.slice().sort((a,b)=>a.d<b.d?-1:1), val:x=>isW?x.kg:x.cm,
-        unit:isW?'kg':'', win:31, end:0, sel:null};
+        unit:isW?'kg':'', sel:null, show:''};
     chPaint(); chBind();
   }
   document.querySelectorAll('.tkrow').forEach(b=>{
@@ -3457,10 +4147,12 @@ function openSettings(){
      row('stBack','Backup',bkSub())+
      '</div>';
 
-  h+='<div class="tiny">v'+APP_VERSION+(HOSTED?' \u00b7 hosted':' \u00b7 local')+'</div></div>';
+  h+='<button class="btn ghost" id="stFresh">[ FORCE UPDATE ]</button>'+
+     '<div class="tiny">v'+APP_VERSION+(HOSTED?' \u00b7 hosted':' \u00b7 local')+'</div></div>';
   setSheet(h);
   document.getElementById('veil').onclick=closeSheet;
   document.getElementById('stClose').onclick=closeSheet;
+  document.getElementById('stFresh').onclick=forceUpdate;
   document.getElementById('stMus').onclick=()=>openMusic('settings');
   document.getElementById('stProg').onclick=openProgress;
   document.getElementById('stHist').onclick=openHistory;
@@ -3469,6 +4161,21 @@ function openSettings(){
 
 /* Backup and GitHub are the same job — getting the log off this phone — so they
    share a panel rather than two cards on the settings screen. */
+async function forceUpdate(){
+  toast('FETCHING LATEST');
+  try{
+    if('serviceWorker' in navigator){
+      const rs=await navigator.serviceWorker.getRegistrations();
+      await Promise.all(rs.map(r=>r.unregister()));
+    }
+    if(window.caches){
+      const ks=await caches.keys();
+      await Promise.all(ks.map(k=>caches.delete(k)));
+    }
+  }catch(e){}
+  const u=location.origin+location.pathname+'?v='+Date.now();
+  setTimeout(()=>location.replace(u),260);
+}
 function openBackup(){
   const n=DB.sess.length, b=bkBehind();
   let h='<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>Backup'+
@@ -3562,14 +4269,13 @@ function openImport(){
    dropped its scroll position mid-animation. Only the tapped row actually changes,
    so patch that one row and leave the rest of the DOM alone. */
 function paintSet(id,ix){
-  const e=EX[id], d=draft[id][ix], b=document.getElementById('sb-'+id+'-'+ix);
+  const d=draft[id][ix], b=document.getElementById('sb-'+id+'-'+ix);
   if(!b||!d) return;
-  const sd=b.querySelector('.sd'), sc=b.querySelector('.sc');
-  if(sd) sd.innerHTML = d.tk
-    ? (e.bw ? (d.v&&d.v!=='Bodyweight' ? esc(d.v)+' \u00b7 ' : '')+d.reps+' reps'
-            : kgTxt(+d.kg)+'kg \u00d7 '+d.reps)
-    : (d.pending ? 'IN PROGRESS' : '');
-  if(sc) sc.textContent = d.tk ? '\u2713' : '';
+  /* the fields are the display now, so they only need putting back in step */
+  const k=b.querySelector('.skg'), v=b.querySelector('.sv'), r=b.querySelector('.sr');
+  if(k && d.kg!=='' && d.kg!==undefined) k.value=String(+d.kg);
+  if(v && d.v) v.value=d.v;
+  if(r && d.reps!=='' && d.reps!==undefined) r.value=String(+d.reps);
   const rb=b.querySelector('.rb');
   if(rb) rb.classList.toggle('hide', !(d.tk && isRecord(id,ix)));
   b.classList.toggle('on', !!d.tk);
@@ -3578,74 +4284,11 @@ function paintSet(id,ix){
 function paintPending(id,ix,on){
   const b=document.getElementById('sb-'+id+'-'+ix); if(!b) return;
   b.classList.toggle('arming',!!on);
-  const sd=b.querySelector('.sd'); if(sd && !draft[id][ix].tk) sd.textContent = on?'IN PROGRESS':'';
 }
 function dropPending(exId,exIx){
   for(const k in draft) draft[k].forEach((c,i)=>{
     if(c.pending && !c.tk && !(k===exId && i===exIx)){ c.pending=false; paintPending(k,i,false); }
   });
-}
-function openSet(id,ix){
-  sfx('open');
-  const e=EX[id], cell=draft[id][ix], def=setDefaults(id,ix);
-  // remember the rest that was already running, so backing out can restore it
-  const prev={end:T.restEnd, src:T.src, buzzed:T.buzzed};
-  const armedNow = !cell.pending && !cell.tk;
-  if(armedNow){                         // rest starts the moment the set is over
-    dropPending(id,ix);                 // only one set can be mid-flight
-    cell.pending=true;
-    startRest(id,ix);
-    updateStrip();
-    paintPending(id,ix,true);
-  }
-  let field='';
-  if(e.bw){
-    const vs=e.vars||['Bodyweight'];
-    field = vs.length===1
-      ? '<div class="fixedv">'+esc(vs[0])+'</div>'
-      : '<select id="setV">'+vs.map(v=>'<option value="'+esc(v)+'"'+(def.v===v?' selected':'')+'>'+esc(v)+'</option>').join('')+'</select>';
-  } else {
-    field = '<select id="setKg">'+ladder(id).map(v=>'<option value="'+v+'"'+(def.kg===v?' selected':'')+'>'+kgTxt(v)+' kg</option>').join('')+'</select>';
-  }
-  const ro=repOpts(e).map(r=>'<option value="'+r+'"'+(def.reps===r?' selected':'')+'>'+r+'</option>').join('');
-
-  setSheet(
-    '<div class="veil" id="veil"></div><div class="sheet"><h3>'+esc(e.n)+' \u00b7 SET '+(ix+1)+'</h3>'+
-    '<div class="setgrid">'+
-      '<div class="sel'+(e.bw&&(e.vars||[]).length<2?' plain':'')+'">'+field+'</div>'+
-      '<div class="sel narrow"><select id="setR">'+ro+'</select><span class="ru">reps</span></div>'+
-    '</div>'+
-    '<button class="btn" id="setOk">[ CONFIRM ]</button>'+
-    '<button class="btn ghost" id="setCancel">Back</button></div>');
-
-  const close=()=>{
-    if(armedNow && !cell.tk){           // nothing was logged, so undo the arming
-      cell.pending=false;
-      paintPending(id,ix,false);
-      T.restEnd=prev.end; T.src=prev.src; T.buzzed=prev.buzzed;
-      updateStrip();
-    }
-    closeSheet(); updateNext(false); paintFab();
-  };
-  document.getElementById('veil').onclick=close;
-  document.getElementById('setCancel').onclick=close;
-  document.getElementById('setOk').onclick=()=>{
-    const was=xpLive(), lw=levelOf(was.base+was.live);   // score before this set lands
-    const k=document.getElementById('setKg'), v=document.getElementById('setV'), r=document.getElementById('setR');
-    cell.kg = k ? k.value : 0;
-    if(e.bw) cell.v = v ? v.value : (e.vars||['Bodyweight'])[0];
-    cell.reps = r.value;
-    cell.tk=true; cell.pending=false;
-    /* Measure the row before the re-render throws it away. */
-    const hit=document.getElementById('sb-'+id+'-'+ix);
-    const at=hit?hit.getBoundingClientRect():null;
-    closeSheet(); paintSet(id,ix); updateNext(true); paintFab();
-    const now=xpLive(), ln=levelOf(now.base+now.live);
-    const gain=(now.base+now.live)-(was.base+was.live);
-    xpPop(at,gain);
-    sfx(isRecord(id,ix)?'record':'confirm');
-    if(ln.lvl>lw.lvl) setTimeout(()=>{ lvlPop(ln); sfx('level'); },420);
-  };
 }
 function askConfirm(title,body,yes){
   return new Promise(res=>{
@@ -3760,9 +4403,17 @@ function sinceStart(){
   const wk=Math.floor(days/7)+1;
   return 'WEEK '+wk+' \u00b7 DAY '+days;
 }
+/* The tube coming up: booting hides the interface, booted lets it warm in. Called
+   from every path that uncovers the app, including the watchdog, so the animation
+   can never be skipped or run twice. */
+function booted(){
+  const r=document.documentElement;
+  r.classList.remove('booting');
+  if(!r.classList.contains('booted')) r.classList.add('booted');
+}
 function splash(){
   const el=document.getElementById('splash');
-  if(!el){ document.documentElement.classList.remove('booting'); return; }   // never leave it hidden
+  if(!el){ booted(); return; }   // never leave it hidden
   const line=document.getElementById('spLine'), go=document.getElementById('spGo');
   const days=document.getElementById('spDays');
   if(days) days.textContent=sinceStart();
@@ -3777,9 +4428,9 @@ function splash(){
     go.classList.add('out');            // the button cuts out first
     setTimeout(()=>{
       el.classList.add('out');          // then the screen
-      document.documentElement.classList.remove('booting');   // interface behind it
+      booted();                          // interface behind it, warming up
     },190);
-    setTimeout(()=>{ if(el.parentNode) el.parentNode.removeChild(el); },650);
+    setTimeout(()=>{ if(el.parentNode) el.parentNode.removeChild(el); },190+380);
   };
   if(go) go.addEventListener('click',drop);
 }
@@ -4007,7 +4658,7 @@ const boot=(name,fn)=>{ try{ fn(); }catch(e){ console.error('start-up: '+name, e
 setTimeout(()=>{
   const r=document.documentElement;
   if(r.classList.contains('booting')){
-    r.classList.remove('booting');                 // never stay blank
+    booted();                                      // never stay blank
     const sp=document.getElementById('splash');
     if(sp && !document.getElementById('spGo')) sp.remove();
   }
