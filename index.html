@@ -304,16 +304,18 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .chain.shut .card{padding-top:9px;padding-bottom:9px}
 .chain.shut .card h3{margin:0}
 .chain.shut .card .upnext{display:none}
-/* A lone lift has no group to frame, so it loses the frame: just the card, with a
-   + at the top corner to open it. The head is still the button — it is lifted out of
-   the flow and sat over the card's heading line so nothing is pushed around. */
-.chain.solo{border:none;background:none;padding:0}
+/* A lone lift still gets the same frame as a superset — same border, same
+   background — it just has no "SUPERSET N" label bar above it and no left
+   accent bar, since that bar signals a join between exercises and a solo
+   lift has nothing to join. The exercise name's own row sits where the label
+   bar would be, with the toggle lined up on it exactly the way the label bar
+   carries its own. */
 .chain.solo::before{display:none}
-.chain.solo .chead{position:absolute;top:8px;right:8px;z-index:2;
-  width:38px;height:38px;padding:0;display:flex;align-items:center;justify-content:center}
+.chain.solo .chead{position:absolute;top:0;right:0;height:38px;width:38px;z-index:2;
+  padding:0;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;border-radius:0}
 .chain.solo .cgap{display:none}
 .chain.solo .cch{width:auto}
-.chain.solo .card{padding:11px 13px 7px 16px}
 .chain.solo .card h3{padding-right:46px}
 .chain.solo.shut .card{padding-bottom:13px}
 .cgap{flex:1}
@@ -335,6 +337,11 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 /* Progress */
 .pghead{display:flex;align-items:center;gap:10px;margin:20px 0 7px}
 .pghead:first-of-type{margin-top:12px}
+/* Progress/Backup sections now sit inside a .card, same box the dashboard
+   uses for an exercise, so the heading needs no extra top margin of its own —
+   the card's own padding already does that job. */
+.pgcard .pghead{margin-top:0}
+.pgcard .pgrow:last-child{border-bottom:none}
 .pgh{font-family:var(--serif);font-size:10px;letter-spacing:.2em;color:var(--bronze);
   margin:0;font-weight:400}
 /* one small control per section, rather than a row of wide buttons */
@@ -372,6 +379,11 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
   border:1px solid var(--cardline);border-radius:8px;color:var(--champ);
   font-family:var(--serif);font-size:30px;text-align:center;
   font-variant-numeric:tabular-nums;-webkit-appearance:none;appearance:none}
+.datepick{width:100%;margin-top:14px;padding:16px;background:var(--card);
+  border:1px solid var(--cardline);border-radius:8px;color:var(--champ);
+  font-family:var(--ui);font-size:17px;text-align:center;
+  font-variant-numeric:tabular-nums;-webkit-appearance:none;appearance:none;
+  color-scheme:dark}
 .vol{margin-top:4px}
 .volrow{display:grid;grid-template-columns:1fr auto;align-items:baseline;
   gap:8px;padding:5px 0;font-size:12px}
@@ -410,8 +422,11 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .srow span{color:var(--bronze);font-size:18px;line-height:1}
 .srow:active{border-color:var(--bronze)}
 .hist{margin-top:10px}
-/* months */
-.hmon{border-bottom:1px solid var(--cardline)}
+/* months: boxed the same way the dashboard boxes an exercise chain — one
+   bordered card per month, header row, collapsible body inside it. */
+.hmon{background:var(--card);border:1px solid var(--cardline);border-radius:5px;
+  padding:0 14px;margin-bottom:9px}
+.hmon:last-child{margin-bottom:0}
 .hmhead{display:grid;grid-template-columns:1fr 4.6em 1.1em;align-items:baseline;width:100%;
   background:none;border:none;padding:14px 0;text-align:left}
 .hmn{font-family:var(--serif);font-size:13px;letter-spacing:.16em;text-transform:uppercase;
@@ -696,10 +711,10 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 .xrk{font-size:9.5px;letter-spacing:.18em;color:var(--bronze)}
 /* clearance shares the foot of the fixed bar with the objectives count:
    one caption line, then a hairline bar across the very bottom */
-.fcap{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
-.fcap .segcap{margin-top:5px}
+.fcap{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:nowrap}
+.fcap .segcap{margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1 1 auto}
 .xcap{margin-top:5px;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--dimmer);font-variant-numeric:tabular-nums;white-space:nowrap}
+  color:var(--dimmer);font-variant-numeric:tabular-nums;white-space:nowrap;flex:0 0 auto}
 .xcap b{color:var(--bronze);font-weight:400}
 .fab.go .xbar{background:rgba(14,11,14,.22)}
 .fab.go .xbar i{background:var(--bg);box-shadow:none}
@@ -981,6 +996,8 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
   padding:16px;border-radius:0;text-align:center;margin-top:10px}
 .btn:active{border-color:var(--bronze)}
 .btn.ghost{color:var(--dim);border-color:var(--hair)}
+.btn.iconbtn{display:flex;align-items:center;justify-content:center;gap:8px}
+.iconbtn svg{display:block;flex:none}
 #saveS,#exJson,#imBtn{border-color:var(--bronze);color:var(--champ)}
 
 .upnext{font-family:var(--ui);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
@@ -1034,7 +1051,7 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
   -webkit-touch-callout:default;touch-action:manipulation}
 /* Sheets sit on top of the banner, not over it: the clock keeps running and stays
    readable while a set is being entered. --fabh is the measured bar height. */
-.sheet{position:fixed;left:0;right:0;bottom:var(--fabh,0px);z-index:70;background:#140F14;
+.sheet{position:fixed;left:0;right:0;bottom:var(--fabh,0px);z-index:70;background:var(--bg);
   overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
   border-top:1px solid var(--line);border-bottom:1px solid var(--line);
   padding:24px 22px 26px;
@@ -1074,7 +1091,7 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
 /* full screen, but these two have more than a screenful, so the body scrolls inside */
 .sheet.fit.full.scroll{justify-content:flex-start;gap:0}
 .sheet.fit.full.scroll .pgbody{flex:1;min-height:0;overflow:auto;
-  -webkit-overflow-scrolling:touch;padding-bottom:10px}
+  -webkit-overflow-scrolling:touch;padding-top:14px;padding-bottom:10px}
 .pgbody .trio,.pgbody .duo{margin-top:14px}
 .ents{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
 .ent{display:flex;align-items:baseline;gap:7px;background:var(--card);
@@ -1097,8 +1114,14 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
   background:transparent;border:0;color:var(--dim);font-size:26px;text-align:center}
 .shx:active{color:var(--bronze)}
 .shx.back{font-size:30px;line-height:38px}
-/* Every section is a framed block with its heading on the same left edge. */
-.sheet.fit .card{margin:0;padding:13px 14px 11px;border-radius:14px}
+/* Every section is a framed block with its heading on the same left edge. Only
+   a card sitting directly in the sheet (Settings' own Clearance card) relies on
+   the sheet's flex gap for spacing; a card nested inside a scrolling body (the
+   .pgcard sections in Progress, Backup, Music) keeps its own margin so they
+   don't sit flush against each other the way the dashboard's cards never do. */
+.sheet.fit>.card{margin:0;padding:13px 14px 11px;border-radius:14px}
+.sheet.fit .pgcard{margin-bottom:9px;padding:13px 14px 11px;border-radius:14px}
+.sheet.fit .pgcard:last-child{margin-bottom:0}
 .sheet.fit .tiny{text-align:center;opacity:.8}
 .veil{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:65}
 /* Behind a panel: opaque, and above the banner, so a swap can never flash the
@@ -1276,14 +1299,15 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
 .pgrow .pv{color:var(--champ);font-variant-numeric:tabular-nums;text-align:right}
 .pgrow.warn .pv{color:var(--alert)}
 .pgrow.dim .pv{color:var(--dim)}
-/* The weigh-in chart: a month in view, swiped through, any reading tappable. */
+/* The weigh-in chart: 14 days in view (waist keeps full history), swiped or
+   dragged through, any reading tappable or selectable via the slider. */
 .chwrap{margin-top:10px}
 .chtop,.chsel{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
   font-size:11px;letter-spacing:.08em;color:var(--dimmer);font-variant-numeric:tabular-nums}
 .chtop{margin-bottom:6px}
 .chsel{margin-top:6px}
 .chsel b,.chtop b{color:var(--champ);font-weight:400}
-.chbox{position:relative;touch-action:pan-y;cursor:grab;-webkit-user-select:none;user-select:none;
+.chbox{position:relative;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none;
   padding-left:2px}
 /* one mark per reading: its weight above it, its date on the rail below */
 .tlv,.tld{position:absolute;pointer-events:none;font-family:var(--serif);
@@ -1479,7 +1503,7 @@ html.booted .fab{animation:pbwarm .55s .12s ease-out both}
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
 let DB={sess:[],wt:[]}, mem={}, STORE='memory';
-const APP_VERSION='2026.09.23.47';
+const APP_VERSION='2026.09.23.58';
 const HOSTED = location.protocol==='https:';
 const STORE_LABEL={
   local: HOSTED
@@ -1849,7 +1873,7 @@ function tone(freq,dur,vol,delay,o){
 /* A dyad — two notes together read as a chord rather than a beep. */
 function dyad(a,b,dur,vol,delay,o){ tone(a,dur,vol,delay,o); tone(b,dur,vol*0.8,delay,o); }
 let SFXAT=0;
-const HISS={tap:[0.07,0.012],open:[0.13,0.016],close:[0.15,0.013],confirm:[0.2,0.018],
+const HISS={tap:[0.07,0.012],open:[0.13,0.016],close:[0.15,0.013],confirm:[0.34,0.018],
   record:[0.4,0.02],rest:[0.15,0.012],clear:[0.55,0.022],start:[0.6,0.02],
   level:[0.6,0.022],done:[0.7,0.02],nope:[0.28,0.02]};
 function sfx(name){
@@ -1863,9 +1887,12 @@ function sfx(name){
     case 'tap':     tone(2100,0.06,0.05,0,{attack:0.006}); break;
     case 'open':    tone(1046,0.12,0.055,0,{to:1568,bend:0.6}); break;
     case 'close':   tone(1046,0.14,0.045,0,{to:660,bend:0.7}); break;
-    /* a set logged: a clean rising fifth */
-    case 'confirm': tone(1046,0.09,0.05,0);
-                    tone(1568,0.16,0.05,0.055,{shimmer:9}); break;
+    /* a set logged: a quick rising major arpeggio, bright and a little triumphant,
+       landing on a shimmering top note — reads as a small win, not just a click */
+    case 'confirm': tone(1046,0.07,0.045,0);
+                    tone(1318,0.07,0.045,0.045);
+                    tone(1568,0.09,0.05,0.09);
+                    tone(2093,0.22,0.05,0.135,{shimmer:10}); break;
     case 'record':  tone(1318,0.09,0.05,0);
                     tone(1760,0.09,0.05,0.06);
                     dyad(2093,2637,0.3,0.042,0.12,{shimmer:7}); break;
@@ -2228,18 +2255,20 @@ function openMusic(from){
     '<button class="shx'+(inSet?' back':'')+'" id="plClose" aria-label="'+
       (inSet?'Back to settings':'Close')+'">'+(inSet?'\u2039':'\u00d7')+'</button></h3>'+
     '<div class="pgbody">'+
+    '<div class="card pgcard">'+
     '<div class="muted" id="plNow">nothing selected</div>'+
     '<div class="trio">'+
       '<button class="btn" id="plGo">[ PLAY ]</button>'+
       '<button class="btn ghost" id="plNext">[ SKIP ]</button>'+
       '<button class="btn ghost" id="plStop">[ STOP ]</button>'+
-    '</div>'+
+    '</div></div>'+
+    '<div class="card pgcard">'+
     '<div class="trks" id="plTrks">'+musTrks(PL.list,loading)+'</div>'+
     '<input type="file" id="plFile" style="display:none">'+
     '<div class="duo">'+
       '<button class="btn" id="plAdd">[ ADD FROM PHONE ]</button>'+
       '<button class="btn ghost" id="sfxBtn">[ '+(DB.sfx===false?'SFX OFF':'SFX ON')+' ]</button>'+
-    '</div></div></div>';
+    '</div></div></div></div>';
   setSheet(h);
 
   const back=()=>{ if(inSet) openSettings(); else closeSheet(); };
@@ -3685,11 +3714,39 @@ function logBody(kind){
       dropLayers(1); openProgress();          // close the entry, refresh what is behind
     }});
 }
-function logPhoto(){
-  const d=today();
-  if(!DB.photos.some(x=>x.d===d)) DB.photos.push({d:d});
-  DB.photos.sort((a,b)=>a.d<b.d?-1:1);
-  save(); toast('PHOTOS LOGGED'); openProgress();
+/* A photo entry only ever needs its date set or corrected, or the entry
+   removed — there is no number to type — so it gets its own small sheet: a
+   date picker, a tick to confirm, and a cross for the other action (delete
+   when editing an existing entry, cancel when logging a new one). */
+function photoSheet(o){
+  const tick='<svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 12.5l5 5L20 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const cross='<svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
+  const delLabel=o.delLabel||'DELETE';
+  setSheet('<div class="veil" id="veil"></div><div class="sheet"><h3>'+esc(o.title)+
+    '<button class="shx back" id="psBack" aria-label="Back">\u2039</button></h3>'+
+    (o.note?'<div class="muted">'+esc(o.note)+'</div>':'')+
+    '<input class="datepick" id="psDate" type="date" value="'+esc(o.d)+'" max="'+esc(today())+'">'+
+    '<div class="duo">'+
+      '<button class="btn iconbtn" id="psOk" aria-label="Confirm">'+tick+'<span>[ CONFIRM ]</span></button>'+
+      '<button class="btn ghost iconbtn" id="psDel" aria-label="'+esc(delLabel)+'">'+cross+'<span>[ '+esc(delLabel)+' ]</span></button>'+
+    '</div></div>', true);
+  const box=topSheet();
+  const back=()=>popSheet();
+  const veil=document.querySelectorAll('#sheetWrap .veil');
+  veil[veil.length-1].onclick=back;
+  box.querySelector('#psBack').onclick=back;
+  const D=box.querySelector('#psDate');
+  box.querySelector('#psOk').onclick=()=>{
+    const v=D.value;
+    if(!v) return toast('PICK A DATE');
+    o.onSave(v);
+  };
+  box.querySelector('#psDel').onclick=async()=>{
+    if(!o.confirmDel) return o.onDel();
+    const ok=await askConfirm('Remove this?','It cannot be undone.','Remove');
+    if(!ok) return photoSheet(o);
+    o.onDel();
+  };
 }
 /* The row in settings says the one thing worth knowing without opening it. */
 function progSub(){
@@ -3731,9 +3788,10 @@ function numSheet(o){
     o.onDel();
   };
 }
-/* A month of readings as a line. The window is swiped through — drag right for
-   older, left for newer — and any reading in view can be tapped to read it off.
-   Kept in one place so panning and selecting only redraw the graph, never the sheet. */
+/* Readings as a line (14 days for weight, full history for waist). Tap or drag
+   anywhere on the graph to move the selection, like a slider — any reading in
+   view can be read off this way. Kept in one place so selecting only redraws
+   the graph, never the sheet. */
 let CH=null;
 /* A timeline, not a plot: one mark per weigh-in, evenly spaced, oldest on the left.
    Spacing readings by the day they fell on packs a month into an unreadable tangle
@@ -3795,11 +3853,16 @@ function chPaint(){
        '<span class="chy" style="top:'+pcY(Math.min.apply(null,vs))+'%">'+num(Math.min.apply(null,vs))+'</span>'+
        '<span class="chy avg" style="top:'+pcY(avg)+'%">'+num(avg)+'</span>';
 
-  /* dates along the foot, only where there is room, with the ends always drawn */
-  let lastD=-99;
+  /* dates along the foot: a fixed set of positions, chosen once from the point
+     layout and independent of which reading is selected, so they never move
+     as the selection changes. Only the color of the matching label (if any is
+     at that exact spot) picks out the current selection; the full date and
+     value for the selection live in the box below the graph instead. */
+  const DTMIN=40;
+  let lastD=-999;
   pts.forEach((p,i)=>{
     const x=xOf(i), end=(i===0||i===pts.length-1);
-    if(x-lastD>=40 || end || p.d===sel){
+    if(x-lastD>=DTMIN || end){
       lastD=x;
       svg+='<span class="tld'+(p.d===sel?' on':'')+'" style="left:'+(x/CH_W*100).toFixed(1)+'%">'+
            day(p.d)+'</span>';
@@ -3819,18 +3882,35 @@ function chPaint(){
 }
 function chBind(){
   const box=document.getElementById('chBox'); if(!box) return;
-  box.addEventListener('click',e=>{
+  // Shared hit-testing: given a clientX, find the nearest reading and select it.
+  const pick=(clientX,announce)=>{
     const pts=chWindow(); if(!pts.length) return;
     const r=box.getBoundingClientRect();
-    const x=(e.clientX-r.left)/r.width*CH_W;
+    const x=(clientX-r.left)/r.width*CH_W;
     const t0=pts[0].t, days=Math.max(1, t0-pts[pts.length-1].t);
     const xOf=p=>pts.length===1 ? CH_W/2 : CH_SIDE + ((t0-p.t)/days)*(CH_W-CH_SIDE*2);
     let best=pts[0];
     pts.forEach(p=>{ if(Math.abs(xOf(p)-x)<Math.abs(xOf(best)-x)) best=p; });
-    CH.sel=best.d;
-    sfx('tap');
-    chPaint();
+    if(best.d!==CH.sel){ CH.sel=best.d; if(announce) sfx('tap'); chPaint(); }
+  };
+  let dragging=false;
+  box.addEventListener('pointerdown',e=>{
+    dragging=true;
+    box.setPointerCapture && box.setPointerCapture(e.pointerId);
+    e.preventDefault();
+    pick(e.clientX,true);
   });
+  box.addEventListener('pointermove',e=>{
+    if(!dragging) return;
+    e.preventDefault();
+    pick(e.clientX,false);
+  });
+  const end=()=>{ dragging=false; };
+  box.addEventListener('pointerup',end);
+  box.addEventListener('pointercancel',end);
+  box.addEventListener('pointerleave',end);
+  // Fallback for browsers without pointer events on this element.
+  box.addEventListener('click',e=>pick(e.clientX,true));
 }
 function chartHTML(){
   return '<div class="chwrap"><div class="chtop" id="chTop"></div>'+
@@ -3866,7 +3946,10 @@ function openTrack(kind){
   veils[veils.length-1].onclick=back;
   (box.querySelector? box : document).querySelector('#tkBack').onclick=back;
   if(arr.length && !isPh){
-    CH={rows:arr.slice().sort((a,b)=>a.d<b.d?-1:1), val:x=>isW?x.kg:x.cm,
+    const sorted=arr.slice().sort((a,b)=>a.d<b.d?-1:1);
+    // Weight: last 14 days only. Waist keeps the full history view.
+    const rows=isW ? sorted.filter(x=>daysAgo(x.d)<14) : sorted;
+    CH={rows: rows.length?rows:sorted, val:x=>isW?x.kg:x.cm,
         unit:isW?'kg':'', sel:null, show:''};
     chPaint(); chBind();
   }
@@ -3875,8 +3958,13 @@ function openTrack(kind){
       const i=+b.dataset.i;
       /* drop the editor and the list beneath it, then draw the list again */
       const again=()=>{ dropLayers(2); openTrack(kind); };
-      if(isPh) return numSheet({title:'Photographs', note:'Logged '+longDate(DB.photos[i].d),
-        a:'', loA:0, hiA:0, onSave:()=>popSheet(),
+      if(isPh) return photoSheet({title:'Photographs', d:DB.photos[i].d, confirmDel:true,
+        onSave:(v)=>{
+          if(v!==DB.photos[i].d && DB.photos.some(x=>x.d===v)) return toast('ALREADY LOGGED THAT DAY');
+          DB.photos[i]={d:v};
+          DB.photos.sort((a,b)=>a.d<b.d?-1:1);
+          save(); toast('UPDATED'); again();
+        },
         onDel:()=>{ DB.photos.splice(i,1); save(); toast('REMOVED'); again(); }});
       const a2=isW?DB.wt:DB.waist, row=a2[i];
       numSheet({title:isW?'Weigh-in':'Waist', note:longDate(row.d),
@@ -3899,13 +3987,14 @@ function openProgress(){
   /* One label, one number, one line. Nothing explains what the number is for. */
   const rows=r=>r.map(x=>'<div class="pgrow'+(x[2]?' '+x[2]:'')+'">'+
     '<span class="pk">'+esc(x[0])+'</span><span class="pv">'+esc(x[1])+'</span></div>').join('');
+  /* Each section boxed the same way the dashboard boxes an exercise: one card,
+     one border, one background, matching .chain/.card exactly. */
+  const section=(t,id,view,r)=>'<div class="card pgcard">'+head(t,id,view)+rows(r)+'</div>';
 
-  h+=head('THE SCALE','pgWt','vwWt')+rows(wv.rows);
-  h+=head('WAIST','pgWa','vwWa')+rows(wa.rows);
-  h+=head('PHOTOGRAPHS','pgPh','vwPh')+rows(ph.rows);
-
-  h+=head('SETS PER WEEK')+
-     rows(MUSCLES.map(m=>[m, String(v[m]||0)]));
+  h+=section('THE SCALE','pgWt','vwWt',wv.rows);
+  h+=section('WAIST','pgWa','vwWa',wa.rows);
+  h+=section('PHOTOGRAPHS','pgPh','vwPh',ph.rows);
+  h+=section('SETS PER WEEK',null,null,MUSCLES.map(m=>[m, String(v[m]||0)]));
 
   h+='</div></div>';
   setSheet(h);
@@ -3913,10 +4002,16 @@ function openProgress(){
   document.getElementById('pgBack').onclick=openSettings;
   document.getElementById('pgWt').onclick=()=>logBody('wt');
   document.getElementById('pgWa').onclick=()=>logBody('waist');
-  document.getElementById('pgPh').onclick=async()=>{
-    const ok=await askConfirm('Photographs taken?','Logs today against the 28-day cycle.','Log');
-    if(!ok) return openProgress();
-    logPhoto();
+  document.getElementById('pgPh').onclick=()=>{
+    photoSheet({title:'Photographs', d:today(), note:'Logs against the 28-day cycle.', delLabel:'CANCEL',
+      onSave:(v)=>{
+        if(DB.photos.some(x=>x.d===v)) return toast('ALREADY LOGGED THAT DAY');
+        DB.photos.push({d:v});
+        DB.photos.sort((a,b)=>a.d<b.d?-1:1);
+        save(); toast('PHOTOS LOGGED');
+        popSheet(); openProgress();
+      },
+      onDel:()=>{ popSheet(); openProgress(); }});
   };
   document.getElementById('vwWt').onclick=()=>openTrack('wt');
   document.getElementById('vwWa').onclick=()=>openTrack('waist');
@@ -4031,8 +4126,8 @@ function openHistory(){
     if(!g){ g={key:key, idx:[]}; months.push(g); }
     g.idx.push(i);
   }
-  if(n) h+='<div class="pgrow"><span class="pk">Total</span>'+
-     '<span class="pv">'+n+' OP'+(n===1?'':'S')+'</span></div>';
+  if(n) h+='<div class="card pgcard"><div class="pgrow"><span class="pk">Total</span>'+
+     '<span class="pv">'+n+' OP'+(n===1?'':'S')+'</span></div></div>';
   h+='<div class="hist">';
   months.forEach((g,mi)=>{
     const open=false;
@@ -4147,12 +4242,10 @@ function openSettings(){
      row('stBack','Backup',bkSub())+
      '</div>';
 
-  h+='<button class="btn ghost" id="stFresh">[ FORCE UPDATE ]</button>'+
-     '<div class="tiny">v'+APP_VERSION+(HOSTED?' \u00b7 hosted':' \u00b7 local')+'</div></div>';
+  h+='<div class="tiny">v'+APP_VERSION+(HOSTED?' \u00b7 hosted':' \u00b7 local')+'</div></div>';
   setSheet(h);
   document.getElementById('veil').onclick=closeSheet;
   document.getElementById('stClose').onclick=closeSheet;
-  document.getElementById('stFresh').onclick=forceUpdate;
   document.getElementById('stMus').onclick=()=>openMusic('settings');
   document.getElementById('stProg').onclick=openProgress;
   document.getElementById('stHist').onclick=openHistory;
@@ -4161,28 +4254,14 @@ function openSettings(){
 
 /* Backup and GitHub are the same job — getting the log off this phone — so they
    share a panel rather than two cards on the settings screen. */
-async function forceUpdate(){
-  toast('FETCHING LATEST');
-  try{
-    if('serviceWorker' in navigator){
-      const rs=await navigator.serviceWorker.getRegistrations();
-      await Promise.all(rs.map(r=>r.unregister()));
-    }
-    if(window.caches){
-      const ks=await caches.keys();
-      await Promise.all(ks.map(k=>caches.delete(k)));
-    }
-  }catch(e){}
-  const u=location.origin+location.pathname+'?v='+Date.now();
-  setTimeout(()=>location.replace(u),260);
-}
 function openBackup(){
   const n=DB.sess.length, b=bkBehind();
   let h='<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>Backup'+
     '<button class="shx back" id="bkBack" aria-label="Back to settings">\u2039</button></h3>'+
     '<div class="pgbody">';
 
-  h+='<div class="pgrow"><span class="pk">Logged</span>'+
+  h+='<div class="card pgcard"><div class="pghead"><h4 class="pgh">LOCAL</h4></div>'+
+     '<div class="pgrow"><span class="pk">Logged</span>'+
      '<span class="pv">'+n+' OP'+(n===1?'':'S')+'</span></div>'+
      '<div class="pgrow'+(b?' warn':'')+'"><span class="pk">Not backed up</span>'+
      '<span class="pv">'+(b?b:'none')+'</span></div>'+
@@ -4191,9 +4270,9 @@ function openBackup(){
        '<button class="btn" id="imOpen">[ LOAD ]</button>'+
        '<button class="btn ghost" id="exCopy">[ COPY ]</button>'+
      '</div>'+
-     '<textarea id="exText" readonly class="hide">'+esc(packDB())+'</textarea>';
+     '<textarea id="exText" readonly class="hide">'+esc(packDB())+'</textarea></div>';
 
-  h+='<div class="pghead"><h4 class="pgh">GITHUB</h4></div>'+
+  h+='<div class="card pgcard"><div class="pghead"><h4 class="pgh">GITHUB</h4></div>'+
      '<div class="pgrow"><span class="pk">Status</span>'+
        '<span class="pv">'+esc(ghWhen())+'</span></div>'+
      (ghOn()?'<div class="pgrow"><span class="pk">Repo</span><span class="pv">'+
@@ -4201,7 +4280,7 @@ function openBackup(){
      '<div class="duo">'+
        '<button class="btn" id="ghNow"'+(ghOn()?'':' disabled')+'>[ SYNC ]</button>'+
        '<button class="btn ghost" id="ghSet">[ '+(ghOn()?'FORGET':'CONNECT')+' ]</button>'+
-     '</div>';
+     '</div></div>';
 
   h+='</div></div>';
   setSheet(h);
