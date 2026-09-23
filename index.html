@@ -18,6 +18,11 @@ html,body{margin:0;padding:0}
    which drags anything position:fixed down to the end of the page. With nothing
    taller than the screen, the bottom bar has only one place it can be. */
 html{height:100%;overflow:hidden}
+/* The installed iOS app draws from the very top of the glass but sizes its viewport one
+   status-bar height short, leaving a strip under the bar. There 100vh is the whole
+   screen, and a page that tall takes the fixed layers (bar, sheets, glass) down with
+   it. Browsers keep 100%: their toolbars make 100vh taller than what is visible. */
+html.standalone{height:100vh}
 body{height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 body{
   background:var(--bg);color:var(--tx);font-family:var(--ui);
@@ -1227,8 +1232,10 @@ html.booted .fab{animation:pbwarm .55s .12s ease-out both}
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
 let DB={sess:[],wt:[]}, mem={}, STORE='memory';
-const APP_VERSION='2026.09.23.73';
+const APP_VERSION='2026.09.23.74';
 const HOSTED = location.protocol==='https:';
+const STANDALONE = !!navigator.standalone || matchMedia('(display-mode: standalone)').matches;
+if(STANDALONE) document.documentElement.classList.add('standalone');
 function load(){
   try{ localStorage.setItem(KEY+'_t','1'); localStorage.removeItem(KEY+'_t'); STORE='local'; }catch(e){ STORE='memory'; }
   try{
@@ -1645,8 +1652,13 @@ function startRest(id,ix){
   sfx('rest');
   paintFab();
 }
-/* Safari's toolbar slides in and out, so the visible height is not innerHeight. */
-function viewH(){ return (window.visualViewport && window.visualViewport.height) || window.innerHeight; }
+/* Safari's toolbar slides in and out, so the visible height is not innerHeight. The
+   installed app has no toolbar, and its page is sized to the whole screen (see
+   html.standalone), past the viewport it reports, so there the page is the measure. */
+function viewH(){
+  if(STANDALONE) return document.body.clientHeight;
+  return (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+}
 function fabH(){ const f=document.getElementById('fab'); return (f && !f.classList.contains('hide')) ? f.offsetHeight : 0; }
 /* The page must be able to scroll far enough for the LAST set to clear the bar.
    A hard-coded reserve cannot know how tall the bar renders on a given phone, so
@@ -4024,13 +4036,13 @@ function screenReport(){
   const vv=window.visualViewport, fab=document.getElementById('fab').getBoundingClientRect();
   return [
     ['Version', APP_VERSION],
-    ['Installed app', (navigator.standalone || matchMedia('(display-mode: standalone)').matches) ? 'yes' : 'no'],
+    ['Installed app', STANDALONE ? 'yes \u00b7 screen fix on' : 'no'],
     ['Screen', screen.width+' \u00d7 '+screen.height+' @'+devicePixelRatio+'x'],
     ['Window', innerWidth+' \u00d7 '+innerHeight],
     ['Visual viewport', vv ? r1(vv.width)+' \u00d7 '+r1(vv.height)+' at '+r1(vv.offsetTop) : 'none'],
     ['Fixed layer', r1(fill.top)+' to '+r1(fill.bottom)],
     ['vh dvh svh lvh', ['vh','dvh','svh','lvh'].map(tall).join(' ')],
-    ['Page', document.documentElement.clientHeight+' \u00b7 body '+document.body.clientHeight+' of '+document.body.scrollHeight],
+    ['Page', document.documentElement.offsetHeight+' \u00b7 body '+document.body.clientHeight+' of '+document.body.scrollHeight],
     ['Safe area T R B L', inset.join(' ')],
     ['Header top', r1(document.querySelector('header').getBoundingClientRect().top)],
     ['Bar', fab.height ? r1(fab.top)+' to '+r1(fab.bottom) : 'hidden'],
