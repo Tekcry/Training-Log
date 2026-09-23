@@ -10,36 +10,33 @@
 <meta name="apple-mobile-web-app-title" content="Training">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
-:root{
-  --bg:#060A08; --surf:#0C1310; --surf2:#132019; --line:#2B4A37; --hair:#17281E;
-  --card:#0D1512; --card2:#080E0B; --cardline:#24402F; --cardhair:#17281E;
-  --tx:#E4F2E9; --dim:#A6C4B2; --dimmer:#7C9C89;
-  --bronze:#5FE08A; --champ:#C9F5D8;
-  --alert:#F2A93B;
-  --serif:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;
-  --ui:"Avenir Next",-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
-  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
-}
+
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
+/* The document is exactly one screen tall and body does the scrolling. Some hosts
+   (the installed web app, embedded viewers) treat a tall document as the viewport,
+   which drags anything position:fixed down to the end of the page. With nothing
+   taller than the screen, the bottom bar has only one place it can be. */
+html{height:100%;overflow:hidden}
+body{height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 body{
   background:var(--bg);color:var(--tx);font-family:var(--ui);
   font-size:16.5px;line-height:1.55;
   padding-bottom:0;
   -webkit-text-size-adjust:100%;
 }
-h1,h2,h3{margin:0;font-family:var(--serif);font-weight:400;letter-spacing:-0.005em}
+h1,h3{margin:0;font-family:var(--serif);font-weight:400;letter-spacing:-0.005em}
 button{font-family:inherit;font-size:inherit;cursor:pointer;border:none;background:none;color:inherit}
 input{font-family:var(--mono);font-size:16px}
 
 /* header */
 header{padding:calc(22px + env(safe-area-inset-top)) 22px 14px;position:relative}
-header::after{content:'';position:absolute;left:22px;right:22px;bottom:0;height:1px;
-  background:linear-gradient(to right,var(--bronze),var(--line) 38%,transparent)}
+header::after{content:'';position:absolute;left:22px;right:22px;bottom:0}
 .eyebrow{font-family:var(--ui);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--bronze)}
 header h1:empty,header .sub:empty{display:none}
 header h1{font-size:30px;margin-top:9px;letter-spacing:-.02em}
-header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
+header .sub,.splash .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
+.splash .sub{text-transform:uppercase}
 .cog{position:absolute;top:calc(14px + env(safe-area-inset-top));right:12px;padding:10px;color:var(--dimmer)}
 .musbtn{position:absolute;top:calc(14px + env(safe-area-inset-top));right:59px;padding:10px;
   color:var(--dimmer);display:block;-webkit-tap-highlight-color:transparent}
@@ -56,6 +53,7 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .mfloat:active{color:var(--champ)}
 
 .trks{margin:6px 0 4px}
+.trks>.muted{padding:14px 0}
 .trk{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--hair)}
 .trk .tname{flex:1;text-align:left;background:none;border:none;padding:12px 0;
   font-size:13.5px;color:var(--tx)}
@@ -72,29 +70,13 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 
 #v-train{padding-bottom:calc(158px + env(safe-area-inset-bottom))} /* replaced at runtime by syncPad() */
 .wrap{padding:4px 22px 26px;max-width:600px;margin:0 auto}
-.card{background:var(--card);border:1px solid var(--cardline);border-radius:14px;
-  padding:18px 16px;margin-bottom:12px}
+.card{background:var(--card);border:1px solid var(--cardline);border-radius:14px}
 .card:last-of-type{margin-bottom:0}
 .card h3{font-size:17px;color:var(--tx)}
 .muted{color:var(--dim);font-size:14px;line-height:1.6}
 .tiny{font-size:12.5px;color:var(--dimmer);letter-spacing:.12em}
 
 /* progress */
-.pwrap{padding:14px 0 0}
-.phead{display:flex;align-items:baseline;gap:12px}
-.pnum{font-family:var(--serif);font-size:44px;line-height:.9;color:var(--champ);letter-spacing:-.03em}
-.pof{font-family:var(--ui);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
-.pmile{font-size:12.5px;color:var(--dim);margin-top:9px;line-height:1.45}
-.pmile b{color:var(--bronze);font-weight:500}
-.pstat{display:block;font-size:12.5px;color:var(--dimmer);margin-top:4px;line-height:1.45}
-.pstat b{color:var(--dim);font-weight:500}
-.bar{height:1px;background:var(--hair);margin-top:15px;overflow:hidden}
-.bar i{display:block;height:100%;background:var(--bronze)}
-.pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;
-  border-bottom:1px solid var(--hair);padding-bottom:13px}
-.pstats .k{display:block;font-weight:500;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dimmer)}
-.pstats .v{display:block;font-family:var(--serif);font-size:20px;color:var(--tx);margin-top:6px;letter-spacing:-.01em}
-.pfoot{font-size:12px;color:var(--dimmer);line-height:1.5;margin-top:12px;font-style:italic}
 
 .startbtn{display:block;width:100%;margin:0 0 14px;padding:16px;max-height:80px;overflow:hidden;
   font-family:var(--serif);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
@@ -237,7 +219,6 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .setbtn.locked .sl{color:var(--dimmer)}
 .setbtn.locked .sc{opacity:.5}
 .card.cdone .setbtn{opacity:.75}
-.setgrid{display:grid;grid-template-columns:1.35fr 1fr;gap:9px;margin:16px 0 4px}
 
 /* export and import sit side by side */
 .duo{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
@@ -254,7 +235,6 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .swap:active{border-color:var(--bronze)}
 .segcap{margin-top:7px;font-family:var(--serif);font-size:10px;letter-spacing:.18em;
   text-transform:uppercase;color:var(--dimmer);text-align:right}
-.seg{margin-top:11px;height:4px}
 
 /* one target line instead of a panel */
 .tgt{display:flex;align-items:baseline;gap:8px;margin:7px 0 9px}
@@ -263,7 +243,7 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
   background:var(--bronze);border-radius:3px;padding:3px 6px}
 .card.cdone .tgt{display:none}
 .card h3 em{font-style:normal;font-size:10px;letter-spacing:.14em;color:var(--dimmer)}
-.upnext{color:var(--bronze)}
+
 .card{padding:12px 12px 8px;margin-bottom:9px}
 
 /* ---- superset chains ---- */
@@ -275,7 +255,7 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .chain::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;
   border-radius:3px;background:var(--bronze);opacity:.45;transition:opacity .35s ease}
 .chain.live::before{opacity:1;box-shadow:0 0 16px -2px var(--bronze)}
-.chead{display:flex;align-items:center;gap:9px;width:100%;background:none;border:0;text-align:left;
+.chead{display:flex;align-items:center;gap:9px;width:100%;border:0;text-align:left;
   padding:7px 13px 7px 16px;border-bottom:1px solid var(--cardhair);
   border-radius:13px 13px 0 0;background:var(--surf);transition:opacity .45s ease}
 .chain.cdone .chead{opacity:.4}
@@ -328,11 +308,6 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .setbtn.mate{border-color:rgba(95,224,138,.55);background:var(--card);
   box-shadow:inset 0 0 0 1px rgba(95,224,138,.18)}
 .setbtn.mate .sl{color:var(--bronze)}
-/* Held in the layout at zero opacity so it fades in rather than appearing. */
-.setbtn .sd::after{content:'NEXT IN SUPERSET';font-size:10px;letter-spacing:.14em;
-  color:var(--dimmer);opacity:0;transition:opacity .28s ease}
-.setbtn.on .sd::after,.setbtn.now .sd::after{content:''}
-.setbtn.mate .sd::after{opacity:1}
 .card h3 .lk{font-family:var(--serif);font-size:9.5px;letter-spacing:.14em;color:var(--dimmer)}
 /* Progress */
 .pghead{display:flex;align-items:center;gap:10px;margin:20px 0 7px}
@@ -360,10 +335,7 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .chart .avg{stroke:var(--dim);stroke-width:1;stroke-dasharray:4 4;
   vector-effect:non-scaling-stroke}
 .chart .dots circle{fill:var(--champ)}
-.chartkey{display:flex;justify-content:space-between;margin-top:5px;
-  font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dimmer);
-  font-variant-numeric:tabular-nums}
-.chartkey .mid{color:var(--dim)}
+
 .tklist{margin-top:14px}
 .tkrow{display:flex;align-items:baseline;justify-content:space-between;width:100%;
   padding:11px 0;border-bottom:1px solid var(--hair);background:none;border-left:0;
@@ -371,10 +343,9 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .tkrow .ed{font-size:12.5px;color:var(--dim)}
 .tkrow .ev{font-size:13px;color:var(--champ);font-variant-numeric:tabular-nums}
 .tkrow:active .ev{color:var(--bronze)}
-.pgline{font-family:var(--serif);font-size:16px;color:var(--champ)}
-.pgline.warn{color:var(--alert)}
+
 .pgnote{margin-top:5px;font-size:12.5px;line-height:1.5;color:var(--dim)}
-.pgrail{margin-top:6px;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dimmer)}
+
 .bignum{width:100%;margin-top:14px;padding:16px;background:var(--card);
   border:1px solid var(--cardline);border-radius:8px;color:var(--champ);
   font-family:var(--serif);font-size:30px;text-align:center;
@@ -384,41 +355,16 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
   font-family:var(--ui);font-size:17px;text-align:center;
   font-variant-numeric:tabular-nums;-webkit-appearance:none;appearance:none;
   color-scheme:dark}
-.vol{margin-top:4px}
-.volrow{display:grid;grid-template-columns:1fr auto;align-items:baseline;
-  gap:8px;padding:5px 0;font-size:12px}
-.volrow .vm{color:var(--dim)}
-.volrow .vbar{height:5px;background:var(--cardhair);border-radius:2px;overflow:hidden}
-.volrow .vbar i{display:block;height:100%;background:var(--dim);border-radius:2px;
-  transition:width .4s ease}
-.volrow .vbar i.ok{background:var(--bronze)}
-.volrow .vn{text-align:right;color:var(--champ);font-variant-numeric:tabular-nums}
-.volrow .vt{color:var(--dimmer);font-variant-numeric:tabular-nums}
-.trends{margin-top:4px}
-.trow{display:grid;grid-template-columns:1fr 52px 5.6em 3.1em;align-items:center;gap:8px;
-  padding:7px 0;border-bottom:1px solid var(--hair);font-size:12.5px}
-.tends{font-size:11px;color:var(--champ);white-space:nowrap;text-align:right;
-  font-variant-numeric:tabular-nums}
-.tends i{color:var(--dimmer);font-style:normal;padding:0 3px}
-.tpct{font-size:11px;text-align:right;color:var(--dimmer);font-variant-numeric:tabular-nums}
-.tpct.up{color:var(--bronze)}
-.trow .tn{color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.spark{width:52px;height:18px;overflow:visible}
-.spark path{fill:none;stroke:var(--dim);stroke-width:1.4;vector-effect:non-scaling-stroke;
-  stroke-linejoin:round;stroke-linecap:round}
-.sparkn{font-size:11px;text-align:right;color:var(--dimmer);font-variant-numeric:tabular-nums}
-.sparkn.up{color:var(--bronze)}
-.sparkless{color:var(--dimmer)}
 
 /* History: a row per session, the sets shown in the same boxes the cards use. */
 .srow{display:flex;align-items:center;justify-content:space-between;width:100%;
   background:var(--card);border:1px solid var(--cardline);border-radius:14px;
   padding:13px 14px;color:var(--tx);text-align:left}
 .srow h3{font-size:17px;margin:0}
-.srow .srl{display:flex;flex-direction:column;gap:3px}
+.srow .srl{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1}
 .srow .srsub{font-family:var(--serif);font-size:10px;letter-spacing:.2em;color:var(--bronze);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.srow .srl{min-width:0;flex:1}
+
 .srow span{color:var(--bronze);font-size:18px;line-height:1}
 .srow:active{border-color:var(--bronze)}
 .hist{margin-top:10px}
@@ -473,12 +419,12 @@ header .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
   border-radius:3px;color:var(--dim)}
 
 /* Splash: the screen warms up, says one thing, and gets out of the way. */
-/* The panel itself is opaque from the very first frame — the tune-in runs on its
-   contents instead. Animating the panel meant its opening keyframe was transparent,
-   so the workout behind it showed through for a fraction of a second. */
+
 /* One column, centred on the glass: the mark, what it is, how long it has been,
-   the line, and the way in. Nothing else. */
-.splash{position:fixed;inset:0;z-index:300;background:var(--bg);
+   the line, and the way in. Nothing else. It sits under every CRT layer (glow 198,
+   lines 199, overlays 200-201) so the glass is the same as the dashboard's, and
+   borrows the dashboard's own header and button styles. */
+.splash{position:fixed;inset:0;z-index:197;background:var(--bg);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
   padding:calc(22px + env(safe-area-inset-top)) 30px calc(22px + env(safe-area-inset-bottom));
   text-align:center}
@@ -494,19 +440,13 @@ html.booting header,html.booting #v-train,html.booting .fab,html.booting .roll{v
     repeating-linear-gradient(0deg,rgba(95,224,138,.13) 0 1px,transparent 1px 3px),
     repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 2px,transparent 2px 6px);
   animation:fuzznoiseout .34s steps(8,end) both}
-.splash::before{content:'';position:absolute;inset:0;pointer-events:none;
-  background:repeating-linear-gradient(180deg,rgba(0,0,0,.34) 0 1px,transparent 1px 3px)}
 .spmark{color:var(--bronze);width:96px;opacity:.9;margin-bottom:18px}
 .spmark svg{width:100%;height:auto;display:block}
-.splash .eyebrow{font-size:10.5px;letter-spacing:.3em;color:var(--dim)}
-.splash .spdays{color:var(--bronze);font-size:10.5px;letter-spacing:.22em;
-  text-transform:uppercase;margin-top:8px}
 /* the line stands on its own: no frame, nothing around it */
 .spline{font-family:var(--serif);font-size:17px;line-height:1.55;color:var(--champ);
   max-width:19em;text-wrap:balance}
-.spgo{position:relative;overflow:hidden;width:auto;min-width:15em;margin-top:2px;
-  border-color:var(--bronze);color:var(--champ);
-  opacity:0;pointer-events:none;transition:background .2s ease,color .2s ease}
+/* the button is the dashboard's START SESSION; this only adds the delayed arrival */
+.spgo{position:relative;margin:2px 0 0;opacity:0;pointer-events:none;transition:none}
 /* same tune-in as the screen itself, static and all */
 .spgo.on{opacity:1;pointer-events:auto;animation:fuzzin .46s steps(1,end) both}
 .spgo.on::after{content:'';position:absolute;inset:0;pointer-events:none;
@@ -515,7 +455,6 @@ html.booting header,html.booting #v-train,html.booting .fab,html.booting .roll{v
     repeating-linear-gradient(0deg,rgba(95,224,138,.16) 0 1px,transparent 1px 3px),
     repeating-linear-gradient(90deg,rgba(255,255,255,.08) 0 2px,transparent 2px 6px);
   animation:fuzznoise .46s steps(8,end) both}
-.spgo:active{background:var(--bronze);color:var(--bg)}
 /* and the same way out as the screen it sits on */
 .spgo.out{animation:fuzzout .34s steps(1,end) both;pointer-events:none}
 .spgo.out::after{display:none}
@@ -586,7 +525,7 @@ body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:201;
    to the interface instead of to a panel: the stepped flicker, the brightness and
    contrast jumps, a shallow squeeze, and the same field of static over the top.
    Each layer is animated on its own, so fixed positioning is untouched. */
-.fxdefs{display:none}
+
 @keyframes uifuzz{
   0%{opacity:1;transform:none;filter:none}
   9%{opacity:.86;transform:scaleY(.985) translateX(-3px);filter:brightness(1.7) contrast(1.5)}
@@ -616,41 +555,24 @@ html.glitching .fab{animation-delay:.04s}
 @media(prefers-reduced-motion:reduce){ body::after{animation:none} .roll{display:none} }
 
 /* CAUTION while resting, CLEAR when the rest is done */
-.fab.rest{border-top-color:var(--alert)}
-.fab.rest .fl{color:var(--alert)}
-.fab.rest .fv{color:var(--alert)}
-.fab.go{background:var(--bronze);border-top-color:var(--bronze)}
+
 .card.up::before,.card.up::after{border-color:var(--bronze)}
-.card.up{box-shadow:0 0 0 1px var(--bronze), 0 10px 34px -18px var(--bronze)}
-.seg b.on{background:var(--bronze);box-shadow:0 0 8px -2px var(--bronze)}
 
 /* ---- instrument panel, applied throughout ---- */
 /* tighter corners read as hardware rather than paper */
-.card,.week,.calcard,.bcard,.strcard,.sel select,.fixedv,.pick,.btn,.sheet,.calnav{border-radius:5px}
-.target{border-radius:3px}
-.done{border-radius:4px}
+.card,.sel select,.pick,.btn,.sheet{border-radius:5px}
 
 /* every label is a channel name: uppercase, tracked, monospaced */
 .card h3,.sheet h3{font-family:var(--ui);font-size:14px;letter-spacing:.13em;text-transform:uppercase}
-.muted,.tiny,.pick .d,.brief p{font-family:var(--ui)}
-.pick .k,.target .lab,.blab,.fl,.eyebrow,.bsum,nav button{font-family:var(--serif);font-weight:500}
-.pick .n{font-family:var(--serif);letter-spacing:.06em;text-transform:uppercase;font-size:15px}
-.pick .k{font-size:9.5px;letter-spacing:.18em}
-.target .lab{font-size:9.5px;letter-spacing:.2em}
-.bsum{font-size:10.5px;letter-spacing:.2em}
-.bsum::after{content:'  [+]'}
-.brief.open .bsum::after{content:'  [-]'}
+.muted,.tiny,.brief p{font-family:var(--ui)}
+.fl,.eyebrow,.bsum{font-family:var(--serif);font-weight:500}
 
 /* hairline grid between set rows, like a printed readout */
-.setrow{border-bottom:1px solid var(--cardhair);padding-bottom:9px}
-.setrow:last-of-type{border-bottom:none}
-.setno::before{content:''}
-.sel select{letter-spacing:.02em}
-.sel::after{width:5px;height:5px;border-width:1.2px}
+
+.sel::after{border-width:1.2px}
 
 /* buttons as bracketed commands */
-.btn{font-family:var(--serif);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  border-radius:5px;white-space:nowrap}
+.btn{font-family:var(--serif);white-space:nowrap}
 
 /* ticked rule under the header, and between sections */
 header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,transparent 6px 10px);
@@ -662,10 +584,9 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 
 /* the timer readout */
 .fab{border-top-width:1px}
-.fab .fv{font-size:31px}
 
 /* tabular figures everywhere a number can change, so nothing jitters */
-.pnum,.wknum b,.fab .fv,.strip b,.sv,.target .val,.setno,.sel select,.cnum{
+.fab .fv,.sv,.sel select{
   font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1}
 
 /* segmented readout: one block per set */
@@ -724,6 +645,10 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
    the corners, under the safe-area padding so it sits on the very lip of the glass. */
 .xbar{position:absolute;left:0;right:0;bottom:0;height:2px;margin:0;
   background:var(--cardhair);border-radius:0;overflow:hidden}
+/* In the bar it sits on the top edge of the home-indicator zone rather than the very
+   bottom of the screen, where the rounded corners clip it, and spans the same width
+   as the objectives strip above it. */
+.fab .xbar{left:22px;right:22px;bottom:env(safe-area-inset-bottom,0px)}
 .xbar i{display:block;height:100%;background:var(--bronze);border-radius:0;
   box-shadow:0 0 10px -2px var(--bronze);transition:width .95s cubic-bezier(.22,.72,.28,1)}
 /* What was just earned, laid over the stretch of bar it is filling. It is torn
@@ -746,33 +671,25 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 .xled .xsum{border-top:1px solid var(--cardline);border-bottom:none;margin-top:4px;
   padding-top:11px;font-family:var(--serif);letter-spacing:.06em}
 
-/* header strip as a telemetry line */
-.strip{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dimmer)}
-.strip b{font-family:var(--serif);font-size:15px;letter-spacing:.02em;color:var(--champ);font-weight:500}
-
 /* channel index with HUD corner brackets on the live card */
-.cnum{font-family:var(--serif);font-size:11px;letter-spacing:.06em;color:var(--cardline)}
-.cnum i{font-style:normal;opacity:.55}
+
 .card.up::before,.card.up::after{content:'';position:absolute;width:13px;height:13px;
   border:1.5px solid var(--bronze);pointer-events:none}
 .card.up::before{top:-1px;left:-1px;border-right:none;border-bottom:none;border-radius:14px 0 0 0}
 .card.up::after{bottom:-1px;right:-1px;border-left:none;border-top:none;border-radius:0 0 14px 0}
 
 /* readouts */
-.target .val{font-family:var(--serif);letter-spacing:-.01em}
-.sel select{font-family:var(--serif);font-size:13.5px;letter-spacing:.01em;padding:10px 26px 10px 10px}
-.setno{font-family:var(--serif);font-size:11px;color:var(--dimmer);letter-spacing:.04em}
+
+.sel select{letter-spacing:.01em}
 
 /* the timer is the primary instrument */
-.fab .fv{letter-spacing:.02em;font-weight:500}
-.fab .fl{letter-spacing:.2em}
-.fab.go{animation:pulse 1.6s ease-in-out infinite}
+.fab .fv{font-weight:500}
+
 @keyframes pulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.12)}}
 
 /* exercise cards — the screen should simplify as the session goes on */
 .card{position:relative;transition:opacity .45s ease, border-color .45s ease, background .45s ease}
-.cnum{position:absolute;top:14px;right:16px;font-family:var(--serif);font-size:15px;
-  color:var(--cardline);letter-spacing:.04em;transition:color .45s ease}
+
 .card h3{padding-right:34px}
 /* Only the lift you are on reads as live. Everything else steps back, including the
    chain frame it sits in, so there is one obvious place to look. */
@@ -784,13 +701,13 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 .session .chain .card[id^=cd-]{opacity:.42}
 .session .chain .card[id^=cd-].up{opacity:1}
 .card.cdone{opacity:.42;border-color:var(--cardhair);background:var(--card2)}
-.card.cdone .cnum{color:var(--bronze);opacity:.8}
-.card.cdone .target,.card.cdone .brief{display:none}
+
+.card.cdone .brief{display:none}
 .card.cdone .muted::after{content:' · CLEARED';color:var(--bronze)}
 .card.up{border-color:var(--bronze);box-shadow:0 0 0 1px var(--bronze), 0 10px 34px -18px var(--bronze)}
 
 /* set rows */
-.setrow{transition:opacity .3s ease}
+
 .sel{position:relative}
 .sel select{width:100%;appearance:none;-webkit-appearance:none;
   background:var(--card2);color:var(--tx);font-family:var(--ui);font-size:16px;
@@ -800,179 +717,23 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 .sel::after{content:'';position:absolute;right:12px;top:50%;width:7px;height:7px;
   margin-top:-5px;border-right:1.5px solid var(--dimmer);border-bottom:1.5px solid var(--dimmer);
   transform:rotate(45deg);pointer-events:none}
-.sel.narrow select{padding-right:46px}
-.ru{position:absolute;right:30px;top:50%;transform:translateY(-50%);
-  font-size:11px;color:var(--dimmer);pointer-events:none}
-.setrow.logged .sel select{border-color:var(--cardhair)}
-.sel.plain::after{display:none}
-.fixedv{background:var(--card2);border:1px solid var(--cardhair);border-radius:5px;
-  padding:10px 10px;font-size:13.5px;color:var(--dim);line-height:1.1}
-.setrow.logged{opacity:.5}
-.done{transition:background .25s ease, color .25s ease, border-color .25s ease, transform .25s ease}
-.done.on{background:var(--bronze);border-color:var(--bronze);color:var(--bg);transform:scale(1.04)}
-.done.pending{color:var(--alert);border-color:var(--alert);border-style:dashed;
-  animation:arming 1.3s ease-in-out infinite}
-@keyframes arming{0%,100%{opacity:1}50%{opacity:.5}}
-.setrow.arming{box-shadow:-9px 0 0 -8px var(--alert)}
 
-/* session strip */
-.strip{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
-  font-size:12.5px;color:var(--dim);padding-top:2px}
-.strip b{font-family:var(--serif);font-size:19px;color:var(--champ);font-weight:400;letter-spacing:-.01em}
-.bar{margin-top:9px}
-.bar i{transition:width .5s cubic-bezier(.22,.61,.36,1)}
+@keyframes arming{0%,100%{opacity:1}50%{opacity:.5}}
 
 /* A/B picker */
-.pick button{padding:14px 14px 15px;transition:background .3s ease}
-.pick .n{font-family:var(--serif);font-size:17px;color:var(--tx);margin-top:5px}
-.pick .d{font-size:11.5px;color:var(--dimmer);margin-top:4px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pick button.on .n{color:var(--champ)}
-
-/* this week */
-.week{background:var(--card);border:1px solid var(--cardline);border-radius:14px;padding:13px 16px;margin-top:2px}
-.wkline{display:flex;gap:7px;margin-bottom:11px}
-.pip{flex:1;height:6px;border-radius:3px;background:var(--cardhair);
-  transition:background .35s ease, box-shadow .35s ease}
-.pip.on{background:var(--bronze);box-shadow:0 0 10px -2px var(--bronze)}
-.wknum{font-family:var(--serif);font-size:23px;color:var(--tx);letter-spacing:-.01em}
-.wknum b{color:var(--champ);font-weight:400;font-size:27px}
-.wksub{font-size:13px;color:var(--dim);margin-top:4px}
-
-/* calendar */
-.calcard{background:var(--card);border:1px solid var(--cardline);border-radius:14px;
-  padding:11px 12px 9px;margin-top:10px}
-.calhead{display:flex;align-items:center;justify-content:space-between;padding:0 2px 9px}
-.calmon{font-family:var(--serif);font-size:17px;color:var(--tx)}
-.calnav{width:30px;height:30px;color:var(--dim);font-size:20px;line-height:1;
-  border:1px solid var(--cardhair);border-radius:9px;background:transparent}
-.calnav:active{border-color:var(--bronze);color:var(--bronze)}
-.caldow,.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.caldow span{text-align:center;font-size:10px;letter-spacing:.1em;color:var(--dimmer);padding-bottom:5px}
-.cell{position:relative;height:27px;display:flex;align-items:center;justify-content:center;
-  border-radius:8px}
-.cell i{font-style:normal;font-size:12.5px;color:var(--dimmer)}
-.cell.future i{color:var(--cardline)}
-.cell.done{background:var(--bronze)}
-.cell.done .tick{width:15px;height:15px;fill:none;stroke:var(--bg);stroke-width:2.8;
-  stroke-linecap:round;stroke-linejoin:round}
-.cell.today{box-shadow:inset 0 0 0 1.5px var(--champ)}
-.cell.today i{color:var(--champ)}
-.calfoot{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:9px;
-  border-top:1px solid var(--cardhair);padding-top:9px}
-.calfoot span{font-size:13px;color:var(--dim)}
-.calfoot b{display:inline;font-family:var(--serif);font-size:20px;color:var(--champ);font-weight:400}
-.calfoot i{display:block;font-style:normal;font-size:11.5px;color:var(--dimmer);margin-top:2px}
-
-/* body */
-.bodyrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.bcard{background:var(--card);border:1px solid var(--cardline);border-radius:14px;
-  padding:11px 14px 9px;text-align:left}
-.blab{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--dimmer);font-weight:500}
-.bval{display:block;font-family:var(--serif);font-size:25px;color:var(--champ);margin-top:5px;letter-spacing:-.01em}
-.bval i{font-style:normal;font-size:12px;color:var(--dim);margin-left:2px}
-.bval.none{font-size:17px;color:var(--dim)}
-.bsub{display:block;font-size:11.5px;color:var(--dimmer);margin-top:3px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.photoline{display:block;width:100%;text-align:left;margin-top:10px;padding:10px 14px;
-  background:var(--card2);border:1px solid var(--cardhair);border-radius:12px;
-  font-size:13px;color:var(--dim)}
-.photoline b{color:var(--bronze);font-weight:500}
+.pick button{transition:background .3s ease;background:var(--bg);padding:15px 14px;text-align:left}
 
 /* strength */
-.strcard{background:var(--card);border:1px solid var(--cardline);border-radius:14px;
-  padding:11px 16px 9px;margin-top:10px}
-.strhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
-  padding-bottom:8px;border-bottom:1px solid var(--cardhair)}
-.strsum{font-size:12.5px;color:var(--bronze)}
-.strnone{font-size:13px;color:var(--dimmer);margin-top:8px}
-.strrow{display:flex;align-items:baseline;gap:10px;padding:6px 0}
-.strrow+.strrow{border-top:1px solid var(--cardhair)}
-.sn{flex:1;font-size:13.5px;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
 .sv{font-family:var(--serif);font-size:15px;color:var(--dim)}
 .sd{width:52px;text-align:right;font-size:12px;color:var(--bronze)}
 
-/* section divider */
-.secrule{margin:26px 0 2px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--dimmer);font-weight:500;border-top:1px solid var(--hair);padding-top:16px}
-
-/* weight strip */
-.wt{display:block;width:100%;padding:12px 14px;margin:12px 0;text-align:left;
-  background:var(--card);border:1px solid var(--cardline);border-radius:14px}
-.wtop{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.wt .lo{display:flex;align-items:baseline;gap:9px;min-width:0}
-.wt .kg{font-family:var(--serif);font-size:25px;color:var(--champ);letter-spacing:-.02em;white-space:nowrap}
-.wt .kg.none{font-size:15px;color:var(--dim);letter-spacing:0}
-.wt .dl{font-size:12.5px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wt .dl b{color:var(--bronze);font-weight:500}
-.wt .dl b.off{color:var(--champ)}
-.wt .go{flex:none;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--bronze);
-  border:1px solid var(--line);border-radius:8px;padding:6px 10px}
-.wt:active .go{border-color:var(--bronze)}
-.spark{display:block;width:100%;height:26px;margin-top:10px;overflow:visible;
-  clip-path:inset(0 100% 0 0);transition:clip-path .85s cubic-bezier(.22,.61,.36,1)}
-.spark.in{clip-path:inset(0 -2px 0 0)}
-.spark .tr{opacity:0;transition:opacity .45s .5s ease-out}
-.spark.in .tr{opacity:1}
-.spark .gl{opacity:0;transition:opacity .4s .3s ease-out}
-.spark.in .gl{opacity:1}
-.spark .ln{fill:none;stroke:var(--dim);stroke-width:1.1;vector-effect:non-scaling-stroke;
-  stroke-linejoin:round;stroke-linecap:round;opacity:.75}
-.spark .tr{stroke:var(--bronze);stroke-width:1.4;vector-effect:non-scaling-stroke;stroke-dasharray:3.5 3}
-.spark .ln{transition:none}
-.spark .gl{stroke:var(--cardline);stroke-width:1;vector-effect:non-scaling-stroke}
-
-/* milestone rail */
-.miles{position:relative;margin-top:10px;padding-left:22px}
-.miles::before{content:'';position:absolute;left:3px;top:7px;bottom:9px;width:1px;background:var(--hair)}
-.miles div{position:relative;display:flex;gap:10px;padding:3px 0;align-items:baseline}
-.miles div::before{content:'';position:absolute;left:-22px;top:10px;width:7px;height:7px;border-radius:50%;
-  background:var(--bg);border:1px solid var(--line)}
-.miles div.hit::before{background:var(--bronze);border-color:var(--bronze)}
-.miles div.now::before{background:var(--bg);border-color:var(--champ);box-shadow:0 0 0 3px rgba(233,207,232,.14)}
-.miles .mk{font-family:var(--mono);font-size:11.5px;color:var(--dimmer);min-width:24px}
-.miles .mt{color:var(--dim);flex:1;font-size:14px}
-.miles div.hit .mt{color:var(--tx)}
-.miles div.now .mt{color:var(--champ)}
-.miles div.now .mk{color:var(--champ)}
-.miles .md{font-family:var(--mono);font-size:11px;color:var(--dimmer)}
-
 /* train */
-.strip{display:flex;justify-content:space-between;align-items:baseline;padding:16px 0 12px;
-  border-bottom:1px solid var(--hair);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
-.strip b{font-family:var(--serif);font-size:19px;letter-spacing:0;text-transform:none;color:var(--champ);font-weight:400}
+
 .pick{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hair);margin:16px 0 4px;
   border-radius:14px;overflow:hidden}
-.pick button{background:var(--bg);padding:15px 14px;text-align:left}
+
 .pick button.on{background:var(--card);box-shadow:inset 0 0 0 1px var(--cardline)}
-.pick .k{font-weight:500;font-size:10.5px;letter-spacing:.12em;color:var(--dimmer);text-transform:uppercase}
-.pick .n{font-family:var(--serif);font-size:17px;margin-top:7px}
-.pick button.on .n{color:var(--champ)}
-.pick .d{font-size:12.5px;color:var(--dimmer);margin-top:3px}
-
-.target{background:var(--card2);border:1px solid var(--cardhair);border-radius:10px;
-  padding:13px 14px;margin:13px 0}
-.target .lab{font-weight:500;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dimmer)}
-.target .val{font-family:var(--serif);font-size:30px;margin-top:7px;letter-spacing:-.02em;color:var(--tx)}
-.target.up .val{color:var(--champ)}
-.target.up .lab{color:var(--bronze)}
-.target .why{font-size:13.5px;color:var(--dim);margin-top:8px}
-
-.setrow{display:grid;grid-template-columns:20px 1.35fr 1fr 38px;gap:9px;align-items:center;margin-bottom:8px;
-  transition:background .35s ease}
-.setno{font-family:var(--serif);font-size:15px;color:var(--dimmer)}
-.fld{position:relative}
-.fld input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--cardline);
-  color:var(--tx);padding:10px 28px 8px 2px;letter-spacing:.12em}
-.fld input::placeholder{color:var(--dimmer)}
-.fld input:focus{outline:none;border-bottom-color:var(--bronze)}
-.fld .u{position:absolute;right:2px;top:50%;transform:translateY(-50%);font-family:var(--mono);
-  font-size:11px;color:var(--dimmer);pointer-events:none}
-.done{height:36px;display:flex;align-items:center;justify-content:center;color:var(--dim);
-  font-size:15px;border:1px solid var(--cardline);border-radius:50%;width:36px}
-.done.on{color:var(--bg);background:var(--bronze);border-color:var(--bronze)}
-.setrow.flash{background:rgba(218,127,181,.10);border-radius:6px}
 
 /* Briefings open by animating their height, in step with the rest of the app. Only
    one is ever open; the others are shut without animation and the page is nudged by
@@ -998,7 +759,7 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 .btn.ghost{color:var(--dim);border-color:var(--hair)}
 .btn.iconbtn{display:flex;align-items:center;justify-content:center;gap:8px}
 .iconbtn svg{display:block;flex:none}
-#saveS,#exJson,#imBtn{border-color:var(--bronze);color:var(--champ)}
+#saveS,#imBtn{border-color:var(--bronze);color:var(--champ)}
 
 .upnext{font-family:var(--ui);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
   color:var(--bronze);border:1px solid var(--line);padding:3px 8px;margin-left:10px;vertical-align:3px}
@@ -1031,7 +792,7 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 .fab.rest .fv{color:var(--champ)}
 .fab.rest .fl{color:var(--bronze)}
 .fab.go .fn{color:rgba(14,11,14,.78)}
-.fab.go{background:var(--bronze);border-top-color:var(--bronze)}
+.fab.go{animation:pulse 1.6s ease-in-out infinite;background:var(--bronze);border-top-color:var(--bronze)}
 .fab.go .fl{color:rgba(14,11,14,.62)}
 .fab.go .fv{color:var(--bg)}
 
@@ -1055,7 +816,7 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
   overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
   border-top:1px solid var(--line);border-bottom:1px solid var(--line);
   padding:24px 22px 26px;
-  max-height:calc(74vh - var(--fabh,0px));overflow:auto}
+  max-height:calc(74vh - var(--fabh,0px));overflow:auto;animation:fuzzin .46s steps(1,end) both;will-change:transform,opacity}
 .sheet h3{font-size:21px}
 /* The debrief is the one sheet that has a lot to say, so it takes the whole screen
    and sizes itself down rather than making him scroll to reach the buttons. */
@@ -1075,10 +836,7 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
 .sheet.full .btn{padding:clamp(11px,1.8vh,16px);margin:0}
 .sheet.full .xfoot,.sheet.full .muted{margin:0}
 .sheet.full .muted{font-size:12.5px}
-/* Settings is a fixed panel: everything fits, nothing scrolls. Statistics is the
-   long one, and it gets its own scrolling sheet. */
-/* Settings sits to its content and never scrolls. Sized by content rather than a
-   fixed height, or a short screen clips whatever is last. */
+
 /* Settings takes the whole screen and still never scrolls: the content is short
    enough to fit, and the space left over is shared out between the sections. */
 .sheet.fit.full{top:0;bottom:0;height:100vh;height:100dvh;max-height:none;
@@ -1093,12 +851,7 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
 .sheet.fit.full.scroll .pgbody{flex:1;min-height:0;overflow:auto;
   -webkit-overflow-scrolling:touch;padding-top:14px;padding-bottom:10px}
 .pgbody .trio,.pgbody .duo{margin-top:14px}
-.ents{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.ent{display:flex;align-items:baseline;gap:7px;background:var(--card);
-  border:1px solid var(--cardline);border-radius:6px;padding:7px 9px;color:var(--dim)}
-.ent:active{border-color:var(--bronze)}
-.ent .ed{font-size:10.5px;color:var(--dimmer)}
-.ent .ev{font-size:12px;color:var(--champ);font-variant-numeric:tabular-nums}
+
 .hdel{margin-top:12px}
 .hex .pc{background:none;border:1px solid var(--cardhair);color:var(--dim)}
 .hex .pc:active{border-color:var(--bronze);color:var(--bronze)}
@@ -1123,7 +876,7 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
 .sheet.fit .pgcard{margin-bottom:9px;padding:13px 14px 11px;border-radius:14px}
 .sheet.fit .pgcard:last-child{margin-bottom:0}
 .sheet.fit .tiny{text-align:center;opacity:.8}
-.veil{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:65}
+
 /* Behind a panel: opaque, and above the banner, so a swap can never flash the
    screen underneath. Held and incoming panels both sit above it. */
 .veil.panel{background:var(--bg);z-index:69}
@@ -1171,8 +924,8 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
   72%{opacity:.8;background-position:0 -7px,11px 0}
   100%{opacity:.95;background-position:0 0,0 0}
 }
-.sheet{animation:fuzzin .46s steps(1,end) both;will-change:transform,opacity}
-.veil{animation:veilin .3s ease both}
+
+.veil{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:65;animation:veilin .3s ease both}
 .sheet.out{transform-origin:50% 50%;
   animation:fuzzout .34s steps(1,end) both}
 .veil.out{animation:veilout .26s ease both}
@@ -1216,24 +969,14 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
   .sheet,.veil,.sheet.out,.veil.out,.sheet.swapin:not(.out){animation:none}
   .sheet::before,.sheet.out::after{display:none}
 }
-.stamps{margin-top:16px;border-top:1px solid var(--hair)}
-.stamps div{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--hair);font-size:13px}
-.stamps span:first-child{color:var(--dim)}
-.stamps span:last-child{font-family:var(--mono);color:var(--tx)}
 
 textarea{width:100%;margin-top:12px;min-height:84px;background:transparent;border:1px solid var(--line);
   color:var(--tx);font-family:var(--mono);font-size:16px;padding:12px;resize:vertical;border-radius:0}
 textarea:focus{outline:none;border-color:var(--bronze)}
 textarea::placeholder{color:var(--dimmer)}
 
-nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:rgba(14,11,14,.96);
-  backdrop-filter:blur(20px);border-top:1px solid var(--hair);
-  padding-bottom:env(safe-area-inset-bottom);z-index:50}
-nav button{flex:1;font-weight:500;padding:19px 4px 20px;color:var(--dimmer);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-nav button.on{color:var(--champ)}
-nav button.on::after{content:'';display:block;width:14px;height:1px;background:var(--bronze);margin:7px auto -7px}
 .hide{display:none}
-.toast{position:fixed;left:50%;transform:translateX(-50%);z-index:99;
+.toast{position:fixed;left:50%;z-index:99;
   bottom:calc(112px + env(safe-area-inset-bottom));
   background:var(--bronze);color:var(--bg);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
   padding:12px 22px;border-radius:999px;opacity:0;pointer-events:none;
@@ -1246,42 +989,22 @@ nav button.on::after{content:'';display:block;width:14px;height:1px;background:v
   body{font-size:15px;line-height:1.55}
   header{padding:calc(26px + env(safe-area-inset-top)) 22px 18px}
   header h1{font-size:25px}
-  header .sub{font-size:12px}
+  header .sub,.splash .sub{font-size:12px}
   .eyebrow{font-size:10px}
   .cog,.musbtn,.mfloat{top:calc(18px + env(safe-area-inset-top))}
   .muted{font-size:13px;line-height:1.55}
-  .pwrap{padding:12px 0 0}
-  .pnum{font-size:58px}
-  .pof{font-size:11.5px}
-  .pmile{font-size:14px;margin-top:11px}
-  .bar{margin-top:20px}
-  .pstats{margin-top:20px;padding-bottom:18px}
-  .pstats .k{font-size:11px}
-  .pstats .v{font-size:25px}
-  .wt{padding:16px 16px;margin:15px 0}
-  .wt .kg{font-size:31px}
-  .wt .dl{font-size:13.5px}
-  .wt .go{font-size:11px;padding:8px 13px}
-  .miles{margin-top:18px}
-  .miles div{padding:10px 0}
-  .miles div::before{top:16px}
-  .miles .mt{font-size:16px}
-  .miles .mk{font-size:13px}
-  .miles .md{font-size:12px}
-  .pfoot{margin-top:16px;font-size:13px}
+
   .card h3{font-size:13px}
-  .target .val{font-size:18px}
-  .target .lab{font-size:9.5px}
+
   .bsum{font-size:10px;padding:6px 0}
   .brief p{font-size:13px;line-height:1.6}
-  .setrow{margin-bottom:8px;padding-bottom:7px}
-  .fld input{font-size:16px;padding:11px 26px 9px 2px}
+
   .btn{padding:13px;font-size:10.5px}
   .fab{padding:12px 18px calc(12px + env(safe-area-inset-bottom))}
+  .fab .xbar{left:18px;right:18px}
   .fab .fl{font-size:9.5px}
   .fab .fn{font-size:12px}
   .fab .fv{font-size:24px}
-  nav button{font-size:11.5px;padding:20px 4px 21px}
 }
 @media(prefers-reduced-motion:reduce){
   *{transition:none!important;animation-duration:.001s!important;animation-delay:0s!important}
@@ -1298,14 +1021,14 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
 .pgrow .pk{color:var(--dim)}
 .pgrow .pv{color:var(--champ);font-variant-numeric:tabular-nums;text-align:right}
 .pgrow.warn .pv{color:var(--alert)}
-.pgrow.dim .pv{color:var(--dim)}
+
 /* The weigh-in chart: 14 days in view (waist keeps full history), swiped or
    dragged through, any reading tappable or selectable via the slider. */
 .chwrap{margin-top:10px}
 .chtop,.chsel{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
   font-size:11px;letter-spacing:.08em;color:var(--dimmer);font-variant-numeric:tabular-nums}
 .chtop{margin-bottom:6px}
-.chsel{margin-top:6px}
+
 .chsel b,.chtop b{color:var(--champ);font-weight:400}
 .chbox{position:relative;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none;
   padding-left:2px}
@@ -1322,7 +1045,7 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
   font-variant-numeric:tabular-nums;background:var(--bg);padding-right:4px}
 .chy.avg{color:var(--dim)}
 .chart .rail{stroke:var(--cardline);stroke-width:1}
-.chart .pick{stroke:var(--bronze);stroke-width:1;stroke-dasharray:3 3;opacity:.8}
+.chart .pick{opacity:.8}
 .chart .ring{fill:none;stroke:var(--bronze);stroke-width:1.2;opacity:.9}
 .chwrap{padding-bottom:4px}
 .chsel{margin-top:16px}
@@ -1337,24 +1060,24 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
    rule still applies and this only repaints them. No markup, ids or script
    behaviour is touched, so the log itself reads exactly as it did.
    ========================================================================== */
-:root{
-  --pb:#00ff66;                     /* the phosphor */
-  --pb-glow:rgba(0,255,102,.6);
+:root{--bg:#060A08;
+  --serif:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;
+  --ui:"Avenir Next",-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;--pb:#00ff66;                     /* the phosphor */
   --pb-dim:#0a7d38;
   --pb-amber:#ffb000;               /* one accent, kept for warnings */
 
-  --bg:#020a05; --surf:#05150b; --surf2:#082010;
+  --bg:#020a05; --surf:#05150b;
   --line:#177a41; --hair:#0d3f22;
   --card:#04120a; --card2:#020c06; --cardline:#156b3a; --cardhair:#0d3f22;
   --tx:#5cff9a; --dim:#2fd274; --dimmer:#1c9b52;
   --bronze:var(--pb); --champ:#b9ffd4;
-  --alert:var(--pb-amber);
-}
+  --alert:var(--pb-amber)}
 
 /* ---- text glow: everything on the glass is lit, not printed ---- */
 body{text-shadow:0 0 4px rgba(0,255,102,.3)}
-h1,h2,h3,.gletter,.freqnum,.pv,.tv,.sd{text-shadow:0 0 6px rgba(0,255,102,.35)}
-.tiny,.muted,.dim,.pk,.hd{text-shadow:0 0 3px rgba(0,255,102,.2)}
+h1,h3,.gletter,.pv,.tv,.sd{text-shadow:0 0 6px rgba(0,255,102,.35)}
+.tiny,.muted,.pk,.hd{text-shadow:0 0 3px rgba(0,255,102,.2)}
 [class*="alert"],.tup,.rb,.capwarn,.warn{text-shadow:0 0 5px rgba(255,176,0,.3)}
 
 /* ---- the tube ----
@@ -1406,14 +1129,14 @@ h1,h2,h3,.gletter,.freqnum,.pv,.tv,.sd{text-shadow:0 0 6px rgba(0,255,102,.35)}
    brightest thing on the screen by a distance. */
 @media (hover:hover) and (pointer:fine){
   .setbtn:hover,.srow:hover,.btn:hover,.bsum:hover,.hhead:hover,.hmhead:hover,
-  .trk .tname:hover,.pgadd:hover,.pgview:hover,.tkrow:hover,.ent:hover,.pc:hover{
+  .trk .tname:hover,.pgadd:hover,.pgview:hover,.tkrow:hover,.pc:hover{
     background:rgba(0,255,102,.13);
     color:var(--champ);
     border-color:var(--pb-dim,#0a7d38)}
   .setbtn.on:hover{background:rgba(255,176,0,.12);border-color:var(--pb-amber)}
 }
 .setbtn:active,.srow:active,.btn:active,.bsum:active,.hhead:active,.hmhead:active,
-.trk .tname:active,.pgadd:active,.pgview:active,.tkrow:active,.ent:active{
+.trk .tname:active,.pgadd:active,.pgview:active,.tkrow:active{
   background:rgba(0,255,102,.16);
   color:var(--champ);
   border-color:var(--pb-dim,#0a7d38)}
@@ -1448,10 +1171,10 @@ html.booted .fab{animation:pbwarm .55s .12s ease-out both}
       </g></svg>
     </div>
     <div class="eyebrow">Training log</div>
-    <div class="sub spdays" id="spDays"></div>
+    <div class="sub" id="spDays"></div>
   </div>
   <div class="spline" id="spLine"></div>
-  <button class="btn spgo" id="spGo" type="button"></button>
+  <button class="startbtn spgo" id="spGo" type="button"></button>
 </div>
 <div class="roll" aria-hidden="true"><canvas id="rollCv" width="128" height="30"></canvas></div>
 
@@ -1471,7 +1194,7 @@ html.booted .fab{animation:pbwarm .55s .12s ease-out both}
     <span class="seg" id="stripSeg"></span>
     <span class="fcap"><span class="segcap" id="stripSets"></span><span class="xcap" id="xpCap"></span></span>
   </span>
-  <span class="xbar" id="xpBar"><i id="xpFill"></i><b class="xspark" id="xpSpark"></b></span>
+  <span class="xbar"><i id="xpFill"></i><b class="xspark" id="xpSpark"></b></span>
 </button>
 <div id="sheetWrap"></div>
 <!-- The displacement field the panel contents are pushed through while a page
@@ -1503,14 +1226,8 @@ html.booted .fab{animation:pbwarm .55s .12s ease-out both}
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
 let DB={sess:[],wt:[]}, mem={}, STORE='memory';
-const APP_VERSION='2026.09.23.58';
+const APP_VERSION='2026.09.23.63';
 const HOSTED = location.protocol==='https:';
-const STORE_LABEL={
-  local: HOSTED
-    ? 'Saved to this site on this device. It survives app updates and closing the app. Clearing Safari data for this site wipes it.'
-    : 'Saved in this browser only, and tied to how this file was opened. Copy the backup often.',
-  memory:'Not saving — this browser is blocking storage. Anything you log is lost on reload.'
-};
 function load(){
   try{ localStorage.setItem(KEY+'_t','1'); localStorage.removeItem(KEY+'_t'); STORE='local'; }catch(e){ STORE='memory'; }
   try{
@@ -1923,11 +1640,6 @@ function startRest(id,ix){
   sfx('rest');
   paintFab();
 }
-function nextLabel(){
-  const k=nextKey(); if(!k) return '';
-  const p=k.lastIndexOf('-'), id=k.slice(0,p);
-  return EX[id].n+' · set '+(+k.slice(p+1)+1);
-}
 /* Safari's toolbar slides in and out, so the visible height is not innerHeight. */
 function viewH(){ return (window.visualViewport && window.visualViewport.height) || window.innerHeight; }
 function fabH(){ const f=document.getElementById('fab'); return (f && !f.classList.contains('hide')) ? f.offsetHeight : 0; }
@@ -2010,7 +1722,7 @@ function openSheet(){
     rTrain(); updateNext(false);
     resetBlocks();                      // collapsed, with no block remembered
     paintFab();
-    window.scrollTo(0,0);
+    scrTo(0);
     panelHit(document.getElementById('v-train'));
   };
 }
@@ -2224,9 +1936,9 @@ let MUSBACK=null;
    list lands, so only the rows change, never the panel. */
 function musTrks(list,loading){
   if(loading && !list.length)
-    return '<div class="muted" style="padding:14px 0">Reading tracks\u2026</div>';
+    return '<div class="muted">Reading tracks\u2026</div>';
   if(!list.length)
-    return '<div class="muted" style="padding:14px 0">No tracks yet. Add one from your phone, or commit files to music/ with an index.json beside them.</div>';
+    return '<div class="muted">No tracks yet. Add one from your phone, or commit files to music/ with an index.json beside them.</div>';
   return list.map((t,i)=>'<div class="trk" data-i="'+i+'">'+
     '<button class="tname" data-play="'+i+'">'+esc(t.name)+'</button>'+
     '<span class="tsrc">'+(t.repo?'repo':'phone')+'</span>'+
@@ -2264,7 +1976,7 @@ function openMusic(from){
     '</div></div>'+
     '<div class="card pgcard">'+
     '<div class="trks" id="plTrks">'+musTrks(PL.list,loading)+'</div>'+
-    '<input type="file" id="plFile" style="display:none">'+
+    '<input type="file" id="plFile" class="hide">'+
     '<div class="duo">'+
       '<button class="btn" id="plAdd">[ ADD FROM PHONE ]</button>'+
       '<button class="btn ghost" id="sfxBtn">[ '+(DB.sfx===false?'SFX OFF':'SFX ON')+' ]</button>'+
@@ -2303,7 +2015,7 @@ function openMusic(from){
     paintMusic();
   }).catch(()=>{
     const box=document.getElementById('plTrks');
-    if(box && !PL.list.length) box.innerHTML='<div class="muted" style="padding:14px 0">Could not read the track list.</div>';
+    if(box && !PL.list.length) box.innerHTML='<div class="muted">Could not read the track list.</div>';
   });
 }
 /* ---------- GitHub sync ----------
@@ -2559,7 +2271,7 @@ function openRestore(){
     '<div class="veil" id="veil"></div><div class="sheet"><h3>Empty log</h3>'+
     '<div class="muted" style="margin-top:6px">Nothing is saved in this copy of the app. '+
       'If this is a new file, bring your last backup across.</div>'+
-    '<input type="file" id="rsFile" style="display:none">'+
+    '<input type="file" id="rsFile" class="hide">'+
     '<textarea id="rsText" placeholder="Paste your backup here" '+
       'style="min-height:84px;margin-top:14px'+(canClip?';display:none':'')+'"></textarea>'+
     '<div class="duo">'+
@@ -2599,10 +2311,8 @@ function openRestore(){
 }
 /* Freeze the page behind any sheet. iOS ignores overflow:hidden on the body,
    so the page is pinned with position:fixed and the scroll position restored after. */
-let lockY=0;
 function lockScroll(){
   if(document.body.classList.contains('locked')) return;
-  lockY=window.scrollY||window.pageYOffset||0;
   document.documentElement.classList.add('locked');
   document.body.classList.add('locked');
 }
@@ -3346,21 +3056,24 @@ function updateNext(scroll){
    the card heading with it when the whole card fits. */
 /* Hand-rolled so the pace is ours: the browser's own smooth scroll is fast and
    varies by device. Eases in and out, and any touch cancels it. */
+/* body is the scroller (see the html/body rule), so every read and write goes here */
+const scrY=()=>document.body.scrollTop;
+const scrTo=y=>{ document.body.scrollTop=y; };
 let SCROLLA=0;
 function glideTo(y,ms){
-  const max=Math.max(0,document.documentElement.scrollHeight-viewH());
+  const max=Math.max(0,document.body.scrollHeight-viewH());
   y=Math.min(max,Math.max(0,y));
-  const from=window.pageYOffset, d=y-from;
+  const from=scrY(), d=y-from;
   if(Math.abs(d)<2) return;
   const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce){ window.scrollTo(0,y); return; }
+  if(reduce){ scrTo(y); return; }
   /* Date.now throughout: the timestamp rAF hands back has a different origin. */
   const id=++SCROLLA, t0=Date.now(), dur=ms||700;
   const ease=t=>t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
   const step=()=>{
     if(id!==SCROLLA) return;
     const p=Math.min(1,(Date.now()-t0)/dur);
-    window.scrollTo(0, from+d*ease(p));
+    scrTo(from+d*ease(p));
     if(p<1) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
@@ -3372,7 +3085,7 @@ function scrollToNext(){
   const row=document.getElementById('sb-'+k); if(!row) return;
   syncPad();
   /* Centre the next set in the space above the bar, wherever it is. */
-  const fh=fabH(), top=window.pageYOffset, vh=viewH(), band=vh-fh;
+  const fh=fabH(), top=scrY(), vh=viewH(), band=vh-fh;
   const rowTop=row.getBoundingClientRect().top+top;
   const want=rowTop-(band-row.offsetHeight)/2;
   if(Math.abs(want-top)>24) glideTo(want,760);
@@ -3382,8 +3095,8 @@ function scrollToNext(){
   SCROLLFIX=setTimeout(()=>{
     if(nextKey()!==k || document.querySelector('.sheet')) return;
     const r=row.getBoundingClientRect(), floor=viewH()-fabH()-12;
-    if(r.bottom>floor+2) glideTo(window.pageYOffset+(r.bottom-floor+8),320);
-    else if(r.top<6) glideTo(window.pageYOffset+(r.top-16),320);
+    if(r.bottom>floor+2) glideTo(scrY()+(r.bottom-floor+8),320);
+    else if(r.top<6) glideTo(scrY()+(r.top-16),320);
   },900);
 }
 
@@ -4307,7 +4020,7 @@ function openImport(){
   const canClip = !!(navigator.clipboard && navigator.clipboard.readText);
   let h='<div class="veil" id="veil"></div><div class="sheet"><h3>Import</h3>'+
     '<div class="muted" style="margin-top:6px">Replaces everything currently saved.</div>'+
-    '<input type="file" id="imFile" style="display:none">'+
+    '<input type="file" id="imFile" class="hide">'+
     '<textarea id="imText" placeholder="Paste a backup here" '+
       'style="min-height:110px;margin-top:14px'+(canClip?';display:none':'')+'"></textarea>'+
     '<div class="duo">'+
@@ -4668,7 +4381,7 @@ function openBrief(id){
   });
   /* anything above us just collapsed, so the page has shifted under our finger */
   const moved=brief.getBoundingClientRect().top-mark;
-  if(Math.abs(moved)>1) window.scrollTo(0,Math.max(0,window.pageYOffset+moved));
+  if(Math.abs(moved)>1) scrTo(Math.max(0,scrY()+moved));
   if(wasOpen){
     body.classList.add('anim');
     body.style.height=body.scrollHeight+'px';
@@ -4707,7 +4420,7 @@ function zapLoop(){
     zapLoop();
   }, 4500+Math.random()*7000);
 }
-function go(){ rTrain(); paintFab(); syncMusic(); window.scrollTo(0,0); }
+function go(){ rTrain(); paintFab(); syncMusic(); scrTo(0); }
 document.getElementById('fab').onclick=fabTap;
 /* Anything you can press should answer. Handlers that play their own cue run first
    and mark the time, so this only fills in the gaps — and scrolling never triggers
