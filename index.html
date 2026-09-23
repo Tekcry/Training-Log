@@ -17,10 +17,7 @@ html,body{margin:0;padding:0}
    (the installed web app, embedded viewers) treat a tall document as the viewport,
    which drags anything position:fixed down to the end of the page. With nothing
    taller than the screen, the bottom bar has only one place it can be. */
-html{height:calc(100% + var(--vgap,0px));overflow:hidden;--vb:calc(-1 * var(--vgap,0px))}
-/* --vgap is 0 everywhere except the installed iOS app, where the viewport is reported one
-   status-bar-height short (see fitScreen). Every layer pinned to the bottom extends by it
-   (--vb is the same amount as a negative offset), so the glass is covered edge to edge. */
+html{height:100%;overflow:hidden}
 body{height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 body{
   background:var(--bg);color:var(--tx);font-family:var(--ui);
@@ -426,7 +423,7 @@ header .sub,.splash .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
    the line, and the way in. Nothing else. It sits under every CRT layer (glow 198,
    lines 199, overlays 200-201) so the glass is the same as the dashboard's, and
    borrows the dashboard's own header and button styles. */
-.splash{position:fixed;inset:0;bottom:var(--vb);z-index:197;background:var(--bg);
+.splash{position:fixed;inset:0;z-index:197;background:var(--bg);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
   padding:calc(22px + env(safe-area-inset-top)) 30px calc(22px + env(safe-area-inset-bottom));
   text-align:center}
@@ -471,10 +468,10 @@ html.booting header,html.booting #v-train,html.booting .fab,html.booting .roll{v
    faint phosphor cast top and bottom, one soft band rolling down the glass and a
    flicker you would only notice if you looked for it. All of it is inert — it sits
    above every layer and passes taps straight through. */
-body::before{content:'';position:fixed;inset:0;bottom:var(--vb);pointer-events:none;z-index:200;
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:200;
   background:repeating-linear-gradient(180deg,rgba(0,0,0,.26) 0 1px,transparent 1px 3px);
   mix-blend-mode:multiply;opacity:.62}
-body::after{content:'';position:fixed;inset:0;bottom:var(--vb);pointer-events:none;z-index:201;
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:201;
   background:
     radial-gradient(130% 100% at 50% 50%,transparent 66%,rgba(0,0,0,.14) 90%,rgba(0,0,0,.26) 100%),
     linear-gradient(180deg,rgba(95,224,138,.02) 0,transparent 7%,transparent 93%,rgba(95,224,138,.016) 100%);
@@ -543,7 +540,7 @@ html.glitching .fab{animation:uifuzz var(--gdur,.46s) steps(1,end) both}
 html.glitching #v-train{animation-delay:.02s}
 html.glitching .fab{animation-delay:.04s}
 /* the same static wash the sheets get, over the whole screen */
-.uistatic{position:fixed;inset:0;bottom:var(--vb);z-index:204;pointer-events:none;mix-blend-mode:screen;
+.uistatic{position:fixed;inset:0;z-index:204;pointer-events:none;mix-blend-mode:screen;
   background:
     repeating-linear-gradient(0deg,rgba(95,224,138,.13) 0 1px,transparent 1px 3px),
     repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 2px,transparent 2px 6px);
@@ -766,7 +763,7 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 /* timer. Two rows: the status line, then the objectives strip pinned along the
    very bottom of the bar. The strip lives here and nowhere else, so the count is
    always on screen instead of scrolling away at the top of the page. */
-.fab{position:fixed;left:0;right:0;bottom:var(--vb);z-index:68;width:100%;
+.fab{position:fixed;left:0;right:0;bottom:0;z-index:68;width:100%;
   display:flex;flex-direction:column;align-items:stretch;gap:0;text-align:left;
   background:var(--card);border:none;border-top:1px solid var(--cardline);border-radius:0;
   padding:13px 22px calc(10px + env(safe-area-inset-bottom));
@@ -811,7 +808,7 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
   -webkit-touch-callout:default;touch-action:manipulation}
 /* Sheets sit on top of the banner, not over it: the clock keeps running and stays
    readable while a set is being entered. --fabh is the measured bar height. */
-.sheet{position:fixed;left:0;right:0;bottom:calc(var(--fabh,0px) + var(--vb));z-index:70;background:var(--bg);
+.sheet{position:fixed;left:0;right:0;bottom:var(--fabh,0px);z-index:70;background:var(--bg);
   overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
   border-top:1px solid var(--line);border-bottom:1px solid var(--line);
   padding:24px 22px 26px;
@@ -819,7 +816,7 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
 .sheet h3{font-size:21px}
 /* The debrief is the one sheet that has a lot to say, so it takes the whole screen
    and sizes itself down rather than making him scroll to reach the buttons. */
-.sheet.full{top:0;bottom:var(--vb);height:calc(100vh + var(--vgap,0px));height:calc(100dvh + var(--vgap,0px));max-height:none;border-bottom:none;
+.sheet.full{top:0;bottom:0;height:100vh;height:100dvh;max-height:none;border-bottom:none;
   display:flex;flex-direction:column;
   justify-content:space-between;gap:8px;overflow:hidden;
   padding:calc(18px + env(safe-area-inset-top)) 22px calc(18px + env(safe-area-inset-bottom))}
@@ -839,7 +836,7 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
 
 /* Settings takes the whole screen and still never scrolls: the content is short
    enough to fit, and the space left over is shared out between the sections. */
-.sheet.fit.full{height:calc(100vh + var(--vgap,0px));height:calc(100dvh + var(--vgap,0px));max-height:none;
+.sheet.fit.full{height:100vh;height:100dvh;max-height:none;
   justify-content:flex-start;gap:14px;overflow:hidden;
   padding:calc(20px + env(safe-area-inset-top)) 22px calc(20px + env(safe-area-inset-bottom))}
 .sheet.fit.full>.tiny{margin-top:auto}
@@ -860,8 +857,8 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
 .hex .pc{background:none;border:1px solid var(--cardhair);color:var(--dim)}
 .hex .pc:active{border-color:var(--bronze);color:var(--bronze)}
 .sheet.fit{display:flex;flex-direction:column;gap:10px;
-  max-height:calc(100vh + var(--vgap,0px) - var(--fabh,0px) - 14px);
-  max-height:calc(100dvh + var(--vgap,0px) - var(--fabh,0px) - 14px);
+  max-height:calc(100vh - var(--fabh,0px) - 14px);
+  max-height:calc(100dvh - var(--fabh,0px) - 14px);
   height:auto;overflow:hidden}
 .sheet.fit>*{margin:0}
 /* The title only — a bare h3 rule in here would centre the section headings too. */
@@ -929,7 +926,7 @@ button,.setbtn,.bsum,.srow,.card h3,.tgt,.prev,.mus,.chead{
   100%{opacity:.95;background-position:0 0,0 0}
 }
 
-.veil{position:fixed;inset:0;bottom:var(--vb);background:rgba(0,0,0,.8);z-index:65;animation:veilin .3s ease both}
+.veil{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:65;animation:veilin .3s ease both}
 .sheet.out{transform-origin:50% 50%;
   animation:fuzzout .34s steps(1,end) both}
 .veil.out{animation:veilout .26s ease both}
@@ -981,7 +978,7 @@ textarea::placeholder{color:var(--dimmer)}
 
 .hide{display:none}
 .toast{position:fixed;left:50%;z-index:99;
-  bottom:calc(112px + env(safe-area-inset-bottom) + var(--vb));
+  bottom:calc(112px + env(safe-area-inset-bottom));
   background:var(--bronze);color:var(--bg);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
   padding:12px 22px;border-radius:999px;opacity:0;pointer-events:none;
   transform:translateX(-50%) translateY(10px);
@@ -1090,7 +1087,7 @@ h1,h3,.gletter,.pv,.tv,.sd{text-shadow:0 0 6px rgba(0,255,102,.35)}
    quite come up. Six offset radials at different sizes and strengths give that
    instead of one symmetrical bloom, and the whole field drifts a little over a
    couple of minutes so the unevenness never settles into a fixed pattern. */
-.crt-glow{position:fixed;inset:-8%;bottom:calc(-8% + var(--vb));pointer-events:none;z-index:198;
+.crt-glow{position:fixed;inset:-8%;pointer-events:none;z-index:198;
   background:
     radial-gradient(58% 42% at 46% 34%,rgba(0,255,102,.055) 0,rgba(0,255,102,.02) 55%,transparent 78%),
     radial-gradient(44% 30% at 74% 62%,rgba(0,255,102,.032) 0,transparent 72%),
@@ -1111,7 +1108,7 @@ h1,h3,.gletter,.pv,.tv,.sd{text-shadow:0 0 6px rgba(0,255,102,.35)}
 }
 
 /* the scanlines themselves, over everything, passing taps through */
-.crt-lines{position:fixed;inset:0;bottom:var(--vb);pointer-events:none;z-index:199;
+.crt-lines{position:fixed;inset:0;pointer-events:none;z-index:199;
   background:repeating-linear-gradient(180deg,
     rgba(0,0,0,.17) 0 1px, rgba(0,0,0,.05) 1px 2px, transparent 2px 3px);
   animation:crtrefresh 6.2s steps(1,end) infinite}
@@ -1230,7 +1227,7 @@ html.booted .fab{animation:pbwarm .55s .12s ease-out both}
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
 let DB={sess:[],wt:[]}, mem={}, STORE='memory';
-const APP_VERSION='2026.09.23.68';
+const APP_VERSION='2026.09.23.69';
 const HOSTED = location.protocol==='https:';
 function load(){
   try{ localStorage.setItem(KEY+'_t','1'); localStorage.removeItem(KEY+'_t'); STORE='local'; }catch(e){ STORE='memory'; }
@@ -1649,27 +1646,7 @@ function startRest(id,ix){
   paintFab();
 }
 /* Safari's toolbar slides in and out, so the visible height is not innerHeight. */
-function viewH(){ return ((window.visualViewport && window.visualViewport.height) || window.innerHeight) + VGAP; }
-/* The installed iOS app (translucent status bar) draws from the very top of the screen
-   but sizes the viewport one status-bar-height short, so anything pinned to its bottom
-   stops short of the glass. Measure the shortfall against the physical screen and hand
-   it to the stylesheet as --vgap. Browsers and desktop always measure 0. */
-let VGAP=0;
-function fitScreen(){
-  let gap=0;
-  if(navigator.standalone || matchMedia('(display-mode: standalone)').matches){
-    const probe=document.createElement('div');
-    probe.style.cssText='position:fixed;top:0;bottom:0;visibility:hidden;pointer-events:none';
-    document.body.appendChild(probe);
-    const vp=probe.offsetHeight; probe.remove();
-    const long=Math.max(screen.width,screen.height), short=Math.min(screen.width,screen.height);
-    const g=Math.round((innerHeight>=innerWidth ? long : short)-vp);
-    if(g>0 && g<=100) gap=g;
-  }
-  if(gap!==VGAP){ VGAP=gap; document.documentElement.style.setProperty('--vgap',gap+'px'); }
-}
-fitScreen();
-window.addEventListener('resize',fitScreen);
+function viewH(){ return (window.visualViewport && window.visualViewport.height) || window.innerHeight; }
 function fabH(){ const f=document.getElementById('fab'); return (f && !f.classList.contains('hide')) ? f.offsetHeight : 0; }
 /* The page must be able to scroll far enough for the LAST set to clear the bar.
    A hard-coded reserve cannot know how tall the bar renders on a given phone, so
