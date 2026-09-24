@@ -19,9 +19,10 @@ html,body{margin:0;padding:0}
    taller than the screen, the bottom bar has only one place it can be. */
 html{height:100%;overflow:hidden}
 /* The installed iOS app draws from the very top of the glass but sizes its viewport one
-   status-bar height short, leaving a strip under the bar. There 100vh is the whole
-   screen, and a page that tall takes the fixed layers (bar, sheets, glass) down with
-   it. Browsers keep 100%: their toolbars make 100vh taller than what is visible. */
+   status-bar height short, leaving a strip under the bar (measured on a 16 Pro Max:
+   894 of 956). There 100vh is the whole screen, and a page that tall takes the fixed
+   layers (bar, sheets, glass) down with it: viewport, bar and glass all read 956.
+   Browsers keep 100%: their toolbars make 100vh taller than what is visible. */
 html.standalone{height:100vh}
 body{height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
 body{
@@ -1232,10 +1233,10 @@ html.booted .fab{animation:pbwarm .55s .12s ease-out both}
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
 let DB={sess:[],wt:[]}, mem={}, STORE='memory';
-const APP_VERSION='2026.09.23.74';
+const APP_VERSION='2026.09.23.78';
 const HOSTED = location.protocol==='https:';
-const STANDALONE = !!navigator.standalone || matchMedia('(display-mode: standalone)').matches;
-if(STANDALONE) document.documentElement.classList.add('standalone');
+if(navigator.standalone || matchMedia('(display-mode: standalone)').matches)
+  document.documentElement.classList.add('standalone');    // see html.standalone
 function load(){
   try{ localStorage.setItem(KEY+'_t','1'); localStorage.removeItem(KEY+'_t'); STORE='local'; }catch(e){ STORE='memory'; }
   try{
@@ -1652,13 +1653,8 @@ function startRest(id,ix){
   sfx('rest');
   paintFab();
 }
-/* Safari's toolbar slides in and out, so the visible height is not innerHeight. The
-   installed app has no toolbar, and its page is sized to the whole screen (see
-   html.standalone), past the viewport it reports, so there the page is the measure. */
-function viewH(){
-  if(STANDALONE) return document.body.clientHeight;
-  return (window.visualViewport && window.visualViewport.height) || window.innerHeight;
-}
+/* Safari's toolbar slides in and out, so the visible height is not innerHeight. */
+function viewH(){ return (window.visualViewport && window.visualViewport.height) || window.innerHeight; }
 function fabH(){ const f=document.getElementById('fab'); return (f && !f.classList.contains('hide')) ? f.offsetHeight : 0; }
 /* The page must be able to scroll far enough for the LAST set to clear the bar.
    A hard-coded reserve cannot know how tall the bar renders on a given phone, so
@@ -2248,16 +2244,15 @@ function cleanDB(d){
   out.bk=out.sess.length;
   return out;
 }
-/* mark: whether this copy counts as a backup. Everything but the screen readout is one. */
-function copyBox(t,mark=true){
+function copyBox(t){
   if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(t.value).then(()=>{ if(mark) markBacked(); toast('COPIED'); })
-      .catch(()=>{ if(legacyCopy(t,mark)) toast('COPIED'); else toast('SELECT AND COPY'); });
+    navigator.clipboard.writeText(t.value).then(()=>{ markBacked(); toast('COPIED'); })
+      .catch(()=>{ if(legacyCopy(t)) toast('COPIED'); else toast('SELECT AND COPY'); });
     return true;
   }
-  return legacyCopy(t,mark);
+  return legacyCopy(t);
 }
-function legacyCopy(t,mark=true){
+function legacyCopy(t){
   const ro=t.readOnly;
   t.readOnly=false;                       // iOS will not select a readonly field
   const r=document.createRange(); r.selectNodeContents(t);
@@ -2266,7 +2261,7 @@ function legacyCopy(t,mark=true){
   let ok=false;
   try{ ok=document.execCommand('copy'); }catch(e){}
   t.readOnly=ro;
-  if(ok && mark) markBacked();
+  if(ok) markBacked();
   return ok;
 }
 function bkBehind(){ return Math.max(0, DB.sess.length-(DB.bk||0)); }
@@ -2902,10 +2897,13 @@ function nextKey(){
   }) || null;
 }
 let saving=false;
+/* From the moment a session is saved until the dashboard has moved on behind the
+   debrief: the finished session is still on screen but must not be touched. */
+let closing=false;
 /* Every set logged means the workout is over — bank it without another tap.
    The Save button stays for the nights you stop early; a short session still counts. */
 function autoSaveIfDone(){
-  if(saving || pick===null || !DB.sess) return;
+  if(saving || closing || pick===null || !DB.sess) return;
   if(nextKey()) return;                       // still sets outstanding
   let any=false;
   for(const id in draft) if(draft[id].some(x=>+x.reps>0)) any=true;
@@ -2935,7 +2933,7 @@ function updateStrip(){
    it snaps upward. Measure the card before and after the class goes on and glide
    between the two heights, so the page settles instead of jumping. Returns how
    long that will take, so whatever runs next can wait for it. */
-const CARDFOLD=420;
+const CARDFOLD=700;
 function foldCard(card,done){
   if(!card) return 0;
   const was=card.classList.contains('cdone');
@@ -3053,9 +3051,11 @@ function updateNext(scroll){
   if(card) card.classList.add('up');
   /* The other lifts in the chain at this same round are what comes next after this
      set — mark them so the round reads as one thing on the screen. */
+  /* The frame in focus is lit at full strength, a lone lift's as much as a chain's —
+     otherwise the session dimming holds it at the level of the blocks waiting. */
   const g=pairOf(kid);
+  const frame=document.getElementById('ch-'+(g ? g[0] : kid)); if(frame) frame.classList.add('live');
   if(g && g.length>1){
-    const frame=document.getElementById('ch-'+g[0]); if(frame) frame.classList.add('live');
     g.forEach(x=>{
       if(x===kid || kix>=setsFor(x)) return;
       const cell=draft[x] && draft[x][kix];
@@ -3085,6 +3085,8 @@ function updateNext(scroll){
 const scrY=()=>document.body.scrollTop;
 const scrTo=y=>{ document.body.scrollTop=y; };
 let SCROLLA=0;
+/* The glide to the next set, and the check that follows it once it has landed. */
+const SCROLLGLIDE=1150;
 function glideTo(y,ms){
   const max=Math.max(0,document.body.scrollHeight-viewH());
   y=Math.min(max,Math.max(0,y));
@@ -3113,16 +3115,16 @@ function scrollToNext(){
   const fh=fabH(), top=scrY(), vh=viewH(), band=vh-fh;
   const rowTop=row.getBoundingClientRect().top+top;
   const want=rowTop-(band-row.offsetHeight)/2;
-  if(Math.abs(want-top)>24) glideTo(want,760);
+  if(Math.abs(want-top)>24) glideTo(want,SCROLLGLIDE);
   /* Smooth scrolling can be cut short, the toolbar can slide back in, and the bar
      can grow a line mid-session. Check once the movement has settled and nudge. */
   clearTimeout(SCROLLFIX);
   SCROLLFIX=setTimeout(()=>{
     if(nextKey()!==k || document.querySelector('.sheet')) return;
     const r=row.getBoundingClientRect(), floor=viewH()-fabH()-12;
-    if(r.bottom>floor+2) glideTo(scrY()+(r.bottom-floor+8),320);
-    else if(r.top<6) glideTo(scrY()+(r.top-16),320);
-  },900);
+    if(r.bottom>floor+2) glideTo(scrY()+(r.bottom-floor+8),480);
+    else if(r.top<6) glideTo(scrY()+(r.top-16),480);
+  },SCROLLGLIDE+150);
 }
 
 /* ---------- state ---------- */
@@ -3249,7 +3251,7 @@ function rTrain(){
     });
     b.querySelector('.sc').onclick=e=>{
       e.stopPropagation();
-      if(!live()) return;
+      if(closing || !live()) return;
       if(draft[id][ix].tk){ askUnset(id,ix); return; }
       if(!b.classList.contains('now')){ toast('FINISH THE SET YOU ARE ON'); return; }
       confirmSet(id,ix);
@@ -3267,6 +3269,7 @@ function rTrain(){
   updateNext();
 }
 function saveSession(){
+  if(closing) return;               // already saved; the debrief is on its way
   const sets={}; let n=0;
   for(const id in draft){
     const v=draft[id].filter(x=>+x.reps>0).map(x=>{
@@ -3279,11 +3282,19 @@ function saveSession(){
   if(!n){toast('Log at least one set');return}
   const before=ledger().total;
   DB.sess.push({d:today(),w:pick,sets});
-  save(); draft={}; pick=nextWorkout(); resetTimer(); rTrain(); refreshCog();
-  /* No scrolling here — the debrief is about to cover the screen anyway. The page
-     returns to the top once he closes it. */
+  save(); closing=true;
   if(ghOn()) ghPush(true);          // quietly; the debrief is about to open
-  setTimeout(()=>debrief(before),450);
+  /* The finished session stays on screen until the debrief has tuned in over it
+     (0.46 s, the sheet's fuzzin); only then does the dashboard behind it move on to
+     the next operation, so the reset is never seen. No scrolling here — the page
+     returns to the top once he closes the debrief. */
+  setTimeout(()=>{
+    debrief(before);
+    setTimeout(()=>{
+      draft={}; pick=nextWorkout(); resetTimer(); rTrain(); refreshCog();
+      closing=false;
+    },540);
+  },450);
 }
 
 /* Each lift in this session against its first logged session: heavier, or more
@@ -4006,7 +4017,7 @@ function openSettings(){
      row('stBack','Backup',bkSub())+
      '</div>';
 
-  h+='<div class="tiny" id="stVer">v'+APP_VERSION+(HOSTED?' \u00b7 hosted':' \u00b7 local')+'</div></div>';
+  h+='<div class="tiny">v'+APP_VERSION+(HOSTED?' \u00b7 hosted':' \u00b7 local')+'</div></div>';
   setSheet(h);
   document.getElementById('veil').onclick=closeSheet;
   document.getElementById('stClose').onclick=closeSheet;
@@ -4014,57 +4025,6 @@ function openSettings(){
   document.getElementById('stProg').onclick=openProgress;
   document.getElementById('stHist').onclick=openHistory;
   document.getElementById('stBack').onclick=openBackup;
-  document.getElementById('stVer').onclick=openScreenReport;
-}
-
-/* Temporary: what this phone reports about its screen and the app's drawing area, so
-   the gap under the bar can be fixed from real numbers rather than guessed. Opened by
-   tapping the version line; remove once the gap is fixed. */
-function screenReport(){
-  const r1=v=>Math.round(v*10)/10;
-  const probe=css=>{
-    const d=document.createElement('div');
-    d.style.cssText='position:fixed;left:0;width:1px;visibility:hidden;pointer-events:none;'+css;
-    document.body.appendChild(d);
-    const out={r:d.getBoundingClientRect(), cs:getComputedStyle(d)};
-    const pad=['Top','Right','Bottom','Left'].map(s=>parseFloat(out.cs['padding'+s])||0);
-    d.remove(); return {r:out.r, pad};
-  };
-  const tall=u=>r1(probe('top:0;height:100'+u).r.height);
-  const fill=probe('top:0;bottom:0').r;
-  const inset=probe('top:0;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)').pad;
-  const vv=window.visualViewport, fab=document.getElementById('fab').getBoundingClientRect();
-  return [
-    ['Version', APP_VERSION],
-    ['Installed app', STANDALONE ? 'yes \u00b7 screen fix on' : 'no'],
-    ['Screen', screen.width+' \u00d7 '+screen.height+' @'+devicePixelRatio+'x'],
-    ['Window', innerWidth+' \u00d7 '+innerHeight],
-    ['Visual viewport', vv ? r1(vv.width)+' \u00d7 '+r1(vv.height)+' at '+r1(vv.offsetTop) : 'none'],
-    ['Fixed layer', r1(fill.top)+' to '+r1(fill.bottom)],
-    ['vh dvh svh lvh', ['vh','dvh','svh','lvh'].map(tall).join(' ')],
-    ['Page', document.documentElement.offsetHeight+' \u00b7 body '+document.body.clientHeight+' of '+document.body.scrollHeight],
-    ['Safe area T R B L', inset.join(' ')],
-    ['Header top', r1(document.querySelector('header').getBoundingClientRect().top)],
-    ['Bar', fab.height ? r1(fab.top)+' to '+r1(fab.bottom) : 'hidden'],
-    ['Orientation', matchMedia('(orientation: portrait)').matches ? 'portrait' : 'landscape'],
-    ['System', ((navigator.userAgent.match(/OS [\d_]+/)||[''])[0].replace(/_/g,'.')) || navigator.platform]
-  ];
-}
-function openScreenReport(){
-  const rows=screenReport();
-  setSheet('<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>Screen'+
-    '<button class="shx back" id="srBack" aria-label="Back to settings">\u2039</button></h3>'+
-    '<div class="pgbody"><div class="card pgcard">'+
-    rows.map(x=>'<div class="pgrow"><span class="pk">'+esc(x[0])+'</span><span class="pv">'+esc(String(x[1]))+'</span></div>').join('')+
-    '</div><div class="duo"><button class="btn" id="srCopy">[ COPY ]</button>'+
-    '<button class="btn ghost" id="srAgain">[ MEASURE AGAIN ]</button></div>'+
-    '<textarea id="srText" readonly class="hide">'+esc(rows.map(x=>x[0]+': '+x[1]).join('\n'))+'</textarea></div></div>');
-  document.getElementById('veil').onclick=closeSheet;
-  document.getElementById('srBack').onclick=openSettings;
-  document.getElementById('srAgain').onclick=openScreenReport;
-  document.getElementById('srCopy').onclick=()=>{
-    if(!copyBox(document.getElementById('srText'),false)) toast('SELECT AND COPY');
-  };
 }
 
 /* Backup and GitHub are the same job — getting the log off this phone — so they
