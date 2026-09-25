@@ -325,30 +325,8 @@ header .sub{color:var(--dim);font-size:11.5px;margin-top:3px;text-align:center}
 .pgcard .pgrow:last-child{border-bottom:none}
 .pgh{font-family:var(--serif);font-size:10px;letter-spacing:.2em;color:var(--bronze);
   margin:0;font-weight:400}
-/* one small control per section, rather than a row of wide buttons */
-.pgadd,.pgview{width:30px;height:30px;line-height:26px;text-align:center;
-  background:none;border:1px solid var(--cardline);border-radius:8px;
-  color:var(--bronze);font-size:19px;padding:0}
-.pgview{margin-left:auto}
-.pgadd{margin-left:6px}
-.pgadd:active,.pgview:active{border-color:var(--bronze);background:var(--card)}
-.pgview svg{width:16px;height:16px;display:block;margin:0 auto;stroke:currentColor;
-  fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-/* a month of readings */
-.chart{width:100%;height:auto;margin-top:10px;display:block}
-.chart .line{fill:none;stroke:var(--bronze);stroke-width:1.6;
-  vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}
-.chart .avg{stroke:var(--dim);stroke-width:1;stroke-dasharray:4 4;
-  vector-effect:non-scaling-stroke}
-.chart .dots circle{fill:var(--champ)}
 
-.tklist{margin-top:14px}
-.tkrow{display:flex;align-items:baseline;justify-content:space-between;width:100%;
-  padding:11px 0;border-bottom:1px solid var(--hair);background:none;border-left:0;
-  border-right:0;border-top:0;text-align:left}
-.tkrow .ed{font-size:12.5px;color:var(--dim)}
-.tkrow .ev{font-size:13px;color:var(--champ);font-variant-numeric:tabular-nums}
-.tkrow:active .ev{color:var(--bronze)}
+/* a month of readings */
 
 .pgnote{margin-top:5px;font-size:12.5px;line-height:1.5;color:var(--dim)}
 /* form fields for the sync panel, as in the food diary */
@@ -367,11 +345,6 @@ header .sub{color:var(--dim);font-size:11.5px;margin-top:3px;text-align:center}
   border:1px solid var(--cardline);border-radius:8px;color:var(--champ);
   font-family:var(--serif);font-size:30px;text-align:center;
   font-variant-numeric:tabular-nums;-webkit-appearance:none;appearance:none}
-.datepick{width:100%;margin-top:14px;padding:16px;background:var(--card);
-  border:1px solid var(--cardline);border-radius:8px;color:var(--champ);
-  font-family:var(--ui);font-size:17px;text-align:center;
-  font-variant-numeric:tabular-nums;-webkit-appearance:none;appearance:none;
-  color-scheme:dark}
 
 /* History: a row per session, the sets shown in the same boxes the cards use. */
 .srow{display:flex;align-items:center;justify-content:space-between;width:100%;
@@ -577,16 +550,12 @@ html.glitching .fab{animation-delay:.04s}
 
 /* ---- instrument panel, applied throughout ---- */
 /* tighter corners read as hardware rather than paper */
-.card,.sel select,.pick,.btn,.sheet{border-radius:5px}
+.card,.btn,.sheet{border-radius:5px}
 
 /* every label is a channel name: uppercase, tracked, monospaced */
 .card h3,.sheet h3{font-family:var(--ui);font-size:14px;letter-spacing:.13em;text-transform:uppercase}
 .muted,.tiny,.brief p{font-family:var(--ui)}
 .fl,.eyebrow,.bsum{font-family:var(--serif);font-weight:500}
-
-/* hairline grid between set rows, like a printed readout */
-
-.sel::after{border-width:1.2px}
 
 /* buttons as bracketed commands */
 .btn{font-family:var(--serif);white-space:nowrap}
@@ -603,7 +572,7 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 .fab{border-top-width:1px}
 
 /* tabular figures everywhere a number can change, so nothing jitters */
-.fab .fv,.sv,.sel select{
+.fab .fv,.sv{
   font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1}
 
 /* segmented readout: one block per set */
@@ -695,10 +664,6 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 .card.up::before{top:-1px;left:-1px;border-right:none;border-bottom:none;border-radius:14px 0 0 0}
 .card.up::after{bottom:-1px;right:-1px;border-left:none;border-top:none;border-radius:0 0 14px 0}
 
-/* readouts */
-
-.sel select{letter-spacing:.01em}
-
 /* the timer is the primary instrument */
 .fab .fv{font-weight:500}
 
@@ -725,32 +690,12 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 
 /* set rows */
 
-.sel{position:relative}
-.sel select{width:100%;appearance:none;-webkit-appearance:none;
-  background:var(--card2);color:var(--tx);font-family:var(--ui);font-size:16px;
-  border:1px solid var(--cardline);border-radius:10px;padding:13px 30px 13px 12px;
-  line-height:1.1;transition:border-color .25s ease}
-.sel select:focus{outline:none;border-color:var(--bronze)}
-.sel::after{content:'';position:absolute;right:12px;top:50%;width:7px;height:7px;
-  margin-top:-5px;border-right:1.5px solid var(--dimmer);border-bottom:1.5px solid var(--dimmer);
-  transform:rotate(45deg);pointer-events:none}
-
 @keyframes arming{0%,100%{opacity:1}50%{opacity:.5}}
-
-/* A/B picker */
-.pick button{transition:background .3s ease;background:var(--bg);padding:15px 14px;text-align:left}
 
 /* strength */
 
 .sv{font-family:var(--serif);font-size:15px;color:var(--dim)}
 .sd{width:52px;text-align:right;font-size:12px;color:var(--bronze)}
-
-/* train */
-
-.pick{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--hair);margin:16px 0 4px;
-  border-radius:14px;overflow:hidden}
-
-.pick button.on{background:var(--card);box-shadow:inset 0 0 0 1px var(--cardline)}
 
 /* Briefings open by animating their height, in step with the rest of the app. Only
    one is ever open; the others are shut without animation and the page is nudged by
@@ -774,8 +719,7 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
   padding:16px;border-radius:0;text-align:center;margin-top:10px}
 .btn:active{border-color:var(--bronze)}
 .btn.ghost{color:var(--dim);border-color:var(--hair)}
-.btn.iconbtn{display:flex;align-items:center;justify-content:center;gap:8px}
-.iconbtn svg{display:block;flex:none}
+
 #saveS{border-color:var(--bronze);color:var(--champ)}
 
 /* timer. Two rows: the status line, then the objectives strip pinned along the
@@ -1040,38 +984,6 @@ html{scroll-behavior:auto}   /* every programmatic scroll runs through glideTo *
 .pgrow .pv{color:var(--champ);font-variant-numeric:tabular-nums;text-align:right}
 .pgrow.warn .pv{color:var(--alert)}
 
-/* The weigh-in chart: 14 days in view (waist keeps full history), swiped or
-   dragged through, any reading tappable or selectable via the slider. */
-.chwrap{margin-top:10px}
-.chtop,.chsel{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
-  font-size:11px;letter-spacing:.08em;color:var(--dimmer);font-variant-numeric:tabular-nums}
-.chtop{margin-bottom:6px}
-
-.chsel b,.chtop b{color:var(--champ);font-weight:400}
-.chbox{position:relative;touch-action:none;cursor:grab;-webkit-user-select:none;user-select:none;
-  padding-left:2px}
-/* one mark per reading: its weight above it, its date on the rail below */
-.tlv,.tld{position:absolute;pointer-events:none;font-family:var(--serif);
-  white-space:nowrap;font-variant-numeric:tabular-nums;transform:translateX(-50%)}
-.tlv{font-size:12.5px;color:var(--champ);margin-top:-20px;
-  background:var(--bg);padding:1px 5px;border:1px solid var(--bronze)}
-.tld{bottom:0;font-size:9.5px;letter-spacing:.04em;color:var(--dimmer)}
-.tld.on{color:var(--bronze)}
-/* the scale down the left edge */
-.chy{position:absolute;left:0;transform:translateY(-50%);pointer-events:none;
-  font-family:var(--serif);font-size:9.5px;letter-spacing:.04em;color:var(--dimmer);
-  font-variant-numeric:tabular-nums;background:var(--bg);padding-right:4px}
-.chy.avg{color:var(--dim)}
-.chart .rail{stroke:var(--cardline);stroke-width:1}
-.chart .pick{opacity:.8}
-.chart .ring{fill:none;stroke:var(--bronze);stroke-width:1.2;opacity:.9}
-.chwrap{padding-bottom:4px}
-.chsel{margin-top:16px}
-.chbox:active{cursor:grabbing}
-.chart .pick{stroke:var(--bronze);stroke-width:1;stroke-dasharray:3 3}
-.chart .dots circle.sel{fill:var(--bronze);r:3.4}
-.chempty{padding:26px 0;text-align:center;font-size:11.5px;color:var(--dimmer)}
-
 /* ==========================================================================
    PIP-BOY CRT
    A layer over the stylesheet above rather than a rewrite of it: every earlier
@@ -1147,14 +1059,14 @@ h1,h3,.gletter,.pv,.tv,.sd{text-shadow:0 0 6px rgba(0,255,102,.35)}
    brightest thing on the screen by a distance. */
 @media (hover:hover) and (pointer:fine){
   .setbtn:hover,.srow:hover,.btn:hover,.bsum:hover,.hhead:hover,.hmhead:hover,
-  .trk .tname:hover,.pgadd:hover,.pgview:hover,.tkrow:hover,.pc:hover{
+  .trk .tname:hover,.pc:hover{
     background:rgba(0,255,102,.13);
     color:var(--champ);
     border-color:var(--pb-dim,#0a7d38)}
   .setbtn.on:hover{background:rgba(255,176,0,.12);border-color:var(--pb-amber)}
 }
 .setbtn:active,.srow:active,.btn:active,.bsum:active,.hhead:active,.hmhead:active,
-.trk .tname:active,.pgadd:active,.pgview:active,.tkrow:active{
+.trk .tname:active{
   background:rgba(0,255,102,.16);
   color:var(--champ);
   border-color:var(--pb-dim,#0a7d38)}
@@ -1244,8 +1156,8 @@ html.booted .fab{animation:pbwarm .55s .12s ease-out both}
 <script>
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
-let DB={sess:[],wt:[]}, mem={}, STORE='memory';
-const APP_VERSION='2026.09.25.1';
+let DB={sess:[]}, mem={}, STORE='memory';
+const APP_VERSION='2026.09.25.4';
 const HOSTED = location.protocol==='https:';
 if(navigator.standalone || matchMedia('(display-mode: standalone)').matches)
   document.documentElement.classList.add('standalone');    // see html.standalone
@@ -1255,9 +1167,6 @@ function load(){
     const s = STORE==='local' ? localStorage.getItem(KEY) : mem[KEY];
     if(s) DB=JSON.parse(s);
   }catch(e){}
-  if(!Array.isArray(DB.wt)) DB.wt=[];
-  if(!Array.isArray(DB.waist)) DB.waist=[];
-  if(!Array.isArray(DB.photos)) DB.photos=[];
   if(!Array.isArray(DB.sess)) DB.sess=[];
   if(typeof DB.bk!=='number') DB.bk=0;
   if(typeof DB.seen!=='boolean') DB.seen=false;
@@ -1266,6 +1175,9 @@ function load(){
   /* The old GitHub setup pushed into the app's own Pages repo, which is public. It is
      not carried over: sync now needs a private data repo. */
   if(DB.gh && DB.gh.owner) DB.gh={};
+  /* Weight, waist and photos moved to another app. Any still stored here are deleted
+     now, and the next sync writes the GitHub copy without them. */
+  if('wt' in DB || 'waist' in DB || 'photos' in DB){ delete DB.wt; delete DB.waist; delete DB.photos; save(); }
 }
 function save(){
   LEDGER=null;                              // the log moved; the score is stale
@@ -2059,7 +1971,7 @@ function openMusic(from){
   });
 }
 /* ---------- sync bookkeeping ----------
-   Every session carries an id, and every session and body entry an edit time (e). A
+   Every session carries an id and an edit time (e). A
    deletion leaves a tombstone in DB.del, so a merge cannot bring it back from another
    copy of the log. Tombstones older than 120 days are dropped. */
 const TOMB=120*864e5;
@@ -2070,14 +1982,14 @@ function giveIds(list){ list.forEach(x=>{ if(!x.id) x.id=sessId(x.d,x.w,list); }
 function drop(key){ DB.del[key]=Date.now(); }
 /* The log changed: keep it, and let GitHub know shortly. */
 function touch(){ save(); ghQueue(); }
-const logOf=src=>({sess:src.sess, wt:src.wt, waist:src.waist, photos:src.photos, del:src.del||{}});
-/* Two copies become one. Each session (by id) and body entry (by date) keeps its most
-   recently edited version, this copy's on a tie; anything deleted after it was last
-   edited stays deleted. Output is in one fixed shape and order, so equal logs are
-   equal strings. */
+const logOf=src=>({sess:src.sess, del:src.del||{}});
+/* Two copies become one. Each session (by id) keeps its most recently edited version,
+   this copy's on a tie; anything deleted after it was last edited stays deleted. Only
+   session tombstones are kept (ids start with the date). Output is in one fixed shape
+   and order, so equal logs are equal strings. */
 function mergeLog(a,b){
   const cut=Date.now()-TOMB, dl={};
-  [b.del,a.del].forEach(d=>Object.keys(d||{}).forEach(k=>{ if(d[k]>cut) dl[k]=Math.max(dl[k]||0,d[k]); }));
+  [b.del,a.del].forEach(d=>Object.keys(d||{}).forEach(k=>{ if(d[k]>cut && /^\d/.test(k)) dl[k]=Math.max(dl[k]||0,d[k]); }));
   const del={}; Object.keys(dl).sort().forEach(k=>{ del[k]=dl[k]; });
   const keep=(list,key,shape)=>{
     const m={};
@@ -2087,27 +1999,25 @@ function mergeLog(a,b){
   };
   return {
     sess:keep(b.sess.concat(a.sess), x=>x.id, x=>({id:x.id, d:x.d, w:x.w, sets:x.sets, e:x.e||0})),
-    wt:keep(b.wt.concat(a.wt), x=>'w'+x.d, x=>({d:x.d, kg:x.kg, e:x.e||0})),
-    waist:keep(b.waist.concat(a.waist), x=>'m'+x.d, x=>({d:x.d, cm:x.cm, e:x.e||0})),
-    photos:keep(b.photos.concat(a.photos), x=>'p'+x.d, x=>({d:x.d, e:x.e||0})),
     del
   };
 }
-const EMPTY={sess:[],wt:[],waist:[],photos:[],del:{}};
+const EMPTY={sess:[],del:{}};
 const canon=l=>JSON.stringify(mergeLog(l,EMPTY));
 /* Take a merged log in. The dashboard is redrawn unless a session is being worked. */
 function applyLog(m){
-  DB.sess=m.sess; DB.wt=m.wt; DB.waist=m.waist; DB.photos=m.photos; DB.del=m.del;
+  DB.sess=m.sess; DB.del=m.del;
   save();
   if(!T.start && !closing){ pick=null; rTrain(); }
   refreshCog();
 }
 
-/* ---------- GitHub sync: data/training-log.json in a private repo ----------
+/* ---------- GitHub sync: training/log.json in a private repo ----------
    A sync reads the file, merges it with this copy, and writes back only if the result
    differs from what is there. Changes queue one; so do opening the app, coming back to
-   it and leaving it. The token is kept on this phone only. */
-function ghCfg(){ const g=DB.gh||{}; return {tok:g.tok||'', repo:g.repo||'', branch:g.branch||'main', at:g.at||0, err:g.err||''}; }
+   it and leaving it. The token is kept on this phone only. The repo can be the food
+   diary's: that app works only in data/, and this one only in training/. */
+function ghCfg(){ const g=DB.gh||{}; return {tok:g.tok||'', repo:g.repo||'', branch:g.branch||'main', at:g.at||0, err:g.err||'', mv:g.mv||0}; }
 function ghSave(patch){ DB.gh=Object.assign(ghCfg(),patch); save(); }
 function ghOn(){ const c=ghCfg(); return !!(c.tok && /^[\w.-]+\/[\w.-]+$/.test(c.repo)); }
 const b64=t=>btoa(unescape(encodeURIComponent(t)));
@@ -2118,7 +2028,25 @@ function ghReq(path,opt){
     headers:Object.assign({Authorization:'Bearer '+ghCfg().tok, Accept:'application/vnd.github+json',
       'X-GitHub-Api-Version':'2022-11-28'},opt.headers)}));
 }
-const ghUrl=()=>'/repos/'+ghCfg().repo+'/contents/data/training-log.json';
+const ghUrl=()=>'/repos/'+ghCfg().repo+'/contents/training/log.json';
+/* The log used to live at data/training-log.json, where the food diary, sharing the
+   repo, took it for one of its profiles. The first sync after the move merges in
+   whatever is left there and removes it; a food diary profile at that path is left
+   alone. */
+async function ghMove(){
+  const old='/repos/'+ghCfg().repo+'/contents/data/training-log.json';
+  const r=await ghReq(old+'?ref='+encodeURIComponent(ghCfg().branch));
+  if(r.ok){
+    const j=await r.json(); let d=null; try{ d=JSON.parse(unb64(j.content||'')); }catch(e){}
+    if(d && d.log){
+      const m=mergeLog(logOf(DB),cleanLog(d.log));
+      if(JSON.stringify(m)!==canon(logOf(DB))) applyLog(m);
+      const del=await ghReq(old,{method:'DELETE',body:JSON.stringify({message:'training log moved to training/log.json',sha:j.sha,branch:ghCfg().branch})});
+      if(!del.ok && del.status!==404) throw del.status;
+    }
+  } else if(r.status!==404) throw r.status;
+  ghSave({mv:1});
+}
 async function ghGet(){
   const q='?ref='+encodeURIComponent(ghCfg().branch);
   const r=await ghReq(ghUrl()+q);
@@ -2132,7 +2060,7 @@ async function ghGet(){
     txt=await r2.text();
   }
   let d=null; try{ d=JSON.parse(txt); }catch(e){}
-  return {sha:j.sha, log:d&&d.log?cleanLog(d.log):null};
+  return {sha:j.sha, log:d&&d.log?cleanLog(d.log):null, txt};
 }
 const ghPut=(log,sha)=>ghReq(ghUrl(),{method:'PUT',body:JSON.stringify({
   message:'log: '+log.sess.length+' sessions', branch:ghCfg().branch, sha:sha||undefined,
@@ -2146,12 +2074,15 @@ async function ghSync(){
   if(GHBUSY){ GHAGAIN=true; return 'busy'; }
   GHBUSY=true;
   try{
+    if(!ghCfg().mv) await ghMove();
     for(let i=0;i<3;i++){
       const rem=await ghGet(), local=logOf(DB);
-      if(!rem.log && !local.sess.length && !local.wt.length && !local.waist.length && !local.photos.length) break;
+      if(!rem.log && !local.sess.length) break;
       const merged=mergeLog(local,rem.log||EMPTY), mj=JSON.stringify(merged);
       if(mj!==canon(local)) applyLog(merged);
-      if(rem.log && mj===canon(rem.log)) break;
+      /* Written unless the file already says exactly this, so anything it holds that
+         the log no longer keeps is cleared from it too. */
+      if(rem.txt===JSON.stringify({v:1,log:merged})) break;
       const r=await ghPut(merged,rem.sha);
       if(r.status===409 || r.status===422) continue;         // moved under us: read again
       if(!r.ok) throw r.status;
@@ -2217,29 +2148,14 @@ function packDB(){
     out.push(parts.length ? d6(x.d)+' '+x.w+' '+parts.join(' | ')
                           : d6(x.d)+' '+(/^[AB]$/.test(x.w)?x.w:'-'));
   });
-  if(DB.wt.length)     out.push('W '+DB.wt.map(x=>d6(x.d)+' '+x.kg).join(' | '));
-  if(DB.waist.length)  out.push('M '+DB.waist.map(x=>d6(x.d)+' '+x.cm).join(' | '));
-  if(DB.photos.length) out.push('P '+DB.photos.map(x=>d6(x.d)).join(' '));
   return out.join('\n');
 }
 function unpackDB(txt){
-  const out={sess:[],wt:[],waist:[],photos:[]};
+  const out={sess:[]};
   txt.split(/\r?\n/).forEach(line=>{
     line=line.trim();
     if(!line || line==='TL1') return;
-    if(line[0]==='W' || line[0]==='M'){
-      line.slice(1).split('|').forEach(part=>{
-        const t=part.trim().split(/\s+/); if(t.length<2 || !/^\d{6}$/.test(t[0])) return;
-        if(line[0]==='W') out.wt.push({d:d10(t[0]), kg:+t[1]});
-        else out.waist.push({d:d10(t[0]), cm:+t[1]});
-      });
-      return;
-    }
-    if(line.slice(0,2)==='Y ') return;    // a link from an older version; no longer used
-    if(line[0]==='P'){
-      line.slice(1).trim().split(/\s+/).forEach(t=>{ if(/^\d{6}$/.test(t)) out.photos.push({d:d10(t)}); });
-      return;
-    }
+    if(/^[A-Z] /.test(line)) return;   // W, M, P and Y lines from older versions: not kept
     /* A session logged before this app existed: date, workout letter (or a dash if
        it is not known), and nothing after it. It happened; there is just no detail. */
     const bare=line.match(/^(\d{6})\s+([AB-])$/);
@@ -2268,22 +2184,9 @@ function esc(v){
 const DATE_RE=/^\d{4}-\d{2}-\d{2}$/;
 function num(v,lo,hi){ const n=+v; return Number.isFinite(n) && n>=lo && n<=hi ? n : null; }
 function cleanLog(d){
-  const out={sess:[],wt:[],waist:[],photos:[],del:{}};
+  const out={sess:[],del:{}};
   if(!d || typeof d!=='object') return out;
   const E=x=>num(x&&x.e,0,1e13)||0;
-  (Array.isArray(d.wt)?d.wt:[]).forEach(x=>{
-    if(!x || !DATE_RE.test(x.d)) return;
-    const kg=num(x.kg,20,400); if(kg===null) return;
-    out.wt.push({d:x.d, kg:kg, e:E(x)});
-  });
-  (Array.isArray(d.waist)?d.waist:[]).forEach(x=>{
-    if(!x || !DATE_RE.test(x.d)) return;
-    const cm=num(x.cm,15,250); if(cm===null) return;
-    out.waist.push({d:x.d, cm:cm, e:E(x)});
-  });
-  (Array.isArray(d.photos)?d.photos:[]).forEach(x=>{
-    if(x && DATE_RE.test(x.d)) out.photos.push({d:x.d, e:E(x)});
-  });
   (Array.isArray(d.sess)?d.sess:[]).forEach(x=>{
     if(!x || !DATE_RE.test(x.d)) return;
     const known=!!W[x.w];
@@ -2310,7 +2213,7 @@ function cleanLog(d){
   Object.keys(d.del&&typeof d.del==='object'?d.del:{}).forEach(k=>{
     const t=num(d.del[k],cut,1e13); if(t!==null && /^[\w-]{1,48}$/.test(k)) out.del[k]=t;
   });
-  ['wt','waist','photos','sess'].forEach(k=>out[k].sort((a,b)=>a.d<b.d?-1:1));
+  out.sess.sort((a,b)=>a.d<b.d?-1:1);
   giveIds(out.sess);
   return out;
 }
@@ -2538,17 +2441,6 @@ function setSheet(html,stack){
   if(!had) return;
   const v=wrap.querySelector('.veil'); if(v) v.classList.add('noanim');
   const sh=wrap.querySelector('.sheet'); if(sh) sh.classList.add('swapin');
-}
-/* Remove layers outright, with no animation — used when a panel is about to be
-   rebuilt over itself, so the stack does not grow every time something is saved. */
-function dropLayers(n){
-  const wrap=document.getElementById('sheetWrap');
-  for(let i=0;i<n;i++){
-    const l=wrap.querySelectorAll('.layer');
-    if(!l.length) return;
-    const box=l[l.length-1];
-    if(box.parentNode) box.parentNode.removeChild(box);
-  }
 }
 /* Close just the top layer, revealing whatever it was opened from. */
 function popSheet(){
@@ -3398,11 +3290,8 @@ function debrief(before){
 }
 
 /* ---------- progress ----------
-   The log measures inputs: sets, weights, reps. The goal is measured in waist and
-   photographs. This is where the two meet — what the scale is doing against its
-   guardrails, what the tape says, when the next photographs are due, whether each
-   muscle is getting the weekly sets the programme claims, and whether the lifts are
-   actually climbing. */
+   Whether each muscle is getting the weekly sets the programme claims. Weight, waist
+   and photos are kept in another app. */
 
 /* Sets are credited in full to what a lift is built for and at half to what it
    assists, which is the usual way of counting weekly volume. */
@@ -3440,56 +3329,6 @@ function volWeek(){
   MUSCLES.forEach(m=>out[m]=Math.round(v[m]/wks*10)/10);
   return out;
 }
-/* Weight guardrails, straight from the plan: flat is right, a kilo down in a month
-   means eating too little, a kilo up means eating slightly too much. Each figure is
-   its own line — a 14-day average and a month-on-month move are two different sums
-   and reading them as one sentence hides both. */
-function wtAvg(from,to){
-  const v=DB.wt.filter(x=>{ const a=daysAgo(x.d); return a>=from && a<to; }).map(x=>+x.kg);
-  return v.length ? v.reduce((a,b)=>a+b,0)/v.length : null;
-}
-function shortDate(iso){
-  const p=(iso||'').split('-');
-  return p.length===3 ? (+p[2])+' '+MONTHS[+p[1]-1].slice(0,3) : (iso||'');
-}
-function wtVerdict(){
-  const rows=[], last=DB.wt.length?DB.wt[DB.wt.length-1]:null;
-  if(!last) return {rows:[['Logged','none']], bad:false};
-  const now=wtAvg(0,14), then=wtAvg(28,42);
-  if(now!==null) rows.push(['14-day average', now.toFixed(1)+'kg']);
-  if(now!==null && then!==null){
-    const d=now-then;
-    rows.push(['Monthly change', (d>=0?'+':'')+d.toFixed(1)+'kg']);
-    if(d<-1)     rows.push(['Trend','Falling \u00b7 eat more','warn']);
-    else if(d>1) rows.push(['Trend','Climbing \u00b7 trim 100\u2013150 cal','warn']);
-    else         rows.push(['Trend','Flat']);
-    rows.push(['Last weigh-in', shortDate(last.d)]);
-    return {rows:rows, bad:Math.abs(d)>1};
-  }
-  rows.push(['Last weigh-in', shortDate(last.d)]);
-  return {rows:rows, bad:false};
-}
-function waistLine(){
-  const w=DB.waist.slice().sort((a,b)=>a.d<b.d?1:-1);
-  if(!w.length) return {rows:[['Logged','none']]};
-  const last=w[0], first=w[w.length-1];
-  const rows=[['Latest', last.cm+' \u00b7 '+shortDate(last.d)]];
-  if(w.length>1){
-    const d=(+last.cm)-(+first.cm);
-    rows.push(['Since '+shortDate(first.d), (d>0?'+':'')+(Math.round(d*10)/10)]);
-  }
-  return {rows:rows};
-}
-const PHOTO_EVERY=28;
-function photoDue(){
-  if(!DB.photos.length) return {due:0, rows:[['Logged','none']]};
-  const last=DB.photos.slice().sort((a,b)=>a.d<b.d?1:-1)[0];
-  const left=PHOTO_EVERY-daysAgo(last.d);
-  return {due:left, rows:[
-    ['Last', shortDate(last.d)],
-    ['Next', left<=0 ? 'due now' : 'in '+left+' day'+(left===1?'':'s'), left<=0?'warn':'']
-  ]};
-}
 /* A single bell caps at 40kg, so the lifts loaded with one need warning before the
    ceiling arrives rather than on the night it does. */
 const BELL_CAP=40;
@@ -3502,67 +3341,16 @@ function capWarn(id,kg){
                  : left+' increment'+(left===1?'':'s')+' left on a single bell. Start thinking about tempo, pauses or one leg at a time.';
 }
 
-function logBody(kind){
-  const isW=kind==='wt';
-  numSheet({
-    title:isW?'Weigh-in':'Waist',
-    note:isW?'Kilograms, one decimal is plenty.'
-            :'Same spot, relaxed, after a normal breath out. Inches or centimetres \u2014 just be consistent.',
-    phA:isW?'75.0':'32', loA:isW?30:15, hiA:isW?250:200,
-    onSave:(n)=>{
-      const d=today(), arr=isW?DB.wt:DB.waist;
-      const i=arr.findIndex(x=>x.d===d);
-      const row=isW?{d:d,kg:n,e:Date.now()}:{d:d,cm:n,e:Date.now()};
-      if(i>-1) arr[i]=row; else arr.push(row);
-      arr.sort((a,b)=>a.d<b.d?-1:1);
-      touch(); toast('LOGGED');
-      dropLayers(1); openProgress();          // close the entry, refresh what is behind
-    }});
-}
-/* A photo entry only ever needs its date set or corrected, or the entry
-   removed — there is no number to type — so it gets its own small sheet: a
-   date picker, a tick to confirm, and a cross for the other action (delete
-   when editing an existing entry, cancel when logging a new one). */
-function photoSheet(o){
-  const tick='<svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 12.5l5 5L20 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  const cross='<svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
-  const delLabel=o.delLabel||'DELETE';
-  setSheet('<div class="veil" id="veil"></div><div class="sheet"><h3>'+esc(o.title)+
-    '<button class="shx back" id="psBack" aria-label="Back">\u2039</button></h3>'+
-    (o.note?'<div class="muted">'+esc(o.note)+'</div>':'')+
-    '<input class="datepick" id="psDate" type="date" value="'+esc(o.d)+'" max="'+esc(today())+'">'+
-    '<div class="duo">'+
-      '<button class="btn iconbtn" id="psOk" aria-label="Confirm">'+tick+'<span>[ CONFIRM ]</span></button>'+
-      '<button class="btn ghost iconbtn" id="psDel" aria-label="'+esc(delLabel)+'">'+cross+'<span>[ '+esc(delLabel)+' ]</span></button>'+
-    '</div></div>', true);
-  const box=topSheet();
-  const back=()=>popSheet();
-  const veil=document.querySelectorAll('#sheetWrap .veil');
-  veil[veil.length-1].onclick=back;
-  box.querySelector('#psBack').onclick=back;
-  const D=box.querySelector('#psDate');
-  box.querySelector('#psOk').onclick=()=>{
-    const v=D.value;
-    if(!v) return toast('PICK A DATE');
-    o.onSave(v);
-  };
-  box.querySelector('#psDel').onclick=async()=>{
-    if(!o.confirmDel) return o.onDel();
-    const ok=await askConfirm('Remove this?','It cannot be undone.','Remove');
-    if(!ok) return photoSheet(o);
-    o.onDel();
-  };
-}
-/* The row in settings says the one thing worth knowing without opening it. */
+/* The row in settings: sets a week, on average, over the same four weeks that the
+   per-muscle figures use. */
 function progSub(){
-  const ph=photoDue();
-  if(ph.due<=0) return 'PHOTOS DUE';
-  const now=wtAvg(0,14);
-  if(now===null) return 'NO WEIGH-IN YET';
-  return now.toFixed(1)+'KG \u00b7 PHOTOS IN '+ph.due+'D';
+  const recent=DB.sess.filter(x=>daysAgo(x.d)<28 && x.sets && Object.keys(x.sets).length);
+  if(!recent.length) return 'NO SETS IN 4 WEEKS';
+  const wks=Math.max(1,(daysAgo(recent[0].d)+1)/7);
+  const n=recent.reduce((a,x)=>a+Object.values(x.sets).reduce((b,v)=>b+v.filter(r=>+r.reps>0).length,0),0);
+  return Math.round(n/wks)+' SETS A WEEK';
 }
-/* A shared editor for a single number, used to correct a weigh-in, a waist
-   measurement, or the weight and reps of a set logged days ago. */
+/* A shared editor for a single number: the weight and reps of a set logged days ago. */
 function numSheet(o){
   setSheet('<div class="veil" id="veil"></div><div class="sheet"><h3>'+esc(o.title)+
     '<button class="shx back" id="nsBack" aria-label="Back">\u2039</button></h3>'+
@@ -3593,235 +3381,17 @@ function numSheet(o){
     o.onDel();
   };
 }
-/* Readings as a line (14 days for weight, full history for waist). Tap or drag
-   anywhere on the graph to move the selection, like a slider — any reading in
-   view can be read off this way. Kept in one place so selecting only redraws
-   the graph, never the sheet. */
-let CH=null;
-/* A timeline, not a plot: one mark per weigh-in, evenly spaced, oldest on the left.
-   Spacing readings by the day they fell on packs a month into an unreadable tangle
-   and leaves gaps wherever a few days were missed — every reading gets the same room
-   instead, with its weight above it and its date below. Swiping steps back through
-   the older ones a reading at a time. */
-const CH_W=320, CH_H=150, CH_TOP=30, CH_BOT=26, CH_SIDE=34;
-/* A timeline: every reading on screen, spaced by the days between them. The graph
-   carries the shape and the average; the list underneath carries the numbers, so
-   nothing here has to be printed twice. */
-function chWindow(){
-  return CH.rows.map(x=>({d:x.d, t:daysAgo(x.d), v:+CH.val(x)}));
-}
-function chPaint(){
-  const box=document.getElementById('chBox'); if(!box) return;
-  const pts=chWindow();
-  if(!pts.length){ box.innerHTML='<div class="chempty">Nothing logged yet.</div>'; return; }
-
-  const vs=pts.map(p=>p.v);
-  let lo=Math.min.apply(null,vs), hi=Math.max.apply(null,vs);
-  if(hi-lo<0.6){ const m=(hi+lo)/2; lo=m-0.4; hi=m+0.4; }   // a flat run still reads as flat
-  const span=hi-lo;
-  lo-=span*0.18; hi+=span*0.18;                             // room for the labels
-  const avg=vs.reduce((a,b)=>a+b,0)/vs.length;
-  const t0=pts[0].t, days=Math.max(1, t0-pts[pts.length-1].t);
-  const xOf=i=>pts.length===1 ? CH_W/2
-    : CH_SIDE + ((t0-pts[i].t)/days)*(CH_W-CH_SIDE-10);
-  const yOf=v=>CH_TOP + (1-(v-lo)/(hi-lo))*(CH_H-CH_TOP-CH_BOT);
-  const sel=CH.sel && pts.some(p=>p.d===CH.sel) ? CH.sel : pts[pts.length-1].d;
-  CH.show=sel;
-  const si=pts.findIndex(p=>p.d===sel);
-  const rail=CH_H-CH_BOT;
-
-  const line=pts.map((p,i)=>(i?'L':'M')+xOf(i).toFixed(1)+' '+yOf(p.v).toFixed(1)).join(' ');
-  let svg='<svg class="chart" viewBox="0 0 '+CH_W+' '+CH_H+'" preserveAspectRatio="none">'+
-    /* the average, across the whole run */
-    '<line class="avg" x1="'+CH_SIDE+'" y1="'+yOf(avg).toFixed(1)+'" x2="'+CH_W+
-      '" y2="'+yOf(avg).toFixed(1)+'"/>'+
-    '<line class="rail" x1="'+CH_SIDE+'" y1="'+rail+'" x2="'+CH_W+'" y2="'+rail+'"/>'+
-    /* the picked reading: a full-height guide, not a stub off the axis */
-    '<line class="pick" x1="'+xOf(si).toFixed(1)+'" y1="'+(CH_TOP-14)+
-      '" x2="'+xOf(si).toFixed(1)+'" y2="'+rail+'"/>';
-  if(pts.length>1) svg+='<path class="line" d="'+line+'"/>';
-  svg+='<g class="dots">'+pts.map((p,i)=>'<circle'+(p.d===sel?' class="sel"':'')+
-      ' r="'+(p.d===sel?4.4:2)+'" cx="'+xOf(i).toFixed(1)+'" cy="'+yOf(p.v).toFixed(1)+'"/>').join('')+
-      '</g>'+
-    /* a ring around the picked one, so it reads as picked at a glance */
-    '<circle class="ring" r="8" cx="'+xOf(si).toFixed(1)+'" cy="'+yOf(pts[si].v).toFixed(1)+'"/>'+
-    '</svg>';
-
-  /* labels are HTML over the top: the graph is stretched to the panel width, and
-     anything drawn inside it stretches with it */
-  const num=v=>Math.round(v*10)/10;
-  const day=iso=>{ const q=(iso||'').split('-'); return q.length===3 ? (+q[2])+'/'+(+q[1]) : iso; };
-  const pcY=v=>(yOf(v)/CH_H*100).toFixed(1);
-
-  /* the scale down the left: highest, average, lowest — three numbers, not thirty */
-  svg+='<span class="chy" style="top:'+pcY(Math.max.apply(null,vs))+'%">'+num(Math.max.apply(null,vs))+'</span>'+
-       '<span class="chy" style="top:'+pcY(Math.min.apply(null,vs))+'%">'+num(Math.min.apply(null,vs))+'</span>'+
-       '<span class="chy avg" style="top:'+pcY(avg)+'%">'+num(avg)+'</span>';
-
-  /* dates along the foot: a fixed set of positions, chosen once from the point
-     layout and independent of which reading is selected, so they never move
-     as the selection changes. Only the color of the matching label (if any is
-     at that exact spot) picks out the current selection; the full date and
-     value for the selection live in the box below the graph instead. */
-  const DTMIN=40;
-  let lastD=-999;
-  pts.forEach((p,i)=>{
-    const x=xOf(i), end=(i===0||i===pts.length-1);
-    if(x-lastD>=DTMIN || end){
-      lastD=x;
-      svg+='<span class="tld'+(p.d===sel?' on':'')+'" style="left:'+(x/CH_W*100).toFixed(1)+'%">'+
-           day(p.d)+'</span>';
-    }
-  });
-  /* and the picked reading itself, above its point */
-  svg+='<span class="tlv on" style="left:'+(xOf(si)/CH_W*100).toFixed(1)+'%;top:'+
-       pcY(pts[si].v)+'%">'+num(pts[si].v)+CH.unit+'</span>';
-  box.innerHTML=svg;
-
-  const top=document.getElementById('chTop');
-  if(top) top.innerHTML='<span>'+esc(shortDate(pts[0].d))+' \u2013 '+esc(shortDate(pts[pts.length-1].d))+
-    '</span><span>avg <b>'+(Math.round(avg*10)/10)+CH.unit+'</b></span>';
-  const s2=document.getElementById('chSel');
-  const show=pts[si];
-  if(s2) s2.innerHTML='<span>'+esc(longDate(show.d))+'</span><b>'+num(show.v)+CH.unit+'</b>';
-}
-function chBind(){
-  const box=document.getElementById('chBox'); if(!box) return;
-  // Shared hit-testing: given a clientX, find the nearest reading and select it.
-  const pick=(clientX,announce)=>{
-    const pts=chWindow(); if(!pts.length) return;
-    const r=box.getBoundingClientRect();
-    const x=(clientX-r.left)/r.width*CH_W;
-    const t0=pts[0].t, days=Math.max(1, t0-pts[pts.length-1].t);
-    const xOf=p=>pts.length===1 ? CH_W/2 : CH_SIDE + ((t0-p.t)/days)*(CH_W-CH_SIDE*2);
-    let best=pts[0];
-    pts.forEach(p=>{ if(Math.abs(xOf(p)-x)<Math.abs(xOf(best)-x)) best=p; });
-    if(best.d!==CH.sel){ CH.sel=best.d; if(announce) sfx('tap'); chPaint(); }
-  };
-  let dragging=false;
-  box.addEventListener('pointerdown',e=>{
-    dragging=true;
-    box.setPointerCapture && box.setPointerCapture(e.pointerId);
-    e.preventDefault();
-    pick(e.clientX,true);
-  });
-  box.addEventListener('pointermove',e=>{
-    if(!dragging) return;
-    e.preventDefault();
-    pick(e.clientX,false);
-  });
-  const end=()=>{ dragging=false; };
-  box.addEventListener('pointerup',end);
-  box.addEventListener('pointercancel',end);
-  box.addEventListener('pointerleave',end);
-  // Fallback for browsers without pointer events on this element.
-  box.addEventListener('click',e=>pick(e.clientX,true));
-}
-function chartHTML(){
-  return '<div class="chwrap"><div class="chtop" id="chTop"></div>'+
-    '<div class="chbox" id="chBox"></div>'+
-    '<div class="chsel" id="chSel"></div></div>';
-}
-/* Every reading for one measure: the month as a line, then the entries themselves,
-   each one tappable to correct or remove. */
-function openTrack(kind){
-  const isW=kind==='wt', isPh=kind==='ph';
-  const arr = isPh?DB.photos : isW?DB.wt : DB.waist;
-  const title = isPh?'Photographs' : isW?'Weigh-ins' : 'Waist';
-  let h='<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>'+title+
-    '<button class="shx back" id="tkBack" aria-label="Back">\u2039</button></h3><div class="pgbody">';
-  if(!arr.length) h+='<div class="pgnote">Nothing logged yet.</div>';
-  else if(!isPh) h+=chartHTML();
-  /* The graph reads the shape; the list reads the entries. Both, as before. */
-  if(arr.length){
-    h+='<div class="tklist">'+arr.slice().reverse().map(x=>{
-      const i=arr.indexOf(x);
-      return '<button class="tkrow" data-k="'+kind+'" data-i="'+i+'">'+
-        '<span class="ed">'+esc(longDate(x.d))+'</span>'+
-        '<span class="ev">'+(isPh?'\u2713':isW?x.kg+'kg':x.cm)+'</span></button>';
-    }).join('')+'</div>';
-  }
-  h+='</div></div>';
-  /* one track panel at a time: if one is already open, it is replaced */
-  if(document.querySelector('#sheetWrap .layer .tklist, #sheetWrap .layer .chwrap')) dropLayers(1);
-  setSheet(h, !!topSheet());
-  const box=topSheet().parentNode.querySelector? topSheet().parentNode : document;
-  const veils=document.querySelectorAll('#sheetWrap .veil');
-  const back=()=>{ if(document.querySelectorAll('#sheetWrap .layer').length) popSheet(); else openProgress(); };
-  veils[veils.length-1].onclick=back;
-  (box.querySelector? box : document).querySelector('#tkBack').onclick=back;
-  if(arr.length && !isPh){
-    const sorted=arr.slice().sort((a,b)=>a.d<b.d?-1:1);
-    // Weight: last 14 days only. Waist keeps the full history view.
-    const rows=isW ? sorted.filter(x=>daysAgo(x.d)<14) : sorted;
-    CH={rows: rows.length?rows:sorted, val:x=>isW?x.kg:x.cm,
-        unit:isW?'kg':'', sel:null, show:''};
-    chPaint(); chBind();
-  }
-  document.querySelectorAll('.tkrow').forEach(b=>{
-    b.onclick=()=>{
-      const i=+b.dataset.i;
-      /* drop the editor and the list beneath it, then draw the list again */
-      const again=()=>{ dropLayers(2); openTrack(kind); };
-      if(isPh) return photoSheet({title:'Photographs', d:DB.photos[i].d, confirmDel:true,
-        onSave:(v)=>{
-          if(v!==DB.photos[i].d && DB.photos.some(x=>x.d===v)) return toast('ALREADY LOGGED THAT DAY');
-          if(v!==DB.photos[i].d) drop('p'+DB.photos[i].d);
-          DB.photos[i]={d:v, e:Date.now()};
-          DB.photos.sort((a,b)=>a.d<b.d?-1:1);
-          touch(); toast('UPDATED'); again();
-        },
-        onDel:()=>{ drop('p'+DB.photos[i].d); DB.photos.splice(i,1); touch(); toast('REMOVED'); again(); }});
-      const a2=isW?DB.wt:DB.waist, row=a2[i];
-      numSheet({title:isW?'Weigh-in':'Waist', note:longDate(row.d),
-        a:isW?row.kg:row.cm, loA:isW?30:15, hiA:isW?250:200,
-        onSave:(v)=>{ if(isW) a2[i].kg=v; else a2[i].cm=v; a2[i].e=Date.now(); touch(); toast('UPDATED'); again(); },
-        onDel:()=>{ drop((isW?'w':'m')+a2[i].d); a2.splice(i,1); touch(); toast('REMOVED'); again(); }});
-    };
-  });
-}
+/* Sets per week for each muscle, over the last four weeks. Weight, waist and photos
+   are kept in another app. */
 function openProgress(){
-  const wv=wtVerdict(), wa=waistLine(), ph=photoDue(), v=volWeek();
-  let h='<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>Progress'+
+  const v=volWeek();
+  setSheet('<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>Progress'+
     '<button class="shx back" id="pgBack" aria-label="Back to settings">\u2039</button></h3>'+
-    '<div class="pgbody">';
-
-  const eye='<svg viewBox="0 0 24 24"><path d="M3 17l5.5-6 4 4L21 6"/></svg>';
-  const head=(t,id,view)=>'<div class="pghead"><h4 class="pgh">'+t+'</h4>'+
-    (view?'<button class="pgview" id="'+view+'" aria-label="History">'+eye+'</button>':'')+
-    (id?'<button class="pgadd" id="'+id+'" aria-label="Add">+</button>':'')+'</div>';
-  /* One label, one number, one line. Nothing explains what the number is for. */
-  const rows=r=>r.map(x=>'<div class="pgrow'+(x[2]?' '+x[2]:'')+'">'+
-    '<span class="pk">'+esc(x[0])+'</span><span class="pv">'+esc(x[1])+'</span></div>').join('');
-  /* Each section boxed the same way the dashboard boxes an exercise: one card,
-     one border, one background, matching .chain/.card exactly. */
-  const section=(t,id,view,r)=>'<div class="card pgcard">'+head(t,id,view)+rows(r)+'</div>';
-
-  h+=section('THE SCALE','pgWt','vwWt',wv.rows);
-  h+=section('WAIST','pgWa','vwWa',wa.rows);
-  h+=section('PHOTOGRAPHS','pgPh','vwPh',ph.rows);
-  h+=section('SETS PER WEEK',null,null,MUSCLES.map(m=>[m, String(v[m]||0)]));
-
-  h+='</div></div>';
-  setSheet(h);
+    '<div class="pgbody"><div class="card pgcard"><div class="pghead"><h4 class="pgh">SETS PER WEEK</h4></div>'+
+    MUSCLES.map(m=>'<div class="pgrow"><span class="pk">'+esc(m)+'</span><span class="pv">'+(v[m]||0)+'</span></div>').join('')+
+    '</div></div></div>');
   document.getElementById('veil').onclick=closeSheet;
   document.getElementById('pgBack').onclick=openSettings;
-  document.getElementById('pgWt').onclick=()=>logBody('wt');
-  document.getElementById('pgWa').onclick=()=>logBody('waist');
-  document.getElementById('pgPh').onclick=()=>{
-    photoSheet({title:'Photographs', d:today(), note:'Logs against the 28-day cycle.', delLabel:'CANCEL',
-      onSave:(v)=>{
-        if(DB.photos.some(x=>x.d===v)) return toast('ALREADY LOGGED THAT DAY');
-        DB.photos.push({d:v, e:Date.now()});
-        DB.photos.sort((a,b)=>a.d<b.d?-1:1);
-        touch(); toast('PHOTOS LOGGED');
-        popSheet(); openProgress();
-      },
-      onDel:()=>{ popSheet(); openProgress(); }});
-  };
-  document.getElementById('vwWt').onclick=()=>openTrack('wt');
-  document.getElementById('vwWa').onclick=()=>openTrack('waist');
-  document.getElementById('vwPh').onclick=()=>openTrack('ph');
 }
 
 /* ---------- session history ----------
@@ -4074,7 +3644,8 @@ function openSync(){
         '<div class="srch"><input class="fld" id="syTok" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_\u2026">'+
         '<button class="btn ghost" id="syPaste">[ PASTE ]</button></div>'+
         '<button class="btn" id="syGo">[ CONNECT ]</button>'+
-        '<div class="pgnote">Fine-grained token for this repo only, Contents: read and write. Kept on this phone only.</div>')+
+        '<div class="pgnote">Fine-grained token for this repo only, Contents: read and write. Kept on this phone only. '+
+          'It can be the food diary\u2019s repo: the log is kept in its own training folder.</div>')+
     '</div><div class="card pgcard"><div class="pghead"><h4 class="pgh">BACKUP FILE</h4></div>'+
     '<div class="duo"><button class="btn" id="exGo">[ SAVE FILE ]</button><button class="btn ghost" id="imGo">[ LOAD FILE ]</button></div>'+
     '<div class="pgnote">Loading merges into what is here. Nothing is lost.</div></div></div></div>');
@@ -4514,7 +4085,7 @@ boot('worker',()=>{ if(HOSTED && 'serviceWorker' in navigator)
 boot('tick',runTick);
 boot('sync',()=>{ refreshCog(); if(ghOn()) ghSync(); });
 boot('restore',()=>{
-  if(!DB.seen && !DB.sess.length && !DB.wt.length) setTimeout(openRestore,500);
+  if(!DB.seen && !DB.sess.length) setTimeout(openRestore,500);
   else if(STORE==='memory') setTimeout(()=>toast('Not saving \u2014 export before closing'),600);
 });
 </script>
