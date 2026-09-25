@@ -40,8 +40,10 @@ header{padding:calc(22px + env(safe-area-inset-top)) 22px 14px;position:relative
 header::after{content:'';position:absolute;left:22px;right:22px;bottom:0}
 .eyebrow{font-family:var(--ui);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--bronze)}
 header h1:empty,header .sub:empty{display:none}
-header h1{font-size:30px;margin-top:9px;letter-spacing:-.02em}
-header .sub,.splash .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
+/* the operation name and its line centred, as the food diary's day is */
+header h1{font-size:22px;margin-top:20px;letter-spacing:-.02em;text-align:center}
+header .sub{color:var(--dim);font-size:11.5px;margin-top:3px;text-align:center}
+.splash .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .splash .sub{text-transform:uppercase}
 .cog{position:absolute;top:calc(14px + env(safe-area-inset-top));right:12px;padding:10px;color:var(--dimmer)}
 .musbtn{position:absolute;top:calc(14px + env(safe-area-inset-top));right:59px;padding:10px;
@@ -257,17 +259,16 @@ header .sub,.splash .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 /* Three cards sitting next to each other do not say "these go together". A chain
    is drawn as one framed block with a bronze rail down the side, a header naming
    the running order, and matching set rows outlined together. */
-.chain{position:relative;border:1px solid var(--cardline);border-radius:14px;
-  margin-bottom:12px;padding-bottom:3px;background:var(--card2)}
+.chain{position:relative;border:1px solid var(--cardline);border-radius:5px;
+  margin-bottom:6px;padding-bottom:3px;background:var(--card)}
 .chain::before{content:'';position:absolute;left:0;top:10px;bottom:10px;width:3px;
   border-radius:3px;background:var(--bronze);opacity:.45;transition:opacity .35s ease}
 .chain.live::before{opacity:1;box-shadow:0 0 16px -2px var(--bronze)}
 .chead{display:flex;align-items:center;gap:9px;width:100%;border:0;text-align:left;
   padding:7px 13px 7px 16px;border-bottom:1px solid var(--cardhair);
-  border-radius:13px 13px 0 0;background:var(--surf);transition:opacity .45s ease}
+  border-radius:4px 4px 0 0;background:var(--surf);transition:opacity .45s ease}
 .chain.cdone .chead{opacity:.4}
-.chead .cx{font-family:var(--serif);font-size:9.5px;letter-spacing:.16em;color:var(--bg);
-  background:var(--bronze);border-radius:3px;padding:2px 6px}
+.chead .cx{font-family:var(--serif);font-size:10px;letter-spacing:.16em;color:var(--bronze)}
 .chain .card{border:none;background:transparent;margin:0;border-radius:0;
   padding:11px 13px 7px 16px}
 .chain .card.up{border-radius:0;box-shadow:inset 3px 0 0 var(--bronze),0 10px 30px -20px var(--bronze)}
@@ -305,7 +306,7 @@ header .sub,.splash .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .chain.solo .card h3{padding-right:46px}
 .chain.solo.shut .card{padding-bottom:13px}
 .cgap{flex:1}
-.cch{flex:none;width:18px;text-align:center;font-size:15px;color:var(--dimmer);
+.cch{flex:none;width:26px;text-align:center;font-size:24px;line-height:1;color:var(--bronze);
   transition:transform .3s ease,color .3s ease}
 .chain:not(.shut) .cch{transform:rotate(45deg);color:var(--bronze)}
 /* Set 2 of the squat, set 2 of the laterals and set 2 of the curl are one trip
@@ -350,6 +351,17 @@ header .sub,.splash .sub{color:var(--dim);font-size:13.5px;margin-top:7px}
 .tkrow:active .ev{color:var(--bronze)}
 
 .pgnote{margin-top:5px;font-size:12.5px;line-height:1.5;color:var(--dim)}
+/* form fields for the sync panel, as in the food diary */
+.fld{display:block;width:100%;height:36px;padding:0 12px;background:var(--card);border:1px solid var(--cardline);border-radius:5px;
+  color:var(--champ);font-family:var(--mono);font-size:16px;-webkit-appearance:none;appearance:none}
+.fld:focus{outline:none;border-color:var(--bronze);box-shadow:0 0 14px -5px var(--bronze)}
+.fld::placeholder{color:var(--dimmer);opacity:.75}
+.flab{display:flex;align-items:center;gap:8px;font-family:var(--serif);font-size:9.5px;letter-spacing:.18em;
+  color:var(--dimmer);margin:12px 0 5px;text-transform:uppercase}
+.srch{display:grid;grid-template-columns:1fr auto;gap:8px}
+.srch .btn{margin:0;padding:0 16px;width:auto;display:flex;align-items:center;justify-content:center;line-height:1;height:36px}
+.sheet .pgcard .srch+.btn{margin-top:16px}
+.armed{color:var(--alert) !important;border-color:var(--alert) !important}
 
 .bignum{width:100%;margin-top:14px;padding:16px;background:var(--card);
   border:1px solid var(--cardline);border-radius:8px;color:var(--champ);
@@ -764,7 +776,7 @@ header::after{background:repeating-linear-gradient(90deg,var(--cardline) 0 6px,t
 .btn.ghost{color:var(--dim);border-color:var(--hair)}
 .btn.iconbtn{display:flex;align-items:center;justify-content:center;gap:8px}
 .iconbtn svg{display:block;flex:none}
-#saveS,#imBtn{border-color:var(--bronze);color:var(--champ)}
+#saveS{border-color:var(--bronze);color:var(--champ)}
 
 /* timer. Two rows: the status line, then the objectives strip pinned along the
    very bottom of the bar. The strip lives here and nowhere else, so the count is
@@ -995,8 +1007,7 @@ textarea::placeholder{color:var(--dimmer)}
 @media (min-height:900px){
   body{font-size:15px;line-height:1.55}
   header{padding:calc(26px + env(safe-area-inset-top)) 22px 18px}
-  header h1{font-size:25px}
-  header .sub,.splash .sub{font-size:12px}
+  .splash .sub{font-size:12px}
   .eyebrow{font-size:10px}
   .cog,.musbtn,.mfloat{top:calc(18px + env(safe-area-inset-top))}
   .muted{font-size:13px;line-height:1.55}
@@ -1204,6 +1215,7 @@ html.booted .fab{animation:pbwarm .55s .12s ease-out both}
   <span class="xbar"><i id="xpFill"></i><b class="xspark" id="xpSpark"></b></span>
 </button>
 <div id="sheetWrap"></div>
+<input type="file" id="imFile" accept=".txt,.json,text/plain,application/json" hidden>
 <!-- The displacement field the panel contents are pushed through while a page
      changes. Stepped from panelHit; at scale 0 it does nothing at all. -->
 <svg width="0" height="0" aria-hidden="true" focusable="false"
@@ -1233,7 +1245,7 @@ html.booted .fab{animation:pbwarm .55s .12s ease-out both}
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
 let DB={sess:[],wt:[]}, mem={}, STORE='memory';
-const APP_VERSION='2026.09.23.78';
+const APP_VERSION='2026.09.25.1';
 const HOSTED = location.protocol==='https:';
 if(navigator.standalone || matchMedia('(display-mode: standalone)').matches)
   document.documentElement.classList.add('standalone');    // see html.standalone
@@ -1249,6 +1261,11 @@ function load(){
   if(!Array.isArray(DB.sess)) DB.sess=[];
   if(typeof DB.bk!=='number') DB.bk=0;
   if(typeof DB.seen!=='boolean') DB.seen=false;
+  if(!DB.del || typeof DB.del!=='object') DB.del={};
+  giveIds(DB.sess);
+  /* The old GitHub setup pushed into the app's own Pages repo, which is public. It is
+     not carried over: sync now needs a private data repo. */
+  if(DB.gh && DB.gh.owner) DB.gh={};
 }
 function save(){
   LEDGER=null;                              // the log moved; the score is stale
@@ -2041,93 +2058,146 @@ function openMusic(from){
     if(box && !PL.list.length) box.innerHTML='<div class="muted">Could not read the track list.</div>';
   });
 }
-/* ---------- GitHub sync ----------
-   Commits the TL1 backup straight to the repo through the contents API. The token
-   lives in this browser's storage and never goes into the file itself — the file is
-   public on Pages, the token must not be. Owner and repo are read off the Pages URL,
-   so there is nothing to type but the token. */
-const GH_API='https://api.github.com';
-function ghGuess(){
-  const host=(location.hostname||'').toLowerCase();
-  const owner=/\.github\.io$/.test(host) ? host.replace('.github.io','') : '';
-  const seg=(location.pathname||'/').split('/').filter(Boolean);
-  /* user.github.io/repo/... is a project page; user.github.io/... is the user page,
-     whose repo is named after the host. */
-  const repo=seg.length && !/\.html?$/i.test(seg[0]) ? seg[0] : (owner?owner+'.github.io':'');
-  return {owner:owner, repo:repo};
+/* ---------- sync bookkeeping ----------
+   Every session carries an id, and every session and body entry an edit time (e). A
+   deletion leaves a tombstone in DB.del, so a merge cannot bring it back from another
+   copy of the log. Tombstones older than 120 days are dropped. */
+const TOMB=120*864e5;
+function sessId(d,w,list){ let n=0; while(list.some(x=>x.id===d+w+n)) n++; return d+w+n; }
+/* Sessions from before ids existed get one from their date and workout, in log order,
+   so two copies of the same old log agree on every id. */
+function giveIds(list){ list.forEach(x=>{ if(!x.id) x.id=sessId(x.d,x.w,list); }); }
+function drop(key){ DB.del[key]=Date.now(); }
+/* The log changed: keep it, and let GitHub know shortly. */
+function touch(){ save(); ghQueue(); }
+const logOf=src=>({sess:src.sess, wt:src.wt, waist:src.waist, photos:src.photos, del:src.del||{}});
+/* Two copies become one. Each session (by id) and body entry (by date) keeps its most
+   recently edited version, this copy's on a tie; anything deleted after it was last
+   edited stays deleted. Output is in one fixed shape and order, so equal logs are
+   equal strings. */
+function mergeLog(a,b){
+  const cut=Date.now()-TOMB, dl={};
+  [b.del,a.del].forEach(d=>Object.keys(d||{}).forEach(k=>{ if(d[k]>cut) dl[k]=Math.max(dl[k]||0,d[k]); }));
+  const del={}; Object.keys(dl).sort().forEach(k=>{ del[k]=dl[k]; });
+  const keep=(list,key,shape)=>{
+    const m={};
+    list.forEach(x=>{ const k=key(x), y=m[k]; if(!y || (x.e||0)>=(y.e||0)) m[k]=x; });
+    return Object.keys(m).filter(k=>!(del[k]>=(m[k].e||0))).map(k=>shape(m[k]))
+      .sort((x,y)=>x.d<y.d?-1:x.d>y.d?1:(key(x)<key(y)?-1:1));
+  };
+  return {
+    sess:keep(b.sess.concat(a.sess), x=>x.id, x=>({id:x.id, d:x.d, w:x.w, sets:x.sets, e:x.e||0})),
+    wt:keep(b.wt.concat(a.wt), x=>'w'+x.d, x=>({d:x.d, kg:x.kg, e:x.e||0})),
+    waist:keep(b.waist.concat(a.waist), x=>'m'+x.d, x=>({d:x.d, cm:x.cm, e:x.e||0})),
+    photos:keep(b.photos.concat(a.photos), x=>'p'+x.d, x=>({d:x.d, e:x.e||0})),
+    del
+  };
 }
-function ghCfg(){
-  const g=DB.gh||{}, guess=ghGuess();
-  return {tok:g.tok||'', owner:g.owner||guess.owner, repo:g.repo||guess.repo,
-          path:g.path||'backup/training-log.txt', branch:g.branch||'main',
-          sha:g.sha||'', at:g.at||0, err:g.err||''};
+const EMPTY={sess:[],wt:[],waist:[],photos:[],del:{}};
+const canon=l=>JSON.stringify(mergeLog(l,EMPTY));
+/* Take a merged log in. The dashboard is redrawn unless a session is being worked. */
+function applyLog(m){
+  DB.sess=m.sess; DB.wt=m.wt; DB.waist=m.waist; DB.photos=m.photos; DB.del=m.del;
+  save();
+  if(!T.start && !closing){ pick=null; rTrain(); }
+  refreshCog();
 }
+
+/* ---------- GitHub sync: data/training-log.json in a private repo ----------
+   A sync reads the file, merges it with this copy, and writes back only if the result
+   differs from what is there. Changes queue one; so do opening the app, coming back to
+   it and leaving it. The token is kept on this phone only. */
+function ghCfg(){ const g=DB.gh||{}; return {tok:g.tok||'', repo:g.repo||'', branch:g.branch||'main', at:g.at||0, err:g.err||''}; }
 function ghSave(patch){ DB.gh=Object.assign(ghCfg(),patch); save(); }
-function ghOn(){ const c=ghCfg(); return !!(c.tok && c.owner && c.repo); }
-function b64(text){ return btoa(unescape(encodeURIComponent(text))); }
-async function ghReq(path,opt){
-  const c=ghCfg();
-  const r=await fetch(GH_API+path, Object.assign({
-    headers:{Authorization:'Bearer '+c.tok, Accept:'application/vnd.github+json',
-             'X-GitHub-Api-Version':'2022-11-28'}
-  },opt||{}));
-  return r;
+function ghOn(){ const c=ghCfg(); return !!(c.tok && /^[\w.-]+\/[\w.-]+$/.test(c.repo)); }
+const b64=t=>btoa(unescape(encodeURIComponent(t)));
+const unb64=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g,'')),c=>c.charCodeAt(0)));
+function ghReq(path,opt){
+  opt=opt||{};
+  return fetch('https://api.github.com'+path,Object.assign({},opt,{cache:'no-store',
+    headers:Object.assign({Authorization:'Bearer '+ghCfg().tok, Accept:'application/vnd.github+json',
+      'X-GitHub-Api-Version':'2022-11-28'},opt.headers)}));
 }
-/* Push the current log. Returns a short status string. */
-async function ghPush(quiet){
-  const c=ghCfg();
-  if(!ghOn()) return 'not set up';
-  const body=(sha)=>JSON.stringify({
-    message:'log: '+DB.sess.length+' sessions',
-    content:b64(packDB()), branch:c.branch, sha:sha||undefined});
-  const url='/repos/'+c.owner+'/'+c.repo+'/contents/'+c.path;
-  try{
-    let r=await ghReq(url,{method:'PUT',body:body(c.sha)});
-    if(r.status===409||r.status===422){
-      /* someone or something else moved the file: take the current sha and redo */
-      const g=await ghReq(url+'?ref='+encodeURIComponent(c.branch));
-      const j=g.ok?await g.json():null;
-      r=await ghReq(url,{method:'PUT',body:body(j&&j.sha)});
-    }
-    if(!r.ok){
-      const msg=r.status===401?'bad token':r.status===404?'repo or path not found':'error '+r.status;
-      ghSave({err:msg});
-      if(!quiet) toast('SYNC: '+msg.toUpperCase());
-      return msg;
-    }
-    const j=await r.json();
-    ghSave({sha:(j.content&&j.content.sha)||'', at:Date.now(), err:''});
-    markBacked();
-    if(!quiet) toast('SYNCED TO GITHUB');
-    return 'ok';
-  }catch(e){
-    ghSave({err:'offline'});
-    if(!quiet) toast('SYNC: NO CONNECTION');
-    return 'offline';
+const ghUrl=()=>'/repos/'+ghCfg().repo+'/contents/data/training-log.json';
+async function ghGet(){
+  const q='?ref='+encodeURIComponent(ghCfg().branch);
+  const r=await ghReq(ghUrl()+q);
+  if(r.status===404) return {sha:'',log:null};
+  if(!r.ok) throw r.status;
+  const j=await r.json();
+  let txt=j.content?unb64(j.content):'';
+  if(!txt){                                      // over 1 MB: fetch the raw file instead
+    const r2=await ghReq(ghUrl()+q,{headers:{Accept:'application/vnd.github.raw'}});
+    if(!r2.ok) throw r2.status;
+    txt=await r2.text();
   }
+  let d=null; try{ d=JSON.parse(txt); }catch(e){}
+  return {sha:j.sha, log:d&&d.log?cleanLog(d.log):null};
 }
-/* Paste a token, check it can see the repo, store it. */
+const ghPut=(log,sha)=>ghReq(ghUrl(),{method:'PUT',body:JSON.stringify({
+  message:'log: '+log.sess.length+' sessions', branch:ghCfg().branch, sha:sha||undefined,
+  content:b64(JSON.stringify({v:1,log}))})});
+let GHT=0, GHBUSY=false, GHAGAIN=false;
+function ghQueue(){ if(!ghOn()) return; clearTimeout(GHT); GHT=setTimeout(()=>{ GHT=0; ghSync(); },1500); }
+function ghFlush(){ if(GHT){ clearTimeout(GHT); GHT=0; ghSync(); } }
+const ghMsg=e=>e===401?'bad token':e===403?'token cannot write here':e===404?'repo not found':typeof e==='number'?'error '+e:'offline';
+async function ghSync(){
+  if(!ghOn()) return 'off';
+  if(GHBUSY){ GHAGAIN=true; return 'busy'; }
+  GHBUSY=true;
+  try{
+    for(let i=0;i<3;i++){
+      const rem=await ghGet(), local=logOf(DB);
+      if(!rem.log && !local.sess.length && !local.wt.length && !local.waist.length && !local.photos.length) break;
+      const merged=mergeLog(local,rem.log||EMPTY), mj=JSON.stringify(merged);
+      if(mj!==canon(local)) applyLog(merged);
+      if(rem.log && mj===canon(rem.log)) break;
+      const r=await ghPut(merged,rem.sha);
+      if(r.status===409 || r.status===422) continue;         // moved under us: read again
+      if(!r.ok) throw r.status;
+      break;
+    }
+    DB.bk=DB.sess.length;
+    ghSave({at:Date.now(),err:''});
+    return 'ok';
+  }catch(e){ const m=ghMsg(e); ghSave({err:m}); return m; }
+  finally{ GHBUSY=false; refreshCog(); if(GHAGAIN){ GHAGAIN=false; ghQueue(); } }
+}
 async function ghConnect(){
-  if(!(navigator.clipboard && navigator.clipboard.readText)) return toast('CLIPBOARD BLOCKED');
-  let t='';
-  try{ t=(await navigator.clipboard.readText()||'').trim(); }catch(e){ return toast('CLIPBOARD BLOCKED'); }
-  if(!/^(gh[pousr]_|github_pat_)/.test(t)) return toast('NOT A GITHUB TOKEN');
-  const guess=ghGuess();
-  if(!guess.owner || !guess.repo) return toast('OPEN THE APP FROM ITS PAGES URL');
-  ghSave({tok:t, owner:guess.owner, repo:guess.repo, sha:'', err:''});
-  const r=await ghReq('/repos/'+guess.owner+'/'+guess.repo);
-  if(!r.ok){ ghSave({tok:'', err:'token rejected'}); return toast('TOKEN REJECTED'); }
-  toast('CONNECTED');
-  await ghPush();
-  openBackup();
+  const repo=document.getElementById('syRepo').value.trim().replace(/^https?:\/\/github\.com\//,'').replace(/\.git$|\/+$/g,'');
+  const tok=document.getElementById('syTok').value.trim();
+  const fail=m=>{ ghSave({tok:'',err:''}); sfx('nope'); toast(m); };
+  if(!/^[\w.-]+\/[\w.-]+$/.test(repo)) return fail('REPO SHOULD LOOK LIKE OWNER/NAME');
+  if(!/^(gh[pousr]_|github_pat_)\w+/.test(tok)) return fail('NOT A GITHUB TOKEN');
+  ghSave({tok,repo,err:'',at:0});
+  toast('CONNECTING\u2026');
+  let info;
+  try{ const r=await ghReq('/repos/'+repo); if(!r.ok) return fail(r.status===401?'TOKEN REJECTED':'REPO NOT FOUND OR NOT SHARED WITH TOKEN'); info=await r.json(); }
+  catch(e){ return fail('NO CONNECTION'); }
+  if(!info.private) return fail('THAT REPO IS PUBLIC \u2014 USE A PRIVATE ONE');
+  if(info.permissions && !info.permissions.push) return fail('TOKEN CANNOT WRITE TO THAT REPO');
+  ghSave({branch:info.default_branch||'main'});
+  const r=await ghSync();
+  sfx(r==='ok'?'done':'nope'); toast(r==='ok'?'CONNECTED \u00b7 SYNCED':'SYNC: '+r.toUpperCase());
+  openSync();
 }
 function ghWhen(){
   const c=ghCfg();
   if(!c.tok) return 'not connected';
   if(c.err) return c.err;
-  if(!c.at) return 'connected, nothing sent yet';
-  const mins=Math.round((Date.now()-c.at)/60000);
-  return mins<1?'synced just now':mins<60?'synced '+mins+'m ago':'synced '+Math.round(mins/60)+'h ago';
+  if(!c.at) return 'connected';
+  const m=Math.round((Date.now()-c.at)/60000);
+  return m<1?'synced just now':m<60?'synced '+m+'m ago':m<2880?'synced '+Math.round(m/60)+'h ago':'synced '+Math.round(m/1440)+'d ago';
+}
+/* A confirm in place: the first tap arms the button, the second within 2.6 s acts. */
+function arm(btn,fn){
+  const was=btn.innerHTML;
+  btn.disarm=()=>{ clearTimeout(btn.at); btn.classList.remove('armed'); btn.innerHTML=was; };
+  btn.onclick=()=>{
+    if(btn.classList.contains('armed')){ btn.disarm(); return fn(); }
+    btn.classList.add('armed'); btn.innerHTML='[ CONFIRM ]';
+    btn.at=setTimeout(btn.disarm,2600);
+  };
 }
 /* Backup format TL1 — plain text, one line per session.
    260824 A gsq 20x10,20x10,20x12 | bp 10x8,10x8
@@ -2197,29 +2267,23 @@ function esc(v){
    the app expects and drop the rest, rather than trusting what was pasted in. */
 const DATE_RE=/^\d{4}-\d{2}-\d{2}$/;
 function num(v,lo,hi){ const n=+v; return Number.isFinite(n) && n>=lo && n<=hi ? n : null; }
-function cleanDB(d){
-  const out={sess:[],wt:[],waist:[],photos:[],sfx:true,bk:0,seen:true};
-  /* carried through untouched, or reloading the app would forget the GitHub token */
-  if(d && d.gh && typeof d.gh==='object') out.gh=d.gh;
-  if(d && typeof d.trk==='string') out.trk=d.trk;
-  out.sfx = !(d && d.sfx===false);
+function cleanLog(d){
+  const out={sess:[],wt:[],waist:[],photos:[],del:{}};
   if(!d || typeof d!=='object') return out;
+  const E=x=>num(x&&x.e,0,1e13)||0;
   (Array.isArray(d.wt)?d.wt:[]).forEach(x=>{
     if(!x || !DATE_RE.test(x.d)) return;
     const kg=num(x.kg,20,400); if(kg===null) return;
-    out.wt.push({d:x.d, kg:kg});
+    out.wt.push({d:x.d, kg:kg, e:E(x)});
   });
-  out.wt.sort((a,b)=>a.d<b.d?-1:1);
   (Array.isArray(d.waist)?d.waist:[]).forEach(x=>{
     if(!x || !DATE_RE.test(x.d)) return;
-    const cm=num(x.cm,30,250); if(cm===null) return;
-    out.waist.push({d:x.d, cm:cm});
+    const cm=num(x.cm,15,250); if(cm===null) return;
+    out.waist.push({d:x.d, cm:cm, e:E(x)});
   });
-  out.waist.sort((a,b)=>a.d<b.d?-1:1);
   (Array.isArray(d.photos)?d.photos:[]).forEach(x=>{
-    if(x && DATE_RE.test(x.d)) out.photos.push({d:x.d});
+    if(x && DATE_RE.test(x.d)) out.photos.push({d:x.d, e:E(x)});
   });
-  out.photos.sort((a,b)=>a.d<b.d?-1:1);
   (Array.isArray(d.sess)?d.sess:[]).forEach(x=>{
     if(!x || !DATE_RE.test(x.d)) return;
     const known=!!W[x.w];
@@ -2238,53 +2302,22 @@ function cleanDB(d){
        with a dash where the workout letter would be if we do not know it. A session
        with sets but an unrecognised workout is corrupt, and is dropped. */
     if(!known && Object.keys(sets).length) return;
-    out.sess.push({d:x.d, w:known?x.w:'-', sets:sets});
+    const o={d:x.d, w:known?x.w:'-', sets:sets, e:E(x)};
+    if(typeof x.id==='string' && /^[\w-]{1,40}$/.test(x.id)) o.id=x.id;
+    out.sess.push(o);
   });
-  out.sess.sort((a,b)=>a.d<b.d?-1:1);
-  out.bk=out.sess.length;
+  const cut=Date.now()-TOMB;
+  Object.keys(d.del&&typeof d.del==='object'?d.del:{}).forEach(k=>{
+    const t=num(d.del[k],cut,1e13); if(t!==null && /^[\w-]{1,48}$/.test(k)) out.del[k]=t;
+  });
+  ['wt','waist','photos','sess'].forEach(k=>out[k].sort((a,b)=>a.d<b.d?-1:1));
+  giveIds(out.sess);
   return out;
-}
-function copyBox(t){
-  if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(t.value).then(()=>{ markBacked(); toast('COPIED'); })
-      .catch(()=>{ if(legacyCopy(t)) toast('COPIED'); else toast('SELECT AND COPY'); });
-    return true;
-  }
-  return legacyCopy(t);
-}
-function legacyCopy(t){
-  const ro=t.readOnly;
-  t.readOnly=false;                       // iOS will not select a readonly field
-  const r=document.createRange(); r.selectNodeContents(t);
-  const sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
-  t.setSelectionRange(0,999999);
-  let ok=false;
-  try{ ok=document.execCommand('copy'); }catch(e){}
-  t.readOnly=ro;
-  if(ok) markBacked();
-  return ok;
 }
 function bkBehind(){ return Math.max(0, DB.sess.length-(DB.bk||0)); }
 function refreshCog(){
   const c=document.getElementById('cog'); if(!c) return;
-  c.className = bkBehind()>=2 ? 'cog stale' : 'cog';
-}
-function backupSheet(title,note,after){
-  setSheet(
-    '<div class="veil" id="veil"></div><div class="sheet"><h3>'+title+'</h3>'+
-    '<div class="muted" style="margin-top:6px">'+note+'</div>'+
-    '<textarea id="bkText" readonly style="min-height:84px;margin-top:14px">'+esc(packDB())+'</textarea>'+
-    '<button class="btn" id="bkCopy">[ COPY ]</button>'+
-    '<button class="btn ghost" id="bkFile">Save as .txt</button>'+
-    '<button class="btn ghost" id="bkSkip">'+(after?'Later':'Close')+'</button></div>');
-  const end=()=>{ closeSheet(); if(after) after(); };
-  document.getElementById('veil').onclick=end;
-  document.getElementById('bkSkip').onclick=end;
-  document.getElementById('bkFile').onclick=async()=>{ if(await exportFile()) end(); };
-  document.getElementById('bkCopy').onclick=()=>{
-    if(copyBox(document.getElementById('bkText'))){ toast('COPIED'); end(); }
-    else toast('SELECT AND COPY');
-  };
+  c.classList.toggle('stale', ghOn() ? !!ghCfg().err : bkBehind()>=2);
 }
 function openRestore(){
   /* Three ways in, same as the Import sheet: the clipboard (no keyboard), an exported
@@ -2311,7 +2344,7 @@ function openRestore(){
   file.onchange=()=>{
     const f=file.files&&file.files[0]; if(!f) return;
     const r=new FileReader();
-    r.onload=()=>{ DB.seen=true; doImport(r.result); };
+    r.onload=()=>restoreText(r.result);
     r.onerror=()=>toast('COULD NOT READ FILE');
     r.readAsText(f);
   };
@@ -2320,14 +2353,14 @@ function openRestore(){
     const t=document.getElementById('rsType'); if(t) t.remove();
     const go=document.getElementById('rsGo');
     go.textContent='[ RESTORE ]';
-    go.onclick=()=>{ DB.seen=true; doImport(box.value); };
+    go.onclick=()=>restoreText(box.value);
   };
   const t=document.getElementById('rsType');
   if(t) t.onclick=()=>{ reveal(); box.focus(); };
   document.getElementById('rsGo').onclick=()=>{
-    if(box.style.display!=='none' || !canClip){ DB.seen=true; return doImport(box.value); }
+    if(box.style.display!=='none' || !canClip) return restoreText(box.value);
     navigator.clipboard.readText().then(txt=>{
-      if(txt && txt.trim()){ DB.seen=true; doImport(txt); }
+      if(txt && txt.trim()) restoreText(txt);
       else { toast('CLIPBOARD EMPTY'); reveal(); }
     }).catch(()=>{ toast('CLIPBOARD BLOCKED'); reveal(); });
   };
@@ -3281,9 +3314,8 @@ function saveSession(){
   }
   if(!n){toast('Log at least one set');return}
   const before=ledger().total;
-  DB.sess.push({d:today(),w:pick,sets});
-  save(); closing=true;
-  if(ghOn()) ghPush(true);          // quietly; the debrief is about to open
+  DB.sess.push({id:sessId(today(),pick,DB.sess), d:today(), w:pick, sets, e:Date.now()});
+  touch(); closing=true;
   /* The finished session stays on screen until the debrief has tuned in over it
      (0.46 s, the sheet's fuzzin); only then does the dashboard behind it move on to
      the next operation, so the reset is never seen. No scrolling here — the page
@@ -3330,7 +3362,6 @@ function debrief(before){
   TOPAFTER=true;                       // back to the top when this closes, not before
   const l=ledger(), r=l.per[l.per.length-1], after=l.total;
   const lw=levelOf(before), ln=levelOf(after);
-  const b=bkBehind();
   setSheet(
     '<div class="veil" id="veil"></div><div class="sheet full">'+
     '<h3>OP '+String(DB.sess.length).padStart(3,'0')+' COMPLETE</h3>'+
@@ -3359,12 +3390,11 @@ function debrief(before){
       ? '<div><div class="xfoot">NEXT \u00b7 OP '+String(m.n).padStart(3,'0')+' \u00b7 '+etaFor(m.n)+'</div>'+
         '<div class="muted">'+esc(m.t)+'</div></div>'
       : ''; })()+
-    '<button class="btn" id="dbBk">[ BACK UP ]</button>'+
+    (ghOn()?'':'<button class="btn" id="dbBk">[ BACK UP ]</button>')+
     '<button class="btn ghost" id="dbClose">Done</button></div>');
   document.getElementById('veil').onclick=closeSheet;
   document.getElementById('dbClose').onclick=closeSheet;
-  document.getElementById('dbBk').onclick=()=>backupSheet('Back up',
-    b>1 ? b+' sessions not backed up.' : 'Paste over your note.');
+  const bk=document.getElementById('dbBk'); if(bk) bk.onclick=exportFile;
 }
 
 /* ---------- progress ----------
@@ -3482,10 +3512,10 @@ function logBody(kind){
     onSave:(n)=>{
       const d=today(), arr=isW?DB.wt:DB.waist;
       const i=arr.findIndex(x=>x.d===d);
-      const row=isW?{d:d,kg:n}:{d:d,cm:n};
+      const row=isW?{d:d,kg:n,e:Date.now()}:{d:d,cm:n,e:Date.now()};
       if(i>-1) arr[i]=row; else arr.push(row);
       arr.sort((a,b)=>a.d<b.d?-1:1);
-      save(); toast('LOGGED');
+      touch(); toast('LOGGED');
       dropLayers(1); openProgress();          // close the entry, refresh what is behind
     }});
 }
@@ -3736,16 +3766,17 @@ function openTrack(kind){
       if(isPh) return photoSheet({title:'Photographs', d:DB.photos[i].d, confirmDel:true,
         onSave:(v)=>{
           if(v!==DB.photos[i].d && DB.photos.some(x=>x.d===v)) return toast('ALREADY LOGGED THAT DAY');
-          DB.photos[i]={d:v};
+          if(v!==DB.photos[i].d) drop('p'+DB.photos[i].d);
+          DB.photos[i]={d:v, e:Date.now()};
           DB.photos.sort((a,b)=>a.d<b.d?-1:1);
-          save(); toast('UPDATED'); again();
+          touch(); toast('UPDATED'); again();
         },
-        onDel:()=>{ DB.photos.splice(i,1); save(); toast('REMOVED'); again(); }});
+        onDel:()=>{ drop('p'+DB.photos[i].d); DB.photos.splice(i,1); touch(); toast('REMOVED'); again(); }});
       const a2=isW?DB.wt:DB.waist, row=a2[i];
       numSheet({title:isW?'Weigh-in':'Waist', note:longDate(row.d),
         a:isW?row.kg:row.cm, loA:isW?30:15, hiA:isW?250:200,
-        onSave:(v)=>{ if(isW) a2[i].kg=v; else a2[i].cm=v; save(); toast('UPDATED'); again(); },
-        onDel:()=>{ a2.splice(i,1); save(); toast('REMOVED'); again(); }});
+        onSave:(v)=>{ if(isW) a2[i].kg=v; else a2[i].cm=v; a2[i].e=Date.now(); touch(); toast('UPDATED'); again(); },
+        onDel:()=>{ drop((isW?'w':'m')+a2[i].d); a2.splice(i,1); touch(); toast('REMOVED'); again(); }});
     };
   });
 }
@@ -3781,9 +3812,9 @@ function openProgress(){
     photoSheet({title:'Photographs', d:today(), note:'Logs against the 28-day cycle.', delLabel:'CANCEL',
       onSave:(v)=>{
         if(DB.photos.some(x=>x.d===v)) return toast('ALREADY LOGGED THAT DAY');
-        DB.photos.push({d:v});
+        DB.photos.push({d:v, e:Date.now()});
         DB.photos.sort((a,b)=>a.d<b.d?-1:1);
-        save(); toast('PHOTOS LOGGED');
+        touch(); toast('PHOTOS LOGGED');
         popSheet(); openProgress();
       },
       onDel:()=>{ popSheet(); openProgress(); }});
@@ -3818,12 +3849,12 @@ function editSet(si,id,ix){
     onSave:(a,b)=>{
       if(e.bw) row.reps=Math.round(a);
       else { row.kg=a; row.reps=Math.round(b); }
-      save(); toast('UPDATED'); openHistory();
+      s.e=Date.now(); touch(); toast('UPDATED'); openHistory();
     },
     onDel:()=>{
       s.sets[id].splice(ix,1);
       if(!s.sets[id].length) delete s.sets[id];
-      save(); toast('SET REMOVED'); openHistory();
+      s.e=Date.now(); touch(); toast('SET REMOVED'); openHistory();
     }});
 }
 async function delSession(si){
@@ -3831,7 +3862,7 @@ async function delSession(si){
   const ok=await askConfirm('Delete this session?',
     longDate(s.d)+' and everything logged in it. It cannot be undone.','Delete');
   if(!ok) return openHistory();
-  DB.sess.splice(si,1); save(); toast('SESSION DELETED'); rTrain(); openHistory();
+  drop(s.id); DB.sess.splice(si,1); touch(); toast('SESSION DELETED'); rTrain(); openHistory();
 }
 function histSets(id,v,si){
   const e=EX[id]||{n:id};
@@ -3992,9 +4023,9 @@ function musSub(){
   const off=DB.sfx===false?' \u00b7 SFX OFF':'';
   return ((t?t.slice(0,20):'NO TRACK')+off).toUpperCase();
 }
-function bkSub(){
-  const n=DB.sess.length, b=bkBehind();
-  return (n+' OP'+(n===1?'':'S')+' \u00b7 '+(b?b+' TO BACK UP':'UP TO DATE')).toUpperCase();
+function syncSub(){
+  const b=bkBehind();
+  return (ghOn() ? ghWhen() : b ? b+' session'+(b===1?'':'s')+' to back up' : 'not connected').toUpperCase();
 }
 function openSettings(){
   const XL=levelOf(ledger().total), LP=ledger().per;
@@ -4014,7 +4045,7 @@ function openSettings(){
      row('stMus','Music',musSub())+
      row('stProg','Progress',progSub())+
      row('stHist','History',sinceStart())+
-     row('stBack','Backup',bkSub())+
+     row('stSy','Sync and backup',syncSub())+
      '</div>';
 
   h+='<div class="tiny">v'+APP_VERSION+(HOSTED?' \u00b7 hosted':' \u00b7 local')+'</div></div>';
@@ -4024,101 +4055,63 @@ function openSettings(){
   document.getElementById('stMus').onclick=()=>openMusic('settings');
   document.getElementById('stProg').onclick=openProgress;
   document.getElementById('stHist').onclick=openHistory;
-  document.getElementById('stBack').onclick=openBackup;
+  document.getElementById('stSy').onclick=openSync;
 }
 
-/* Backup and GitHub are the same job — getting the log off this phone — so they
-   share a panel rather than two cards on the settings screen. */
-function openBackup(){
-  const n=DB.sess.length, b=bkBehind();
-  let h='<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>Backup'+
-    '<button class="shx back" id="bkBack" aria-label="Back to settings">\u2039</button></h3>'+
-    '<div class="pgbody">';
-
-  h+='<div class="card pgcard"><div class="pghead"><h4 class="pgh">LOCAL</h4></div>'+
-     '<div class="pgrow"><span class="pk">Logged</span>'+
-     '<span class="pv">'+n+' OP'+(n===1?'':'S')+'</span></div>'+
-     '<div class="pgrow'+(b?' warn':'')+'"><span class="pk">Not backed up</span>'+
-     '<span class="pv">'+(b?b:'none')+'</span></div>'+
-     '<div class="trio">'+
-       '<button class="btn" id="exFile">[ SAVE ]</button>'+
-       '<button class="btn" id="imOpen">[ LOAD ]</button>'+
-       '<button class="btn ghost" id="exCopy">[ COPY ]</button>'+
-     '</div>'+
-     '<textarea id="exText" readonly class="hide">'+esc(packDB())+'</textarea></div>';
-
-  h+='<div class="card pgcard"><div class="pghead"><h4 class="pgh">GITHUB</h4></div>'+
-     '<div class="pgrow"><span class="pk">Status</span>'+
-       '<span class="pv">'+esc(ghWhen())+'</span></div>'+
-     (ghOn()?'<div class="pgrow"><span class="pk">Repo</span><span class="pv">'+
-       esc(ghCfg().owner+'/'+ghCfg().repo)+'</span></div>':'')+
-     '<div class="duo">'+
-       '<button class="btn" id="ghNow"'+(ghOn()?'':' disabled')+'>[ SYNC ]</button>'+
-       '<button class="btn ghost" id="ghSet">[ '+(ghOn()?'FORGET':'CONNECT')+' ]</button>'+
-     '</div></div>';
-
-  h+='</div></div>';
-  setSheet(h);
-  document.getElementById('veil').onclick=closeSheet;
-  document.getElementById('bkBack').onclick=openSettings;
-  document.getElementById('exFile').onclick=exportFile;
-  document.getElementById('exCopy').onclick=()=>{
-    if(copyBox(document.getElementById('exText'))) toast('COPIED');
-    else toast('SELECT AND COPY');
-  };
-  document.getElementById('imOpen').onclick=openImport;
-  document.getElementById('ghNow').onclick=()=>{ if(ghOn()) ghPush().then(()=>openBackup()); };
-  document.getElementById('ghSet').onclick=async()=>{
-    if(ghOn()){ ghSave({tok:'',sha:'',at:0,err:''}); toast('TOKEN FORGOTTEN'); openBackup(); }
-    else await ghConnect();
-  };
+/* Sync and backup, as in the food diary: GitHub keeps the log in step by itself, and
+   the file is a copy to keep. Loading a file merges it in; nothing is lost. */
+function openSync(){
+  const c=ghCfg(), on=ghOn(), $=id=>document.getElementById(id);
+  setSheet('<div class="veil" id="veil"></div><div class="sheet fit full scroll"><h3>Sync and backup'+
+    '<button class="shx back" id="syBack" aria-label="Back to settings">\u2039</button></h3><div class="pgbody">'+
+    '<div class="card pgcard"><div class="pghead"><h4 class="pgh">GITHUB</h4></div>'+
+    '<div class="pgrow'+(c.err?' warn':'')+'"><span class="pk">Status</span><span class="pv">'+esc(ghWhen())+'</span></div>'+
+    (on?'<div class="pgrow"><span class="pk">Repo</span><span class="pv">'+esc(c.repo)+'</span></div>'+
+        '<div class="duo"><button class="btn" id="syNow">[ SYNC NOW ]</button><button class="btn ghost" id="syOff">[ FORGET TOKEN ]</button></div>'
+      :'<label class="flab" for="syRepo">Private data repo</label>'+
+        '<input class="fld" id="syRepo" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="owner/training-data" value="'+esc(c.repo)+'">'+
+        '<label class="flab" for="syTok">Access token</label>'+
+        '<div class="srch"><input class="fld" id="syTok" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="github_pat_\u2026">'+
+        '<button class="btn ghost" id="syPaste">[ PASTE ]</button></div>'+
+        '<button class="btn" id="syGo">[ CONNECT ]</button>'+
+        '<div class="pgnote">Fine-grained token for this repo only, Contents: read and write. Kept on this phone only.</div>')+
+    '</div><div class="card pgcard"><div class="pghead"><h4 class="pgh">BACKUP FILE</h4></div>'+
+    '<div class="duo"><button class="btn" id="exGo">[ SAVE FILE ]</button><button class="btn ghost" id="imGo">[ LOAD FILE ]</button></div>'+
+    '<div class="pgnote">Loading merges into what is here. Nothing is lost.</div></div></div></div>');
+  $('veil').onclick=closeSheet;
+  $('syBack').onclick=openSettings;
+  $('exGo').onclick=exportFile;
+  $('imGo').onclick=()=>$('imFile').click();
+  if(on){
+    $('syNow').onclick=async()=>{ toast('SYNCING\u2026'); const r=await ghSync();
+      sfx(r==='ok'?'done':'nope'); toast(r==='ok'?'SYNCED':'SYNC: '+r.toUpperCase()); reopenSync(); };
+    arm($('syOff'),()=>{ ghSave({tok:'',err:'',at:0}); refreshCog(); toast('TOKEN FORGOTTEN'); openSync(); });
+  } else {
+    $('syPaste').onclick=async()=>{ try{ $('syTok').value=(await navigator.clipboard.readText()).trim(); }catch(e){ toast('PASTE IT BY HAND'); } };
+    $('syGo').onclick=ghConnect;
+  }
 }
-
-/* Import lives in its own sheet so the backup panel stays short. */
-function openImport(){
-  /* Reading the clipboard directly means no text box to tap and no keyboard. The
-     box is still there for when the browser will not hand the clipboard over, but
-     it stays hidden until it is needed. */
-  const canClip = !!(navigator.clipboard && navigator.clipboard.readText);
-  let h='<div class="veil" id="veil"></div><div class="sheet"><h3>Import</h3>'+
-    '<div class="muted" style="margin-top:6px">Replaces everything currently saved.</div>'+
-    '<input type="file" id="imFile" class="hide">'+
-    '<textarea id="imText" placeholder="Paste a backup here" '+
-      'style="min-height:110px;margin-top:14px'+(canClip?';display:none':'')+'"></textarea>'+
-    '<div class="duo">'+
-      '<button class="btn" id="imPaste">[ '+(canClip?'PASTE':'RESTORE')+' ]</button>'+
-      '<button class="btn ghost" id="imBtn">[ FROM FILE ]</button>'+
-    '</div>'+
-    (canClip?'<button class="btn ghost" id="imType">Type it in instead</button>':'')+
-    '<button class="btn ghost" id="imBack">Back</button></div>';
-  setSheet(h);
-  document.getElementById('veil').onclick=closeSheet;
-  document.getElementById('imBack').onclick=openBackup;
-  const file=document.getElementById('imFile'), box=document.getElementById('imText');
-  document.getElementById('imBtn').onclick=()=>file.click();
-  file.onchange=()=>{
-    const f=file.files&&file.files[0]; if(!f) return;
-    const r=new FileReader();
-    r.onload=()=>doImport(r.result);
-    r.onerror=()=>toast('Could not read file');
-    r.readAsText(f);
-  };
-  const reveal=()=>{
-    box.style.display='block';
-    const t=document.getElementById('imType'); if(t) t.remove();
-    document.getElementById('imPaste').textContent='[ RESTORE ]';
-    document.getElementById('imPaste').onclick=()=>doImport(box.value);
-  };
-  const t=document.getElementById('imType');
-  if(t) t.onclick=()=>{ reveal(); box.focus(); };
-  document.getElementById('imPaste').onclick=()=>{
-    if(box.style.display!=='none' || !canClip) return doImport(box.value);
-    navigator.clipboard.readText().then(txt=>{
-      if(txt && txt.trim()) doImport(txt);
-      else { toast('CLIPBOARD EMPTY'); reveal(); }
-    }).catch(()=>{ toast('CLIPBOARD BLOCKED'); reveal(); });
-  };
+/* Redraw the panel after something finishes, but only if it is still the one open. */
+function reopenSync(){ if(document.getElementById('syBack')) openSync(); }
+/* A backup, as TL1 text or the JSON the sync writes, merged into this log. TL1 carries
+   no ids, so a session in it counts as one already here when this log has a session
+   on the same day for the same operation. */
+function importText(txt){
+  const raw=(txt||'').trim(), tl1=/^TL1\b/.test(raw); let d=null;
+  if(tl1) d=unpackDB(raw);
+  else { try{ const j=JSON.parse(raw); d=j&&j.log?j.log:j; }catch(e){} }
+  if(!d || !Array.isArray(d.sess)){ sfx('nope'); toast('NOT A TRAINING LOG BACKUP'); return false; }
+  const inc=cleanLog(d);
+  if(tl1) inc.sess=inc.sess.filter(x=>!DB.sess.some(y=>y.d===x.d && y.w===x.w));
+  const before=DB.sess.length;
+  applyLog(mergeLog(logOf(DB),inc));
+  ghQueue();
+  const n=DB.sess.length-before;
+  sfx('done'); toast(n?'LOADED '+n+' NEW SESSION'+(n===1?'':'S'):'NOTHING NEW TO LOAD');
+  return true;
 }
+/* The empty-log prompt restores the same way, then gets out of the way. */
+function restoreText(txt){ if(importText(txt)){ DB.seen=true; save(); closeSheet(); go(); } }
 /* Repainting the whole page on every set is what made the screen jump: the browser
    dropped its scroll position mid-animation. Only the tapped row actually changes,
    so patch that one row and leave the rest of the DOM alone. */
@@ -4160,20 +4153,6 @@ function askConfirm(title,body,yes){
     box.querySelector('#cfYes').onclick=()=>end(true);
   });
 }
-async function doImport(txt){
-  const raw=(txt||'').trim();
-  let d;
-  if(/^TL1\b/.test(raw)) d=unpackDB(raw);
-  else { try{ d=JSON.parse(raw); }catch(e){ toast('Not a valid backup'); return; } }
-  if(!d || !Array.isArray(d.sess)){ toast('Not a valid backup'); return; }
-  const ok=await askConfirm('Import '+d.sess.length+' session'+(d.sess.length===1?'':'s')+'?',
-    'This replaces the '+DB.sess.length+' session'+(DB.sess.length===1?'':'s')+' and '+DB.wt.length+' weight entr'+(DB.wt.length===1?'y':'ies')+' currently saved. It cannot be undone.',
-    'Replace with '+d.sess.length);
-  if(!ok){ openBackup(); return; }
-  DB=cleanDB(d);
-  save(); closeSheet(); draft={}; pick=null; resetTimer(); go();
-  toast('Imported '+d.sess.length+' sessions');
-}
 /* Export as a .txt. On iOS the native route is the share sheet — that gives
    Save to Files, Notes, Mail and AirDrop. Falls back to a download, then to copy. */
 function backupName(){
@@ -4214,9 +4193,7 @@ async function runExport(){
     markBacked(); toast('SAVED '+name);
     return true;
   }catch(e){}
-  const t=document.getElementById('exText');
-  if(t && copyBox(t)){ toast('COPIED'); return true; }
-  toast('SELECT AND COPY');
+  toast('COULD NOT SAVE THE FILE');
   return false;
 }
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.className='toast on';setTimeout(()=>t.className='toast',1700)}
@@ -4484,6 +4461,15 @@ function zapLoop(){
 }
 function go(){ rTrain(); paintFab(); syncMusic(); scrTo(0); }
 document.getElementById('fab').onclick=fabTap;
+document.getElementById('imFile').onchange=e=>{
+  const f=e.target.files[0]; if(f) f.text().then(t=>{ if(importText(t)) reopenSync(); });
+  e.target.value='';
+};
+/* Sync on the way out, and again on the way back in. */
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){ ghFlush(); return; }
+  if(ghOn()) ghSync();
+});
 /* Anything you can press should answer. Handlers that play their own cue run first
    and mark the time, so this only fills in the gaps — and scrolling never triggers
    it, because a scroll is not a click. */
@@ -4526,7 +4512,7 @@ boot('interference',()=>{ zapLoop(); setTimeout(rollPass, RND(1500,9000)); drawS
 boot('worker',()=>{ if(HOSTED && 'serviceWorker' in navigator)
   navigator.serviceWorker.register('sw.js').catch(()=>{}); });
 boot('tick',runTick);
-boot('cog',refreshCog);
+boot('sync',()=>{ refreshCog(); if(ghOn()) ghSync(); });
 boot('restore',()=>{
   if(!DB.seen && !DB.sess.length && !DB.wt.length) setTimeout(openRestore,500);
   else if(STORE==='memory') setTimeout(()=>toast('Not saving \u2014 export before closing'),600);
