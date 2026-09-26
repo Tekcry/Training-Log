@@ -245,8 +245,8 @@ header .sub{color:var(--dim);font-size:11.5px;margin-top:3px;text-align:center}
   text-transform:uppercase;color:var(--dimmer);text-align:right}
 
 /* one target line instead of a panel */
-.tgt{display:flex;align-items:baseline;gap:8px;margin:7px 0 9px}
-.tv{font-family:var(--serif);font-size:16px;color:var(--champ);letter-spacing:-.01em}
+.tgt{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 8px;margin:7px 0 9px}
+.tv{font-family:var(--serif);font-size:16px;color:var(--champ);letter-spacing:-.01em;white-space:nowrap}
 .tup{font-family:var(--serif);font-size:9.5px;letter-spacing:.16em;color:var(--bg);
   background:var(--bronze);border-radius:3px;padding:3px 6px}
 .card.cdone .tgt,.card.cdone .capwarn{display:none}
@@ -1309,7 +1309,7 @@ document.documentElement.classList.add('booting');
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
 let DB={sess:[]}, mem={}, STORE='memory';
-const APP_VERSION='2026.09.26.5';
+const APP_VERSION='2026.09.26.7';
 const HOSTED = location.protocol==='https:';
 if(navigator.standalone || matchMedia('(display-mode: standalone)').matches)
   document.documentElement.classList.add('standalone');    // see html.standalone
@@ -1547,13 +1547,12 @@ function setDefaults(id,ix){
   const e=EX[id], d=draft[id][ix], p=prescribe(id);
   const prior=draft[id].slice(0,ix).reverse();
   const lastKg=(prior.find(x=>x.kg!=='' && x.kg!==undefined)||{}).kg;
-  const lastReps=(prior.find(x=>x.reps!=='' && x.reps!==undefined)||{}).reps;
   const lastV =(prior.find(x=>x.v)||{}).v;
   return {
     kg:  d.kg!=='' && d.kg!==undefined ? +d.kg
            : snapKg(lastKg!==undefined ? +lastKg : (p.kg || e.st || 0), id),
     v:   d.v || lastV || p.v || (e.vars||['Bodyweight'])[0],
-    reps:d.reps!=='' && d.reps!==undefined ? +d.reps : (lastReps!==undefined ? +lastReps : (p.tgt||e.hi))
+    reps:d.reps!=='' && d.reps!==undefined ? +d.reps : repFor(p,ix)
   };
 }
 function repOpts(e){
@@ -1612,12 +1611,6 @@ function restFor(id,ix){
 }
 
 /* ---------- progression engine ---------- */
-/* The session before s that has this lift in it. */
-function prevFor(id,s){
-  const i=DB.sess.indexOf(s);
-  for(let j=i-1;j>=0;j--){ const x=DB.sess[j]; if(x.sets && x.sets[id] && x.sets[id].length) return x.sets[id]; }
-  return null;
-}
 function lastFor(id){
   for(let i=DB.sess.length-1;i>=0;i--){const s=DB.sess[i];if(s.sets[id]&&s.sets[id].length)return{s,sets:s.sets[id]}}
   return null;
@@ -1642,48 +1635,55 @@ function metUnlock(id,sets,w){
   const u=unlockSpec(id,kg,w);
   return done.length>=u.need && done.every(x=>x.reps>=u.bridge);
 }
+/* Exactly what to lift next time: one weight, and a rep count for each set.
+   Each set aims for one more rep than the same set last time, never past what earns
+   the next weight (goal). When every set reached the goal, the weight goes up and the
+   reps start where the heavier bell lands (Epley), then climb one a session again.
+   Two sessions running with no gain at the same weight: one step down, same reps. */
 function prescribe(id){
   const e=EX[id], L=lastFor(id);
-  if(!L) return {kg:e.bw?'':(e.st||''),reps:e.lo,up:false,last:'',
-    note: e.bw ? '' : 'New lift. It should feel like you could do '+(e.hi+2)+'. Adjust from there.'};
+  if(!L) return {kg:e.bw?'':(e.st||''),reps:[e.lo],goal:e.bw&&e.stages?e.stages[0].hi:unlockSpec(id,e.st||DIAL[0]).bridge,up:false,last:'',
+    note:'New lift: this is a starting point. Log what you actually get.'};
   const done=L.sets.filter(x=>x.reps>0);
   const kg=Math.max(...done.map(x=>+x.kg||0));
-  /* Epley: to hit e.lo reps at the next weight you need roughly this many at the
-     current one. On a 20% jump that is well past the normal top of the range.
-     Curls run 2 sets in A and 3 in B, so the bar is the lower of the two. */
   const u=unlockSpec(id,kg), nxt=u.next, bridge=u.bridge, need=u.need;
-  const top=done.length>=need && done.every(x=>x.reps>=bridge);
+  const prev=done.map(x=>+x.reps);
   const lastTxt=done.map(x=>({kg:+x.kg||0,reps:+x.reps}));
   lastTxt.v=(done.find(x=>x.v)||{}).v || '';
+  const plus=cap=>prev.map(r=>cap?Math.min(r+1,cap):r+1);   // cap 0: no ceiling
   /* Bodyweight lifts climb through stages: a target on each, then the next stage. */
   if(e.bw){
     const vs=e.vars||['Bodyweight'], lastV=(done.find(x=>x.v)||{}).v||vs[0];
     const st=e.stages||[{v:lastV,hi:e.hi}];
     const si=Math.max(0,st.findIndex(x=>x.v===lastV)), cur=st[si];
     const hit=done.length>=need && done.every(x=>x.reps>=cur.hi), nx=hit&&st[si+1];
-    if(nx) return {kg:'',v:nx.v,reps:e.lo,up:true,last:lastTxt,tgt:nx.hi};
-    return {kg:'',v:cur.v,reps:e.lo,up:false,last:lastTxt,tgt:cur.hi};
+    if(nx) return {kg:'',v:nx.v,reps:[e.lo],goal:nx.hi,up:true,last:lastTxt,
+      note:'New stage: '+e.lo+' is a starting point. Log what you actually get.'};
+    return {kg:'',v:cur.v,reps:plus(st[si+1]?cur.hi:0),goal:cur.hi,up:false,last:lastTxt};
   }
-  /* Under the bottom of the range on every set two sessions running at the same weight:
-     one step down. Once: a warning. */
-  const short=x=>x.filter(y=>y.reps>0).every(y=>y.reps<e.lo);
-  if(done.length && short(done)){
-    const P2=prevFor(id,L.s), down=prevKg(kg,id);
-    if(P2 && short(P2) && Math.max(...P2.filter(y=>y.reps>0).map(y=>+y.kg||0))===kg && down<kg)
-      return {kg:down,reps:e.lo,up:false,down:true,last:lastTxt,
-        note:'Under '+e.lo+' two sessions running, so down a step.'};
-    if(down<kg) return {kg:snapKg(kg,id),reps:e.lo,up:false,last:lastTxt,
-      note:'Under '+e.lo+' again and it drops to '+kgTxt(down)+'kg.'};
+  const hist=DB.sess.filter(x=>x.sets && x.sets[id] && x.sets[id].some(y=>y.reps>0)).slice(-3);
+  const avg=x=>{ const d=x.sets[id].filter(y=>y.reps>0); return d.reduce((a,y)=>a+ +y.reps,0)/d.length; };
+  const heavy=x=>Math.max(...x.sets[id].map(y=>+y.kg||0));
+  const down=prevKg(kg);
+  if(hist.length===3 && hist.every(x=>heavy(x)===kg) && avg(hist[1])<=avg(hist[0]) && avg(hist[2])<=avg(hist[1]) && down<kg)
+    return {kg:down,reps:prev,goal:unlockSpec(id,down).bridge,up:false,down:true,last:lastTxt,
+      note:'No gain two sessions running, so down a step at the same reps.'};
+  const top=done.length>=need && done.every(x=>x.reps>=bridge);
+  if(top && nxt<=kg) return {kg:snapKg(kg),reps:plus(0),goal:0,up:false,last:lastTxt};
+  if(top){
+    const land=Math.max(1,Math.floor(30*((kg*(1+Math.min(...prev)/30))/nxt-1)));
+    return {kg:nxt,reps:[land],goal:unlockSpec(id,nxt).bridge,up:true,last:lastTxt};
   }
-  if(top && nxt<=kg) return {kg:snapKg(kg,id),reps:e.lo,up:false,last:lastTxt};
-  if(top) return {kg:nxt,reps:e.lo,up:true,last:lastTxt};
-  /* Reps still owed across the sets that earn the next weight: a handful is close
-     enough to put on the card. */
-  const owed=done.length>=need && nxt>kg ? done.reduce((a,x)=>a+Math.max(0,bridge-x.reps),0) : 0;
-  return {kg:snapKg(kg,id),reps:e.lo,up:false,last:lastTxt,
-    tgt: nxt>kg && bridge>e.hi && done.every(x=>x.reps>=e.hi) ? bridge : 0,
-    near: owed>0 && owed<=3 ? {reps:owed,kg:nxt} : null};
+  return {kg:snapKg(kg),reps:plus(bridge),goal:nxt>kg?bridge:0,up:false,last:lastTxt};
 }
+/* What hitting every target this session earns: the next weight, or the next stage. */
+function nextStep(id,p){
+  const e=EX[id];
+  if(e.bw){ const st=e.stages||[], i=st.findIndex(x=>x.v===p.v); return st[i+1]?st[i+1].v.toUpperCase():''; }
+  return kgTxt(nextKg(p.kg))+'KG';
+}
+/* Reps for set i: sets beyond last time's count take the last set's number. */
+const repFor=(p,i)=>p.reps[Math.min(i,p.reps.length-1)];
 /* Milestones already reached in the last three months: each weight (or stage) the
    first time every set hit what it takes to move on. Worked out from the log, so a
    milestone ticks itself off the moment the session that earns it is saved. */
@@ -1710,28 +1710,25 @@ const PLANWK=13;                                  // three months ahead
 function plan(id){
   const e=EX[id], p=prescribe(id), L=lastFor(id), pw=perWeek(id)||1.5, n=Math.round(pw*PLANWK);
   const wk=i=>Math.min(PLANWK,Math.ceil((i+1)/pw));
-  const done=L?L.sets.filter(x=>x.reps>0):[], low=done.length?Math.min(...done.map(x=>+x.reps)):0;
   const out=[];
   if(e.bw){
     const st=e.stages||[{v:p.v||'Bodyweight',hi:e.hi}];
-    let si=Math.max(0,st.findIndex(x=>x.v===p.v)), r=p.up||!L?e.lo:low+1;
-    out.push({i:0,t:st[si].v+': '+(p.up?'start from what you can do, build':'build')+' to '+st[si].hi+' reps on every set'});
+    let si=Math.max(0,st.findIndex(x=>x.v===p.v)), r=Math.min(...p.reps);
+    out.push({i:0,t:st[si].v+': +1 rep a session until '+st[si].hi+' on every set'+(p.note?'. '+p.note:'')});
     for(let i=0;i<n;i++){
       if(r>=st[si].hi){
         if(!st[si+1]){ out.push({i:i+1,t:'Last stage: keep adding a rep a session'}); break; }
         si++; r=e.lo;
-        if(i+1<n) out.push({i:i+1,t:st[si].v+': start from what you can do, build to '+st[si].hi}); else break;
+        if(i+1<n) out.push({i:i+1,t:st[si].v+': start at '+e.lo+', +1 rep a session until '+st[si].hi+' on every set'}); else break;
       } else r++;
     }
     return out.map(x=>({w:wk(x.i),t:x.t}));
   }
   const land=(from,reps,to)=>Math.max(1,Math.floor(30*((from*(1+reps/30))/to-1)));
-  let kg=p.kg||e.st||0;
-  const lastKg=done.length?Math.max(...done.map(x=>+x.kg||0)):kg;
-  let r=!L||p.down?e.lo:p.up?land(lastKg,low,kg):low+1;
+  let kg=p.kg||e.st||0, r=Math.min(...p.reps);
   const step=(i,k,reps,note)=>{ const u=unlockSpec(id,k);
-    out.push({i,t:kgTxt(k)+'kg: build to '+u.bridge+' reps on every set'+(reps?' (expect about '+reps+' at first)':'')+(note?'. '+note:'')}); return u.bridge; };
-  let tgt=step(0,kg,L&&p.up?r:0,p.note);
+    out.push({i,t:kgTxt(k)+'kg: '+(reps?'start at '+reps+', ':'')+'+1 rep a session until '+u.bridge+' on every set'+(note?'. '+note:'')}); return u.bridge; };
+  let tgt=step(0,kg,p.up?r:0,p.note);
   for(let i=0;i<n;i++){
     if(r>=tgt){
       const nx=nextKg(kg,id);
@@ -3473,10 +3470,11 @@ function rTrain(){
     h+='<div class="card'+(cdone?' cdone':'')+'" id="cd-'+id+'">'+
       '<h3>'+e.n+(e.side?' <em>per side</em>':'')+'</h3>'+
       '<div class="tgt'+(p.up?' up':'')+'">'+
-        '<span class="tv">'+(e.bw?((p.v?esc(p.v)+' \u00b7 ':'')+'to '+(p.tgt||e.hi)+' reps')
-          :(p.kg||'\u2014')+'kg \u00d7 '+(p.tgt||e.lo+'\u2013'+e.hi))+'</span>'+
+        '<span class="tv">'+(e.bw?esc(p.v||'Bodyweight'):(p.kg||'\u2014')+'kg')+' \u00d7 '+
+          Math.min(...Array.from({length:ns},(_,i)=>repFor(p,i)))+'</span>'+
         (p.up?'<span class="tup">\u25b2 UP</span>':'')+(p.down?'<span class="tup">\u25bc DOWN</span>':'')+
-        (p.near?'<span class="tup near">'+p.near.reps+' REP'+(p.near.reps>1?'S':'')+' TO '+kgTxt(p.near.kg)+'KG</span>':'')+
+        (!p.up && p.goal && Array.from({length:ns},(_,i)=>repFor(p,i)).every(r=>r>=p.goal)
+          ? '<span class="tup near">EARNS '+esc(nextStep(id,p))+'</span>':'')+
       '</div>'+
       (capWarn(id,p.kg)?'<div class="capwarn">'+esc(capWarn(id,p.kg))+'</div>':'')+
       (function(){
@@ -3506,6 +3504,7 @@ function rTrain(){
         '<button class="bsum" type="button" data-br="'+id+'" data-t="f">BRIEFING</button></div>'+
       '<div class="bbody" id="br-'+id+'"><div class="binner">'+
         '<div class="bpane" data-t="p">'+
+          '<p><b>Stop at the target on every set except the last. On the last, do as many as you can with good form.</b></p>'+
           '<p>'+ns+' sets'+(e.side?' per side':'')+
             (chained?' \u00b7 superset with '+g.filter(x=>x!==id).map(x=>EX[x].n.toLowerCase()).join(' and '):'')+'</p>'+
           '<ol class="plan">'+
