@@ -1309,7 +1309,7 @@ document.documentElement.classList.add('booting');
 /* ---------- storage: localStorage, memory fallback ---------- */
 const KEY='sfx_log_v1';
 let DB={sess:[]}, mem={}, STORE='memory';
-const APP_VERSION='2026.09.26.7';
+const APP_VERSION='2026.09.26.8';
 const HOSTED = location.protocol==='https:';
 if(navigator.standalone || matchMedia('(display-mode: standalone)').matches)
   document.documentElement.classList.add('standalone');    // see html.standalone
@@ -4572,6 +4572,8 @@ document.addEventListener('visibilitychange',()=>{
   if(document.hidden){ ghFlush(); return; }
   if(ghOn()) ghSync();
 });
+/* Sessions logged with no signal sync as soon as it comes back. */
+window.addEventListener('online',()=>{ if(ghOn()) ghSync(); });
 /* Anything you can press should answer. Handlers that play their own cue run first
    and mark the time, so this only fills in the gaps — and scrolling never triggers
    it, because a scroll is not a click. */
@@ -4612,8 +4614,10 @@ boot('sheets',watchSheets);
 boot('splash',splash);
 boot('music',mPreselect);
 boot('interference',()=>{ zapLoop(); setTimeout(rollPass, RND(1500,9000)); drawStatic(); fuzzNext(); });
+/* sw.js keeps the app on the phone so it opens and runs with no signal. It is always
+   checked for a new version rather than taken from the browser's cache. */
 boot('worker',()=>{ if(HOSTED && 'serviceWorker' in navigator)
-  navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+  navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).catch(()=>{}); });
 boot('tick',runTick);
 boot('sync',()=>{ refreshCog(); if(ghOn()) ghSync(); });
 boot('restore',()=>{
